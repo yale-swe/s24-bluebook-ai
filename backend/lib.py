@@ -1,30 +1,56 @@
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 import os
 from openai import OpenAI
+import json
+
+# Open the JSON file
+with open('course_subjects.json', 'r') as file:
+    # Load the JSON data into a Python list
+    subjects = json.load(file)
 
 tools = [
     {
         "type": "function",
         "function": {
-            "name": "filter_classes_by_rating",
-            "description": "",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "operator": {
-                        "type": "string",
-                        "enum": ["$gt", "$lt", '$gte', '$lte', '$eq'],
-                        "description": "The operator to use for the filter",
-                    },
-                    "rating": {
-                        "type": "number",
-                        "description": "The rating to filter by",
-                    },
+        "name": "CourseFilter",
+        "description": "Provide filters for a course based on conditions.", 
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "subject_code": {
+                    "type": "string",
+                    "enum": [str(key) for key in subjects.keys()],
+                    "description": "A code for the subject of instruction",
                 },
-                "required": ["operator", "rating"],
+                "rating": {
+                    "type": "number",
+                    "description": "The rating (a number with one significant digit) for the class (0 - 4). If a number is not provided, interpret the given opinion to fit the range. A good, or average, class should be 3.5",
+                },
+                "comparison_operator_rating": {
+                    "type": "string",
+                    "enum": ["$lt", "$gt", "$gte", "$lte"],
+                    "description": "A comparison operator for the class rating",
+                },
+                "workload": {
+                    "type": "number",
+                    "description": "The workload (a number with one significant digit) for the class (0 - 4). If a number is not provided, interpret the given opinion to fit the range.",
+                },
+                "comparison_operator_workload": {
+                    "type": "string",
+                    "enum": ["$lt", "$gt", "$gte", "$lte"],
+                    "description": "A comparison operator for the class workload",
+                },
+                "comparison_operator_workload": {
+                    "type": "string",
+                    "enum": ["$lt", "$gt", "$gte", "$lte"],
+                    "description": "A comparison operator for the class workload",
+                },
+                
             },
+            "required": ["comparison_operator_rating", "rating"],
+        },
         }
-    },
+    }
 ]
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
