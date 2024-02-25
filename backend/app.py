@@ -6,7 +6,7 @@ import json
 
 from pymongo.mongo_client import MongoClient
 
-uri = "mongodb+srv://dbUser:<PASSWORD HERE>@cluster0.blvdnja.mongodb.net/?retryWrites=true&w=majority"
+uri = "mongodb+srv://bluebookairoot:<password>@bluebookcluster.0hf4pzi.mongodb.net/?retryWrites=true&w=majority&appName=BluebookCluster"
 
 # connect to the MongoDB cluster
 client = MongoClient(uri)
