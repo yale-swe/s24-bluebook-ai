@@ -39,13 +39,7 @@ tools = [
                     "type": "string",
                     "enum": ["$lt", "$gt", "$gte", "$lte"],
                     "description": "A comparison operator for the class workload",
-                },
-                "comparison_operator_workload": {
-                    "type": "string",
-                    "enum": ["$lt", "$gt", "$gte", "$lte"],
-                    "description": "A comparison operator for the class workload",
-                },
-                
+                },             
             },
             "required": ["comparison_operator_rating", "rating"],
         },
