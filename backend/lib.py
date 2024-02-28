@@ -1,6 +1,12 @@
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 import os
 from openai import OpenAI
+import json
+
+# Open the JSON file
+with open('course_subjects.json', 'r') as file:
+    # Load the JSON data into a Python list
+    subjects = json.load(file)
 
 tools = [
     {
