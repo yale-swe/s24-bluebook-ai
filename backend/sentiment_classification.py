@@ -17,19 +17,24 @@ Processing
     - Retrieve the relevant information specified by 'sentiment_input_fields'
     - Format as string
     - Pass to sentiment analysis model
-    - Store result as a new field in the json object
+    - Store result as a new field(s) in the json object
+
+Sentiment Analysis Details
+- Model used: https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest?text=Covid+cases+are+increasing+fast%21
 
 Result
-- Updated .json files with new 'sentiment' field for each fourse
+- Updated .json files with new sentiment field(s) for each course's json object
 """
 
 # Function to perform sentiment analysis (replace this with your actual sentiment analysis logic)
 def analyze(
         sentiment_input: str,
     ):
-    sentiment_analysis = pipeline("sentiment-analysis",model="siebert/sentiment-roberta-large-english")
+    # sentiment_analysis = pipeline("sentiment-analysis",model="siebert/sentiment-roberta-large-english")
+    sentiment_analysis = pipeline("sentiment-analysis",model="cardiffnlp/twitter-roberta-base-sentiment-latest")
     result = sentiment_analysis(sentiment_input)
-    return result[0]['label']
+    import ipdb; ipdb.set_trace
+    return result[0]['label'], result[0]['score']
 
 # Convert sentiment input to a string
 def stringify(
@@ -64,11 +69,12 @@ def main(args):
                 
                 # Perform sentiment classification
                 stringified_inputs = stringify(sentiment_inputs)
-                sentiment_output = analyze(stringified_inputs)
+                sentiment_label, sentiment_score = analyze(stringified_inputs)
 
                 # Update the course with sentiment classification result
-                course["sentiment"] = sentiment_output
-                course['stringified_info'] = stringified_inputs
+                course["sentiment"] = sentiment_label
+                course["sentiment_score"] = sentiment_score
+                # course.pop("stringified_info")
 
             # Write back the updated data to the same file
             with open(file_path, 'w') as file:
