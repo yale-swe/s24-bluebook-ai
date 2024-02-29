@@ -21,6 +21,14 @@ Processing
 
 Sentiment Analysis Details
 - Model used: https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest?text=Covid+cases+are+increasing+fast%21
+- TODO: 
+    - Refactor so that EACH review has the sentiment analysis applied to it, then count up # of positive, negative, and neutral results, compute proportions of each and use the max proportion one as the label
+    - Store the following in updated json objects:
+        - List[str]: sentiment labels for each review
+        - List[float]: sentiment scores for each review
+        - List[float]: proportions of pos/neg/neutral reviews (or Dict?)
+        - str: final sentiment label
+        - float: final sentiment label's proportion score
 
 Result
 - Updated .json files with new sentiment field(s) for each course's json object
@@ -72,8 +80,11 @@ def main(args):
                 sentiment_label, sentiment_score = analyze(stringified_inputs)
 
                 # Update the course with sentiment classification result
-                course["sentiment"] = sentiment_label
-                course["sentiment_score"] = sentiment_score
+                course["sentiment_labels"] = 
+                course["sentiment_scores"] = 
+                course["sentiment_distribution"] = 
+                course["final_sentiment"] = sentiment_label
+                course["final_sentiment_proportion"] = sentiment_score
                 # course.pop("stringified_info")
 
             # Write back the updated data to the same file
