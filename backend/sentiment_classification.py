@@ -34,7 +34,7 @@ Result
 - Updated .json files with new sentiment field(s) for each course's json object
 """
 
-# Function to perform sentiment analysis (replace this with your actual sentiment analysis logic)
+# Function to perform sentiment analysis
 def analyze(
         sentiment_input: str,
     ):
