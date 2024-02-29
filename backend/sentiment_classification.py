@@ -80,9 +80,9 @@ def main(args):
                 sentiment_label, sentiment_score = analyze(stringified_inputs)
 
                 # Update the course with sentiment classification result
-                course["sentiment_labels"] = 
-                course["sentiment_scores"] = 
-                course["sentiment_distribution"] = 
+                # course["sentiment_labels"] = 
+                # course["sentiment_scores"] = 
+                # course["sentiment_distribution"] = 
                 course["final_sentiment"] = sentiment_label
                 course["final_sentiment_proportion"] = sentiment_score
                 # course.pop("stringified_info")
@@ -97,6 +97,7 @@ def main(args):
 ############################################################
 
 # Call the main function to process all JSON files
+# Example call: python sentiment_classification.py --sentiment_input_fields title code --data_path data/test_courses
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
