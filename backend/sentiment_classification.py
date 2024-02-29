@@ -1,1 +1,102 @@
+import os
+import json
+import argparse
+from typing import List, Dict
+from transformers import pipeline
+
+"""
+This file runs sentiment classification on CourseTable data as follows:
+
+Args
+- data_path: Path to the desired folder containing .json files for courses
+- sentiment_input_fields: List containing desired fields in each course's json object to consider for sentiment analysis
+
+Processing
+- Consider each .json file in 'data_path'
+- For each item in the .json: 
+    - Retrieve the relevant information specified by 'sentiment_input_fields'
+    - Format as string
+    - Pass to sentiment analysis model
+    - Store result as a new field in the json object
+
+Result
+- Updated .json files with new 'sentiment' field for each fourse
+"""
+
+# Function to perform sentiment analysis (replace this with your actual sentiment analysis logic)
+def analyze(
+        sentiment_input: str,
+    ):
+    sentiment_analysis = pipeline("sentiment-analysis",model="siebert/sentiment-roberta-large-english")
+    result = sentiment_analysis(sentiment_input)
+    return result[0]['label']
+
+# Convert sentiment input to a string
+def stringify(
+        sentiment_inputs: List[str],
+    ):
+    sentiment_string = ""
+    for field, value in sentiment_inputs.items():
+        sentiment_string += f"{field}: {value}\n"
+    return sentiment_string.strip()
+
+# Main function to loop over all JSON files in a folder
+def main(args):
+
+    # Look at all data files
+    for filename in os.listdir(args.data_path):
+
+        # Confirm only .jsons are considered 
+        if filename.endswith(".json"):
+
+            # Read the json file
+            file_path = os.path.join(args.data_path, filename)
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+
+            # Add sentiment field to each json object
+            for course in data:
+
+                # Retrieve relevant sentiment info for current course
+                sentiment_inputs = {}
+                for field in args.sentiment_input_fields:
+                    sentiment_inputs[field] = course.get(field)
+                
+                # Perform sentiment classification
+                stringified_inputs = stringify(sentiment_inputs)
+                sentiment_output = analyze(stringified_inputs)
+
+                # Update the course with sentiment classification result
+                course["sentiment"] = sentiment_output
+                course['stringified_info'] = stringified_inputs
+
+            # Write back the updated data to the same file
+            with open(file_path, 'w') as file:
+                json.dump(data, file, indent=4)
+
+
+############################################################
+############ RUN SENTIMENT CLASSIFICATION HERE #############
+############################################################
+
+# Call the main function to process all JSON files
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+
+    # Specify the folder path where JSON files are located
+    parser.add_argument("--data_path", 
+                        type=str, 
+                        default="data/test_courses",
+                        help="Folder where the .json files for the course data are located") 
+
+    parser.add_argument("--sentiment_input_fields", 
+                        nargs="*",  # 0 or more values expected => creates a list
+                        type=str,
+                        default=["title", "code"],
+                        help="Specify what field(s)/attribute(s) of each course to use to run sentiment classification") 
+
+    args = parser.parse_args()
+
+    main(args)
 
