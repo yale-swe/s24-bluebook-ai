@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>117</strong> </p></li>
+<li><p>RESPONSES: <strong>91 </strong> </p></li>
+<li><p>DECLINED: <strong>3</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>17 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        CGSC 315 01/PSYC 315 01 
+        The Modern Unconscious 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>Among the practices in this course geared toward learning during the COVID-19 pandemic, which succeeded and which could be improved? Please comment on course practices that allowed for virtual engagement.<br/> <br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC602   <strong>CRN:</strong> 13029/13028   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><span class="currentStep">4</span><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Perhaps at least one added synchronous component would have made the course a little more engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Asynchronous lecture, so hard to engage past just listening to the videos. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The recorded lectures were helpful. I enjoyed watching them when I had the time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> All lectures were asynchronous and simply uploaded in the media library. Aside from office hours, there was zero engagement. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Well the professor obviously just reused the recorded lectures from his class in the Spring, so that was a little frustrating, but whatever. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> hard to keep up with course given virtual nature <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Recordings do allow you to watch wherever and whenever but having live would allow students to easily ask questions as the lecture goes on. Obviously, ideally this would be a much better course in person but COVID doesn't allow this. Additionally, I think it would have been much easier to have a discussion tab or maybe piazza thing for this class to ask easy and quick questions throughout the course that do not need a whole email situation. Also, it allows for more...anonymity? I know I am more likely to use a discussion forum like the discussion on Canvas or piazza than I am to email (unless its more complicated or personal).
+
+Additionally, I do not agree with the use of the lockdown browser. It seems like an okay idea to stop cheating however, it disadvantages anyone a second device. Anyone with a second computer, a tablet, iPad, etc would be able to kind of circumvent lockdown browser anyways. Additionally, during the tests you weren't allowed to go back to questions you had already answered. I think this is ridiculous because it stresses me out much more than it needs to. I do best on tests when I look through and try to do every question then go back to the ones I do not know. It actually makes me waste more time than I have because I want to make sure I am getting every question correct which reduces my time for later questions. Also, I know this was supposed to decrease the chance of calling friends and essentially doing it with each other but how does that change anything? Friends could call and just ask what they think of a question or for help on one even if the questions are scrambled for people.
+
+I would say either please try to find a better way that doesn't disadvantage anyone or allow it to be open note. Maybe make it so that you have to send in the notes you will use and then you can access only the test and those notes on lockdown browser or something....even then people can still use other devices though.
+
+Also, I personally did not know anyone in the class until the very last week because everything was recorded so I think recorded lectures already decreases chances of "calling friends for help". <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> More engagement with the material in between exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was entirely prerecorded so it felt very distant. It's worth it to wait until it's in person so you can actually see someone teach it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Classes were asynchronous, so timezones were no problem. Tests occurred during the designated class time, so you wouldn't be able to take a class at the same time.
+The test format was new to me, but it worked well for this type of class. We used lockdown browser, and once a question was answered, you could not go back to check it again.
+No other online learning tools were implemented. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were easily adapted for the pandemic, since they were simply uploaded as recordings and could be viewed asynchronously. That said, engagement in this class was incredibly low for me. My only actual engagement with the course material, outside of lectures and the occasional office hours, was exams. Some reading responses or discussion sections would have very much been appreciated so that I might be able to think through the material more effectively and actively. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There was truly no practice that allowed for engagement with the class. The pre-recorded lectures definitely allowed people on different time zones to have more flexible access to the class, but because there was no opportunity for in-person communication (other than office hours), it didn't have the feel of a real course at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked that the lectures were recorded <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One thing that I believe could be improved was the structure of the online exams. In the exams once you answered a question you were not able to go back and look at it or change your answer which I believed was unfair because in a normal year during an in person exam you would have the option to do this. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was a good online course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Shorter lectures would be better, even if that means they become a bit more frequent throughout the week. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Recorded lectures should be posted at any time <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Prerecorded lectures were helpful but could have been more effective with weekly assignments <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The recorded lectures made the class very flexible, which  I liked. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A little more engagement from the professor with regards to adding to the course instead of recycling and giving us the same experience rather than adding knowledge. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The flexible learning style of pre-recorded lectures was helpful. I would <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I enjoyed the class being asynchronous, it was very manageable during remote learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was nice that I could do the class entirely on my own time, but it could have had at least a couple live sessions with Professor Bargh teaching. He also literally just used the same recorded lectures as last semester, which I guess makes sense but still made the course feel less engaging. I also think the grading was unfair and so many of the multiple choice questions were worded illogically. Plus, a course like this is unfair because I think everyone cheats on the exams when they are not supposed to be open note. I think that is really unfair for those that did not. They could have proctored the exams on zoom like my other courses did. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked the pre-recorded lectures because it was easy to follow the course at my own pace. However, I did find myself falling behind in the lectures because there were only 3 exams throughout the entire semester, so having more graded work to submit might have helped me stay on track throughout the course and avoid falling behind. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures were pre-recorded and posted the morning of class which was helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There was zero engagement in this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The prerecorded lecture gave clear insights required for the course <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures were prerecorded which was convenient. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> His engagement with students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I wish there was a section of some kind just to have a synchronous component to the course that is not just office hours. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Very best <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The recorded lecture format worked well although it was difficult to stay on schedule watching the lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think everything worked well overall. It was better that the lectures were recorded so I could take notes and rewind the video. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The practices were just fine. I preferred the recorded lecture and every lecture allowed me to press play and pause and take my time when watching them. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There should be live lectures, but recorded. This would help with the interaction with instructors and classmates. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><span class="currentStep">4</span><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

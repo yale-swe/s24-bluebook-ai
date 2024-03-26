@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>236</strong> </p></li>
+<li><p>RESPONSES: <strong>189 </strong> </p></li>
+<li><p>DECLINED: <strong>9</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>26 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2021-Spring</strong>
+     
+    
+         
+        EDST 160 01/PSYC 150 01 
+        Social Psychology 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 21153/21152   <strong>Term:</strong> 202101</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I like this class a lot, i dont think much could be improved <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Gendron -- Gave up so many opportunities to understand the material.
+Weaknesses: I thought the readings in the book were too long for the info. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would prefer more structure to the resources - for example on the review guide surveys it would be nice to have a (very) brief summary about the studies listed, because I really can't remember which last names corresponded to which study. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weaknesses: understanding some of the studies was difficult, and I would have preferred a small summary of some of the more convoluted studies in the notes for when I was reviewing. 
+Strengths: notes were excellent, pacing in class was very good, class participation through polls was often enough to be effective, assignments were straightforward <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> very organized and interesting information <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The grading of essays by the TAs was really hit or miss and there were obvious differences in the grading scheme used by each TA. Some were very harsh graders, while others were far more forgiving. There was also little effective feedback given on how to improve our writing, leaving us to just kind of wing it.
+There were also way too many papers mentioned in lecture to remember the minute details of for exams and quizzes and I am not surely what there really is to be gained by doing so. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class is incredible, and I only have positive things to say about it. Professor Gendron is amazing, and her class was engaging and genuinely interesting. I loved how Prof Gendron set up her powerpoints (she clearly put a lot of time into her preparation) and used PollEv. The papers, exams, and project paper had really cool questions that helped me learn psychology on a whole different level by making higher-level connections and application. Even though I attended live lecture and took really careful notes, I still found the weekly quizzes a little bit hard. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were very engaging and I thought the course was organized well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of the weaknesses is that Ed was supposed to be a place that replaced email communication but it felt like Ed posts were gone through on a twice-weekly schedule making it feel like email could have been faster. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The one thing with this class is that lectures feel really long. I don't know if that can be avoided but it was sometimes hard to engage because of the length. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: very organized lecture, clear expectations for students, and a good grading structure
+weaknesses: no feedback on the second 2 response papers, could use more real life connections to the course material <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: good content presented, organized lectures, material was clearly explained
+Weaknesses: not the most organized when it comes to assignments. Expectations were not always clear. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: good explanations, compelling material, easy quizzes Weaknesses: none <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: great professor who is accommodating, kind, and thorough. Lectures are succinct yet detailed and digestible. Notes are provided via PowerPoints and delivered nicely, and the format is great for live or asynchronous viewing. Tests are completely doable and do not require extensive memorization. Quizzes are simple and a good way to reinforce content weekly. Workload is manageable and content is extremely interesting.
+
+Weaknesses: survey of many concepts means any one concept is not covered in as much depth as sometimes would be desired. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Interesting content, very applicable, and the teaching team genuinely cares about the students. This is the only course where I felt enough effort was put into empathizing with students and actually looking for ways to accommodate those that were struggling. Maria Gendron and her team are fantastic. So grateful for their kindness. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Really well organized and not too difficult, Professor Gendron is super accommodating too. I thought the material was really engaging, too. The papers are pretty manageable and sometimes fun to write (if you're not big on reading research papers, know how to pick ones that are short and easy to summarize). Honestly no big flaws. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this course had way too much scientific content for an introductory course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I loved this class! Everything was super well explained in lecture, the concepts were interesting and applicable to real life, and the essays/projects were actually interesting to complete. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It is a true survey course that covers a lot of topics. The paper assignments are a strength because they provide an opportunity to go more in-depth on some specific topics that each individual students are interested in. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was a little boring which made it hard to stay engaged. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was extremely well organized and I really liked the PollEV polls that we did during class, as it helped facilitate engagement. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The structure is very nice, and feedback is always clear. The lectures were super engaging and the content was very interesting. 
+
+No weaknesses! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Studies sometimes not very clearly explained <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength lies in the teaching and the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There were a lot of assignments - response papers, weekly quizzes and readings, two exams and a paper project final was a bit more than I anticipated and I had to spend a lot more time on the screen than I already was. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Dr. Gendron is a major strength of this class. She is the kind of professor that would make any class good  no matter what she teaches. But the class is wonderful too. She really knows how to adapt the class to student needs and build engaging slides that facilitate memory. For example, she always defines key terms clearly on their own slides so students can write them down. When things got tough on campus and in the world, she was flexible with deadlines too. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the poll everywhere questions were really interesting and interactive. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: amazing and interesting content that's useful for daily life <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was exceptionally well-taught ad the lecture was interactive. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Really interesting <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The material was very engaging and relevant to current events <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - Dr. Gendron is very insightful and knowledgeable. Dr. Gendron and the TAs were very open to hear our opinions or suggestions throughout the semester.
+Weakness - I know there are a lot of people in the class so I understand in a way, but it took a while to release the grades for some papers and quizzes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: This course was taught in a very organized manner, with important terms and relevant literature all marked on the powerpoints. The professor also made sure to include summary slides throughout the lecture which was extremely helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> In-person format would be great, which obviously is not at their Professors discretion <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: great content, GREAT, flexible, and understanding prof
+
+no weaknesses <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> i found this class incredibly engaging and there was a lot of feedback for all the assignments and exams. i loved the format of the exams. I think this class really emphasized learning to learn rather than for a test or for a grade. i felt very supported by professor gendron and the rest of the teaching team <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: very well structured, fun, relevant class
+
+Weaknesses: a lot of material to learn with a lot of assignments. I would have had to credit/d/fail the class if the exams were not open note because I would not have had the time to memorize so much material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+- Prof. Gendron
+- broad range of information presented
+- compatible with online format
+- not too much weight on any one syllabus item
+
+Weaknesses:
+-  while there isn't much weight on any particular syllabus item, there are a lot of small components to this class that are somewhat difficult to manage
+- labeling of lectures and readings in canvas was not super helpful because they often depended on counting the lectures in the syllabus (if the lectures were already numbered the syllabus or if the readings were labeled by topic rather than lecture number, finding readings would be a lot more intuitive and take less time) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The quizzes were impossible. The tests were good. Quizzes were impossible though. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of the course are many! The professor is very engaging and passionate about what she teaches. It is taught in a way that is easy to understands and builds upon key concepts. Additionally, the teaching team was receptive to questions and feedback. 
+Its weakness lies in the lack of feedback on response papers and exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It would be more engaging in person <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this course provided an interesting overview of concepts, but sometimes quizzes felt very vague. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I enjoyed the material and I think the readings and organization of the course were quite good. The lectures could get a bit unfocused though <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength of the course was the textbook as it provided a lot of clear information and it was mostly interesting. Also, I appreciated the feedback survey as they were helpful. However, the grading of the course was very disorganized and unclear. All the TAs seemed to grade differently and marked down for petty things. The grading was inconsistent and it felt like the level of work that I put in for each assignment was not worth the effort as the TAs harshly graded and marked down on concepts that I actually explained in the paper. Although I put in hours of studying for the course, the quizzes did not accurately reflect what was taught in the lecture and the book as many questions were confusing and some were not covered in the course material. The lack of feedback for our test answers was also detrimental to our learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course did not seem like a Yale-level course and unfortunately did not facilitate or necessitate much engagement. Topics were covered very generally, with more focus on the definitions of well-known terms (like "discrimination" and "self esteem") and the memorization of the overall conclusions of dozens of papers than on deep analysis of social psychological concepts. At times, I felt like I was in middle school. I wish this course was more like CGSC110/PSYC130, which was an engaging lecture that drew connections between concepts, made students think, looked at real-world applications, and provided a more in-depth study of a smaller number of papers. This is not a critique on the professor herself; she was kind and always open to feedback. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Instructor was very flexible!! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Very engaging material! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was very interesting overall because it was easy to see how concepts play out in our everyday lives. The course was also very easy to follow and all materials were provided by the teaching team very effectively to help students succeed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the weekly quizzes reinforced lecture and reading material and the other assignments were interesting ways to apply the concept we learned in class. The TAs were helpful and Professor Gendron is incredibly understanding and passionate about the subject. Weaknesses: none come to mind <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very well run the engagement with students is phenomenal. Other courses should model themselves off of Dr. Gendrons course structure as well as her mindfulness and genuine care for students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Maybe it was the zoom format of the class, but it was hard to feel grounded in the class this semester. It was hard to ever know if I was on track with everyone else or if I was doing the class wrong and with feedback coming late and from different TFs each time, it felt hard to improve. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the content is very interesting. Response papers were really helpful in examining research papers. weekly quizzes helped with understanding the content <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I absolutely loved how this course was organized. The rubrics for each assignment were very clear, and expectations were also clear from the start. The lectures were organized in a very helpful format (discuss a concept, introduce some studies that better explain that concept), and it was honestly one of the clearest lecture formats I've ever seen. I also loved the fact that Dr. Gendron included interactive elements in her Powerpoints. Zoom made focusing on lectures for long periods of time very difficult, but I never had issues focusing in Dr. Gendron's class. Weaknesses: I wish that the guidelines for the exams were made clearer beforehand. I really didn't know what to expect for the first exam. I liked that we reserved class time for review, but I wish that the TAs also held their own review sessions just so that we could hear things explained in a different way. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the content was very interesting and Professor Gendron did a great of keeping everyone up to pace. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths of this course are its organization and the material itself. Learning about society is interesting and the way the interactions play out with other people is engaging. The course is also well organized so the material is not overbearing and its split up so that one topic tends to logically flow into the next. A weakness of the course is the Ed discussions. I never managed to use the Ed discussions but last semester I took a different psychology class that used a different program that was more accessible. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths include the organization of the course. A weakness is that feedback was either never given (we couldn't see the correct/incorrect answers of our quizzes), or feedback was vague (response papers, for example). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was very clear what work we had to complete and by when. The Ed Discussion was also very helpful in getting our questions answered. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Only strengths for this class!!! It was wonderfully organized, and Professor Gendron is an amazing lecturer and a really warm and understanding person. She makes the course extremely engaging and geared towards facilitating student learning. This was definitely my favorite course of the semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The material was fascinating and presented in a broad overview but very understandable way.
+
+Weaknesses: Too much work with not enough feedback. Assignments included weekly quizzes (out of 10) which we never got to see what we got wrong; 4 essays that were graded weirdly, and, personally, I do not think very well; and 2 exams also which we never got to see what we got wrong and what was the correct answer. The quizzes were okay in making sure we kept up with the course but even if you got a few quizzes with just 1 wrong (9/10) that was already a few 90% which brought down the grade. And god forbid if you got even just one quiz with more than 1 wrong. Also, I do not think I learned anything from taking the quizzes because I could not learn from my mistakes and see what I had gotten wrong. The same goes for the midterm. Additionally, communication on Ed was a little lacking especially in time-sensitive cases from my experience although generally Ed was a good resource. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Gendron was definitely a huge strength for this class. I really liked the lecture content and I though that the textbook reading really enhanced the lecture. The one weakness of this course was that the lectures were a bit long and covered a lot of content per lecture. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>12</strong> </p></li>
+<li><p>RESPONSES: <strong>10 </strong> </p></li>
+<li><p>DECLINED: <strong>0</strong> </p></li>
+<li><p>NO RESPONSE: <strong>2 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        EAST 542 02/EALL 530 02/HUMS 269 02/EAST 242 02/EALL 230 02 
+        Poetry&amp;EthicsImperialCollapse 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/> <br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i> </p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403-YCWR   <strong>CRN:</strong> 15813/15812/15811/15810/15809   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Incredible class with no weaknesses. One of my favorite classes I've taken at Yale. Prof. Bender is a gem. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course surveys broadly across academic papers and books, which I think is great because it extends the poetry of Du Fu under a universal, global context. The wide range of disciplines tackled - philosophy, linguistics, psychology, anthropology - also shed light to the intricate, rich implications of Du Fu's poetry. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: openness and availability of the professor and the TA, poems were fun and interesting, the translations provided were quite nice (especially with the footnotes that Prof. Bender created), and the flexibility of the course. 
+
+Weakness: I wish I had more structured feedback on my papers and more designated time with the professor to go over my writing. Although this course was listed as a WR credit with an emphasis on improving our writing, I didn't feel like I improved all that much. Also, the readings can be quite dense. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> great discussions and fantastic professor, I wish thee readings had been aa bit shorter + more focused. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> WEAK: Time and time again, I wished Luke would give us a lecture contextualizing the material. Every class, there were poems, a secondary article, some biographical chapters, maybe another background article (or three; useless really), and some long sections of text written by Luke talking about the assigned readings. Everything was organized really well and thematized succinctly, but that did NOT mean that when we got to class everybody knew when a certain poem was written or what was going on in Du Fu's life when he was writing at that particular point in time. Literally just 2 minutes of "this was happening now" would've helped. That's not a large ask. And before asking for our opinions, actual GUIDING questions would've been helpful--none of us (except for some native Chinese students) had any experience with Chinese poetic form, and he would just be like "thoughts on this poem?' I'd share my thoughts and get either a summation of my thoughts in more cogent terms (wow, impressive Luke tbh, that was actually really cool and so nice) or the uninspiring "thanks for that." Every time I got the latter I wanted to scream or go back to bed. It was ridiculous. Luke sharing his personal opinion is something that has definitely been brought up before-and it's certainly not like he hasn't gotten this comment in the past--because he DEFINITELY has. Look at previous reviews, they all wish he said more. I'm not paying to hear the insights of some mediocre Yalie muse about what they think they know; I'm paying to hear one of the foremost scholars on Du Fu talk about just that. And, with a discussion format on Zoom during a pandemic, it was like "yes king give us nothing &lt;3" because that's definitely what it felt like. Look, you might read a ton of comments about how great this class was, but in reality it was just your standard run-of-the-mill mediocre literature class. I mean the TF Yang said it was "nice knowing you throughout the semester" on my final paper and I turned to my mother and was like, not once did we speak to each other EVER? Felt like copy and paste for every student. If it wasn't my apologies, but jeez he never said anything in class and I was never compelled to go to his specific office hours, given the lackluster office hours I attended with Luke, so did we even know each other at all? Very strange comment. And the comments themselves were utterly useless. 37 college classes and As on every. single. literature paper I've ever written and now "this was structured poorly." Look, sure I will take the criticism-BUT THAT'S ALL HE EVER SAID. There was no explanation as to HOW it was structured poorly! Or, "this paragraph has no argument" well it shouldn't need one, read one of your own paragraphs of text that you made us read? Or "pick simpler words" well, then don't use "lacustrine" or "ineluctable" in casual speech during class and assign texts from the 90s that were incredibly dense and ridiculously hard to understand because of the word choice and verbosity and expect me NOT to emulate that. I cannot express how frustrating it was to also get the TF saying "beautiful paragraph" and Luke saying "actually no, this was trash" [not like that obviously, but you get the point] on the. same. freaking. paragraph. Either a lack of communication or no communication at all between them b/c that was absurd. This class left way too much to be wanted. And I got an A in this class, too, so don't think I'm just complaining to complain. I've taken great lit classes and terrible ones, and this one was just mediocre. But why oh why would you give handouts on structure and style AFTER the papers were due? Makes no sense at all. STRONG: structure was identical every single class (a bit monotonous, but I'm sure some enjoyed that). Both prof and TF (who literally never said a single word in class and seemed like literal wasted space on the screen) graded and put comments on our papers (however drastically different their opinions were). <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

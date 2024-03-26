@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>78</strong> </p></li>
+<li><p>RESPONSES: <strong>64 </strong> </p></li>
+<li><p>DECLINED: <strong>2</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>10 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        PHAR 550 01/C&amp;MP 550 01/MCDB 550 01/ENAS 550 01/BENG 350 01/MCDB 310 01 
+        Physiological Systems 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 13476/13481/11978/10197/10117/10130   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The tests covered so much material and we had to study a lot but when it came to the midterms, not all topics were asked about. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was great, but the only weakness was that many of the office hours I wanted to go to were during the school day, which meant if I had a question on Tuesday that I wanted to ask in person, I'd have to wait until Friday. Nonetheless, Piazza was a great resource whenever that occurred. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Intellectually, the content was very interesting and satisfying. There are also many opportunities for you to improve your grade, such as the mere attendance at section can boost quiz scores up to a 100 as long as you get half of the questions right. 
+
+Weaknesses: I honestly feel like this class would be impossible in a live, in person setting. Since we were remote, all of our exams were open note, and there is just so much material that I don't know how I would have gotten through the class with hand-written, closed note exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I loved this class so much. I learned a lot from it. My one suggestion for improvement would be more clinical vingettes / real life examples of diseases / disorders. Those were so so fun and helped me better understand the topics at hand. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are the organization and clarity of the lectures; it is clear what content we have to know, and organized in a format that definitely facilitates student learning. Weakness was that there wasn't a ton of opportunity for grades outside of the few midterms and finals. I would have preferred to have weekly homework assignments outside of the quizzes, which just ask us to regurgitate facts. I wish that the undergrads had an option like the grad students where we could read papers and attend a discussion section to talk about them and receive a grade for that, rather than relying solely on midterms/quizzes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Teaching was good. The pace of the course and structure was great. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The entire teaching team was SO responsive and focused on making this course a great one and they definitely succeeded. The course depends a lot on how much effort you put in and engaged with the material given that it could get pretty complex. I would say a great help would be narrowing down the lecture learning objectives a but more or at making more detailed power points. Despite the recorded lectures, I would have liked to pay more attention to the actual class than copying down all the information before they professor moved on the next slide. Despite that, it was a great class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength of the course was that Prof. Saltzman and Prof. Campbell were excellent professors and taught in a clear and engaging manner. I enjoyed being able to watch lectures live but also having them recorded so I could go back to them and rewatch sections that I didn't understand. A weakness is that I wish the tests had more short response questions and less multiple choice so that more partial credit could be given and also that the exams were long and difficult to finish in 50 minutes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Really cool class, I think the lectures tend to fly through information sometimes (which makes sense as there is a ton of content to get through) but maybe take a bit more time to develop the more important concepts and systems - especially would have benefitted from taking the cardiac system/loops a bit slower. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths include fantastic instructors, intellectually challenging material, and great TAs/peer tutors. The only barrier for me was that lecture was early in the morning, but that's just me. I don't recognize any other weaknesses regarding the way the material was taught, but incoming students must have a mastery of introductory biology. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: You will learn an immense amount in this course. I learned more from this course than from any other course I have taken at Yale. This course gives students the tools to understand most common medical conditions that they may experience in their life, and how to go about ameliorating those conditions. The content is incredibly interesting and relevant. The tests are fair. The workload is manageable (A LOT of reading and a weekly 4-6 question open-note quiz). Weaknesses: There was some miscommunication about expectations for studying on the part of the instructors, particularly Stuart. At the beginning of the course, students were told "study from the lecture slides, and only go to the book if you have further questions." Toward the end of the course, Stuart began referring to the textbook as "assigned reading" out of nowhere, and he also began rushing faster through his lectures around this point, making them more difficult to follow and understand. His lectures discouraged me from attending the live lecture screenings, because he moved too fast for me to adequately understand the material in real time. I had to watch his lectures on my own time, with a lot of pausing and replaying, to fully understand the topics he covered. To improve, Stuart can slow down, or the instructors collectively can give students a clear understanding of the expectations for the textbook readings at the beginning of the course that one of them does not decide to arbitrarily change later. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths -- lead instructors and teaching team are amazing at their job, committed to making sure students have a good grasp on the material; tests are hard but fair; weekly quizzes are a great way to stay consistently engaged with the material
+Weaknesses -- perhaps sections should be changed from 50 minutes to a full hour, considering we almost always went overtime <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This was a terrific course and I thoroughly enjoyed learning the material. I really enjoyed the quizzes as a way to reinforce important concepts and keep all of us up to pace with the course during the semester. Sometimes the quizzes may have required answers that were somewhat long. I liked the model of the 3 exams dispersed throughout the semester without a final exam. It would have potentially been preferable to give the option of dropping the lowest score out of the three midterms, as that would take some pressure off of them, especially since it was easy to lose points due to the multiple choice nature of the exams. I very much appreciated the ability to gain lost point in quizzes by going to section each week. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lecture format is nice and the learning objectives at the end are helpful. At times the amount of information was overwhelming. The discussion sections were very helpful in outlining the most important concepts of the course. The quizzes were also a great resource for studying foe the exams. However, the exams were incredibly difficult in that we were only given 50 minutes. It was difficult to check answers which led to a lot of simple mistakes that cost a great deal of points. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This was my favorite course I have ever taken at Yale!!! I truly have no complaints <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of the  course is that it really challenges you and makes you a better student. It provides a lot of opportunities of getting help too. 
+
+The weaknesses is that it is a lot of information and the exams do feel very difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this courses strengths were having lecture slides and the discussion sections. I think if there were more office hour times or practice quizzes to study it would help out alot <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The professors and TAs. Professor Campbell and Saltzman were always very supportive and available. 
+Weaknesses: Harsh grading. The grades I got were not reflective of how hard I worked. The virtual format made it very difficult to feel motivated at times. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The weaknesses are how much reading there was. Its a lot of reading to understand the material. Also, the Q&amp;A session was difficult because it was right after 45 min of class before which made it difficult to pay attention. Some strengths are how everyone was encouraging to help learn about the information. It was helpful and made me want to really engage with the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course is very well taught, the information presented in lectures is clear, and the professors manage the class effectively, but the workload is a lot to keep up with. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The instruction was purposeful and relevant. I felt everything taught in lecture was useful for my understanding and my ability to apply the physiological concepts outside of class. I appreciate the variety of professors as well. It was refreshing to have lectures cycle between three professors and experience three different teaching styles. 
+
+One challenge was the administration of exams. I personally experienced technological issues. The test would often shut down a few minutes before my allotted time or before I was able to upload written responses. Turning off the automatic submission feature on canvas would ameliorate this. Also, I often felt pressed for time on exams. I had to limit the amount of information I included in responses which jeopardized the accuracy and completeness of my answers. I think a solid 10-15 extra minutes for exams (which were 50 min) would ameliorate this. As our class was a morning class, I can imagine us meeting slightly earlier to accomplish this. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength of this course is that the instructors explained difficult concepts very well and had many structures in place, such as Friday Q&amp;A sessions, to make sure that students had an opportunity to clarify confusing concepts that they were unsure about. Also, the discussion sections were very helpful in reviewing content and focusing in on what concepts are most important to know well. The weekly quizzes were also extremely helpful, as they provided an incentive to review lecture content while not being detrimental to our grades.
+
+The only thing I was hoping for is a little bit more guidance on what concepts to focus on for exams. I did fairly well on the exams, but I would have liked to have some practice exams or more practice questions in preparation for the exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are the professors and the TAs. All were helpful and knowledgeable. Also, the book is helpful if you make the effort to read it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was informative but maybe there could have been more interactive components for example a challenge question every week. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the early live lectures on fridays were not that helpful and also hard to attend given the hour so I was usually skipping them and just watching the lecture on the weekend <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course are its instructors. Professors Saltzman and Campbell were incredible professors all around, and the course was extremely well-structured. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought a big weakness was the distribution of content. For example, multiple lectures were spent going over the renal system in great depth, but the only one lecture was spend on the reproductive system and I felt like I didn't learn much. Format of the exams was frustrating as well. Multiple choice questions were worth too many points and getting a few wrong would be the equivalent of the short answer. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

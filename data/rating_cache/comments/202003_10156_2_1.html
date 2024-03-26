@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>165</strong> </p></li>
+<li><p>RESPONSES: <strong>138 </strong> </p></li>
+<li><p>DECLINED: <strong>5</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>5 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        CPSC 201 01 
+        Intro to Computer Science 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 10156   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The problem sets were very well designed for understanding all the material. Good introduction to a lot of different topics in CS while still keeping it somewhat cohesive. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: focused on basic programming concepts. Racket isn't a complicated language so I could focus on understanding the concepts rather than trying to learn its grammar.
+Weakness: The live sessions are often a repetition of recorded lectures. I think the live lectures would be better utilized if they are more devoted to example problems. I also feel like some of the more complicated concepts were not explained very clearly, e.g. machine von Neumann and its different parts. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The weakness is Racket and the scope of things being learned is too broad. In my opinion, it would be better to focus on less things and dive deeper into some of the concepts. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths were that a lot of important information was covered and the Peer Tutoring Hours were always very well run and very helpful. A weakness was that sometimes the lectures were a bit confusing and the homeworks weren't explained very well or very well connected to what was being taught. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: a good overview of the basics and introduction to data structures/algorithms. 
+Weakness: I really did not enjoy the oral section of the exam although I could see the necessity for it during a virtual format. Psets are not collaborative but are a reasonable amount of work. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The main strength of this course were the 7 psets. They were useful for consolidating ideas and more importantly a joy to complete.
+The teaching style was overall effective, but due to the lack of a textbook and the large list of at times disparate topics, this class was more of an overview of a bunch of different ideas. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> As everyone says, the language is useful , but the psets are quite fun and the workload is fair. The first two exams were an insane time crunch, and most people were unable to finish. Then the third exam was a cakewalk. So be prepared for that. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Overall a pretty good introduction to college programming, not too much of a difficult class if you've had some prior high school experience with computer science
+
+Weaknesses: Felt like the live lectures didn't really teach much material compared to the recorded lectures, so the recorded lectures were the main source of learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I'm copying-and-pasting from question 11 here: My biggest issue with this course is the tests--the tests were 10-12 questions each with 50 minutes to do them, giving 5 minutes or less to write, test, and copy a working Racket procedure for each question. Then you have 5 minute oral exams...I don't understand why they tested us this way, there's no time to think in either scenario. On top of that they switched the weight of assignments and exams in the middle of the semester without any announcement. 
+
+I also had some trouble with the way the questions were worded, which may just have been a personal thing, but most of the time I went to office hours was just to clarify what the instructions were asking for because I didn't understand the way they were worded. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I really enjoyed the PSETS! I think they were great, except for the fact that in the beginning psets, there was often one question that was exceedingly difficult for seemingly no reason. I think that needs to be adjusted. I understand wanting to challenge us, but that sort of challenge should come in the later psets, not in the beginning when the learning curve is really steep and people are freaking out and spending 5-6 hours on a single problem. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The live sessions frequently felt like a repetition of the pre-record, and it felt unnecessary for them to be small. The course would have been better if we just had one large lecture section that included both the contents of the pre-record, then break out rooms to go over what we typically did in live section. This would have made it more engaging. Additionally, the time management for the lectures could be improved. However, the was sufficient help and time to complete psets and all the materials were easily accessible making it easy to review materials and study for tests. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Racket, because it forced me to learn how to use recursion effectively. The ULAs were also an invaluable resource, and the "Review with Rob" sessions were a lifesaver.
+
+Weaknesses: Also Racket, because literally no one uses it outside of this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The live lectures were only 25 minutes long, so they were often used as supplements to the prerecorded lectures. However, we often did not get through all of the examples in the live lectures and I think that sticking with a 50 minute lecture would have been more productive. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Give a warning beforehand on how the exams will be tight on time <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weaknesses -- recorded lectures were not very well-explained. Often time instructor just read the slides, especially in the computer architecture unit. I had to rewatch recorded lectures more than 2-3 times to get a full understanding of the concepts. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Great course. Was very well organized. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - psets and review workshops
+Weaknesses - time constraint on exams were very difficult and I wish there was more practice in reinforcing concepts during the live lecture <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would've preferred just recorded lectures and cutting out the live lecture. I never went to the live ones, as they sort of just seemed like a waste of time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I learned a lot in the course, and the problem sets were effective in reinforcing the concepts we learned. However, I feel like only having 25 minute live lectures was somewhat limiting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class was pretty organized and lectures were interesting. A huge weakness was that there were no professor office hours and the ULAs were often not sure how to do the problem sets themselves. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weaknesses: The split lecture format was really weird and made it hard to keep up with the class. I really would have preferred for it to be one or the other. It ended feeling like shorter vaguer lectures and then office hours. The split class was also really weird; I get it was for the interest in time but it made class sessions short. Also, the test format was just personally not very enjoyable. As a person without a strong STEM background, how intensely timed the tests were made it really difficult to get things done even if I already knew the answer because I'm a slow test taker. The third midterm, although closed book was a lot better. My suggestion for the future is to maybe throw in a couple more multiple choice if the tests are going to be so short. 
+Strengths: Virtual office hours was really successful. The recorded lectures were easy enough to understand. The provided files and resources were also really great for review. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The live lectures were next to useless in learning the content because my professor never got through anything besides the introduction in the live part. The recorded parts were monotonous, but I thought the problem sets were pretty interesting and fun(?) to work through. The times per pset varied widely, as did the difficulty for each test. Overall, learning was incredibly boring the way this was taught. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+P-sets were a great help in solidifying concepts
+Lectures were well-structured and ordered
+Supplemental written notes were very helpful to refer to
+ 
+Weaknesses:
+Grading on the midterms was pretty ambiguous. The midterms had good questions but how points were awarded was often correlated to "how many lines are correct" which does not make much sense if single mistakes are carried through. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Characteristic of Yale, more theory-focused and you will struggle to see immediate applications of your skills. If you know programming and some basic algorithm and data structures, you will find this course incredibly manageable, especially the first half.
+
+Biggest potential difficulties:
+- Class is graded on a CURVE
+- Problem sets have extra test cases and so you could be caught with a lower grade than expected
+- MIDTERMS will determine your grade by quite a large factor, so be sure to study. The second midterm in particular was quite challenging for many students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Extended length for exams. I felt very rushed during the first two exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course is organized in a very logical and clear way, which facilitated learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> i think zoom for CS just doesn't work with me personally, i dont know about others. I did not find it engaging nor did i find myself able to learn the material like I was able to in 112. Just didnt work for me. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Was unclear whether I was supposed to watch both pre-recorded and live lectures or just live.
+
+Second midterm was far too difficult in comparison to first midterm. 
+
+Learned a lot! Really enjoyed the homework assignments. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Lab assignments were of appropriate difficulty and ULAs were always helpful.
+
+Weaknesses: Information in lectures did not align with lab timeline, so there wasn't much incentive to attend live lecture as students would inevitably have to re-watch the lecture once the information became relevant. Recorded lectures were also not very engaging, and it was at times difficult to discern which information was important to the big picture / what concepts were being emphasized. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Solely having a lecture made it difficult to engage with this course. While I enjoyed the content and structure of the course greatly, as the course provides an overview and sets the foundation for the field of computer science, I sometimes did find it a bit rushed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Very engaging and comprehensive cover of the material
+
+Weaknesses: Live lecture component being split up into four groups made each live lecture too short - very little time to ask questions, and instructor often had to rush through the material if they started late. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Problems sets are written well and facilitate learning. The lectures and materials provided covered all the material needed. 
+Weakness: Online office hour queues sometimes had extremely long wait times. Even though I was second in line it may take over an hour to get into a call with a TA. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course gives a good overview of the field of computer science and generally lives up to its name. The homework assignments took a fair amount of time to complete, but I found that they somewhat felt like a separate entity to the lectures and exams. While I understand that the instructors wished to engage in smaller groups of students and chose to split the class into four groups, I believe that a weakness of the course was this structure. Each live lecture was only 25 minutes long which was insufficient for the instructors to fully explain concepts for students. Often times, it was difficult to finish covering all of the material in that short time limit. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The recorded/live format of this class was effective (especially given the large number of students in the class), but I think longer live lectures would have been appreciated, as our group sometimes felt rushed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It feels like a pre rec class. We learn stuff, but its not that exciting or fun <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the recorded lectures were very solid but the live lectures were a little bland and could've been improved. Given the COVID-19 circumstances this is understandable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Good introduction to a variety of topics in computing, fair grading.
+Weaknesses: P-sets could be relate a little more to topics covered in class. Queue-system office hours does not work; needs a revamp. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:  Covers some foundational knowledge about computers that helps give cs some context. Weaknesses: The time limit for midterms are way too short, especially in the online format where you need to constantly scroll back and forth to reference charts at the top of the webpage. PSETS also sometimes had questions that went far beyond the scope of lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was overall a very strong course; I think I learned a lot and the usage/limitations of racket were very well applied in order to maximize the learning experience. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: psets are doable and representative of what lectures discuss, course is pretty structured and streamlined
+weaknesses: not a lot of information about exams &amp; some formats were not representative of psets, live lectures were only 25 minute sessions and didn't seem long enough <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought this was a good introduction to computer science. The material covered and the problem sets were interesting. Office hours were helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> felt like a pretty standard introductory computer science course, not sure that there is much to be changed/improved <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I really liked how the course gave a broad overview of computer science, including both the theoretical and practical aspects. Personally, I would have preferred a full live lecture format, which could be more conducive to question-asking and engagement. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> We never got feedback for our exams, only a score <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I think it gave me a solid foundation in computer science, a much deeper understanding of the discipline than what I had learned before college
+Weaknesses: not sure how practical/applicable the material is, sure it's good to learn foundational material but I'm not convinced that I'll take much useful from this course <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was well organized and the online resources are very helpful, but we were split into sections in class, which gave us less time to ask questions. I think having one larger group instead of two smaller groups may work out better by allowing more time for questions and having more people asking questions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course had incredibly low engagement and the exams were inproportionally difficult for the material taught in class. The lectures were straight forward and seemed applicable to future CS classes. However, the use of Doctor Racket seemed very pointless. This class could have taken advantage of a programming language like C which would have proved to be more useful moving forward. Additionally, the professors and course manager were not very supportive or flexible. It felt as if they were not willing to help you understand and learn and only there to catch you on your mistakes and penalize you. It was incredibly frustrating. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures were a bit dry, and Professor Rushmeier is not a great lecturer. However, the problem sets were interesting. Midterms were tough under the time crunch but fair. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Very well organized in my opinion - I really liked how there was a prerecorded lecture and then more discussion-based synchronous part. This allowed us to learn the new stuff at our own pace and then get to apply it in the live sessions. The problem sets were fair in terms of difficulty and I found them very interesting.
+
+Weaknesses: I know this is just how the course is designed but it did feel strange sometimes, because the Racket programming didn't have any immediate applications. I now know that's the point of the course, because you have to learn to adapt to whatever new language comes your way as a computer scientist, but clearly this is not what you're looking for if you want an intro to coding (go to CPSC 100 ("CS50") for that) and I'm not sure they make that clear enough in the course description. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I thought the problem sets were all very well-made and conducive to learning, and I generally enjoyed the class format.
+Weaknesses: The way of accessing office hours through one-to-one appointments (which I'm assuming was to maintain the "no collaboration on psets" rule - a rule I do think was helpful for my learning because this is an introductory class but also felt quite restricting) discouraged me from asking for help. This one isn't quite a weakness, but our first homework assignment placed emphasis on computer science as a humanities class, and there was an effort to work that in through talking about CS history in recorded lectures, but I think that if this course professes to care about this, the homework should also include humanities-oriented sections. Finally, I feel that the psets could have better prepared us for exams by having more theory as well as just coding. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Plenty of office hours (very helpful to go to)
+Teaching could be more interactive/better <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the strengths of this course were the ample resources available to students. The course is designed in such a way where collaborative work is not allowed, however, I do think discussion with other students would lead to a more beneficial experience. Also, the timed exams were very difficult for me personally. Coding certain problems can be difficult if you don't see a solution instantly. I feel like having more time for exams would be more conducive to learning because I found myself running out of time to finish exams even though I knew the material... simply put, I just needed a little bit more time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> More review sessions would have been nice, as they were super helpful when they did happen. I really liked the psets and thought they were very satisfying to complete. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Engaging concepts, lots of resources and help, fun problem sets, and very manageable tests <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I found the problem sets to be pretty engaging. Although time-consuming, after solving them you grasp a good amount of the concepts.  Weaknesses- The recorded lecture and Holly were very unengaging and pointless. The course would have benefitted from having a larger, live lecture. The tests were VERY DIFFICULT and not enough time. 50 minutes for ten problems was ridiculous (considering some were lengthy, coding problems and grades were not curved). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths
+- really good understanding of how computer works from basic circuits/bits instruction
+- problem sets were helpful
+
+weaknesses
+- more practice problems during class time instead of review of recorded videos <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the psets were actually pretty interesting and not too challenging -- for example, we built a "tiny computer" that could process strings of 0s and 1s and perform basic computations, which was really cool! Professor Rushmeier's lectures were also insightful and well organized, and reviewing them was definitely helpful for doing well on the midterms. The ULAs were extremely friendly and helpful.
+Weaknesses: the psets didn't really connect well to the midterms since they were more conceptual. For the second midterm, the timing was insane and everyone felt very rushed. The ULA system is useful, but on rare busy nights, it can take up to an hour for students to get help. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was very hard to connect with the professors and get help <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Psets were very enjoyable
+Weaknesses: I wish we had advanced warning that the final midterm would be closed notes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course covered a wide variety of topics giving us a view of the computer science field as a whole. However, due to the virtual format, the course was not particularly engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: really covers a lot of ground with fundamental computer science concepts. Even as someone with a lot of higher-level programming experience, there was still a lot I didn't know about lower-level CS theory. So the breadth of 201 is a huge strength. Having a live lecture section in addition to short lecture videos was helpful for asking questions and for overall engagement. The programming assignments were very well designed, especially when it comes to building simulators of Turing machines or assembly code, which was a great way to put into practice these models which often stay theoretical (and Racket was a great choice of language to accomplish this).
+Weaknesses: some of the exam questions can be better written and better formatted. Canvas never quite worked very well for writing code on exams. The time limits can be very restrictive and slightly unnecessary. otherwise this course is pretty solid. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course did a great job of teaching recursion. The course could have gone over how to use the terminal in the beginning of the course since many students had never used it before. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The biggest strength is Professor Rushmeier. She is very nice and willing to teach. The biggest weakness is the office hours. I lined up for hours before a ULA comes. Then, the ULA either doesn't know how to answer my questions or doesn't finish helping me before leaving. Sometimes, I even suddenly get deleted from the queue without any ULA coming to help. Joyce Wu keeps avoiding my questions and says that she has to help other people in the queue as an excuse to abandon me, even if there is nobody else left in the queue. When I questioned that, she ignored me and left my zoom immediately. After many times, I think she actually doesn't know how to answer my question. Because of ULAs like her, I felt so lost, frustrated, and helpless. I'm writing all this not to blame anyone, but to let the Yale computer science department know that in order to encourage students pursuing computer science, they should pick the right ULAs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the syllabus and course content is very well developed. The progression of topics makes a lot of sense. The pacing of the course is also very reasonable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Using Racket is both a strength and a weakness. Racket is not commonly used in the industry, so it may seem "irrelevant". But it forces the student to adapt to a new language they probably never seen before. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Interesting material and psets
+Weakness: We consistently ran over the allotted time for the 25 minute live lecture or didn't get to discuss everything that we wanted to from the pre-recorded lecture. We would also usually rush through the material we did cover because of this time constraint. 
+
+Making the live lecture a longer portion of the allotted class time would allow more content from the pre-recorded lecture to be discussed in more depth. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The autograding feature provided confidence to homework problems.
+
+The course offers little help from the instructors and it is left to the undergraduate learning assistants to help students understand the content. There is also no feedback at all for what was done incorrectly, either on homework or exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The material is interesting, the ULAs are really helpful, and the course is well structured. There are lots of opportunities to get help, which is great.
+Weaknesses: Some of the material is not taught as well as the other topics in my opinion (specifically the unit with logic circuits and some of the von Neumann architecture), and Racket isn't the most useful language. Also, the exams go by super quickly. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the class lecture notes and prerecorded lectures were thorough and good for learning. I do think that the problem sets at times challenged different skills and ideas than the actual topics we were learning in class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course has a great ecosystem of resources. I loved the multiple modes of teaching and there were lots of places to get help from. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Coding in racket took a while to get used to and it made it a little harder to focus on the new concept we were covering in a problem set when I was just struggling with racket errors. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Very well organized and I learned a lot. Maybe a little slow in pace. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the professors could have been better at explaining, ,longer sessions and offering review sessions of previous coding assignments would have been good
+lectures were too short, and professors were constantly rushing 
+office hours could have been better organised <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I wish the recorded lectures were more interactive -- there were some instances where the prof would say "pause and work through that again in your head," but I wish we were asked to pause and try to work through problems before the solutions were given. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The structure of the course is good, as every new concept is built on knowledge prior learned in class.
+
+Weaknesses: The depth can be improved. For example, provide more insight into the detailed implementation of some algorithms. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors seemed invested in moving the class to the virtual setting. They had a prerecorded lecture section and then a live lecture session to tune into. I like the format of the class and I think it was conducive to learning. I think a weakness of the class was that the homeworks are MUCH harder than the problems we investigate in class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the problem sets were a strong point as they always required one to think and come up with a variety of solutions to many different problems. I do think that the recorded lecture has issues with the pacing at times. Sometimes they moved on from topics too quickly and other times they dwelt on them for too long. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this course could be improved by increasing the number of office hours there are leading up to the homework being due. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The problemsets were definitely a huge strength of the course. Dr. Rushmeier was also amazing, and although I didn't interact with Professor Barron I heard he was great. The prerecorded lectures were really great as well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lots of opportunities to ask questions, the course moves at a good pace, very appropriate amount of homework (enough to cement in the topics learned, not so much that it is super overwhelming). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class covers really important material, necessary for any computer science major. The psets were also very well done despite being quite challenging and time consuming.
+
+However, the three midterms were very definitely a time crunch and hard to do well on. This year especially, we had lots of issues regarding the midterms because they were administered asynchronously through Canvas. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked that live lectures were in smaller sections to provide more of an intimate experience. I wish, however, that more TAs were online for office hours before the due date of problem sets, because sometimes the queue became so large that they would run out of time before getting to answer your questions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would like to see more collaboration between peers. I'm not sure if I entirely understood why we completed the homework with absolutely no collaboration. I think being able to bounce ideas off of students would enrich the learning experience in homework sets.  
+The timing for tests also felt very short. My coding background was limited, so this crunched time feeling could also just be a result of me needing more coding practice. Nevertheless, I feel that more time would help students do better on the tests. 
+
+The avenues for help, like office hours, discussion posts, and CS201 email were always quick to answer. The class was also extremely well-structured in that everything felt like it was building on top of each other and even with my limited background I never felt extremely lost. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the workload is fair, supplemental notes are provided for many lectures, and office hours are extremely helpful in getting you over pset problems where you're stuck.
+
+Weaknesses: I didn't think there were many. However, the second midterm an outlier for almost everyone and much harsher than other assignments. Some questions on the test required justification, or no credit would be given. This was the first time we had done any written problem of the sort where we were expected to fully write out our reasoning: it would have been helpful if we had more practice problems where it was clear how much justification we actually needed to provide. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The problem sets of the course were very engaging and were very useful in understanding what was taught through lectures. Besides, the instructors and peer tutors also provided valuable help when preparing for exams and solving the problem sets.
+
+Weaknesses: There seemed to be a lack of coordination and organization between the faculty members heading this course. For all three exams, students had to ask for a review session a few days prior to the exam dates instead of the instructors directly communicating with one another and making it happen. In addition, the live sessions were very short. Most of the time, we were not able to even get through what was planned for the day. We were also not able ask some questions due to time constraints, and sometimes, insufficient responses were provided. Besides, the exams were poorly designed as they were Canvas quizzes with very limited amount of time given to complete them. More often than not, these exams seemed to be aimed at getting as many students wrong as possible, instead of actually testing their understanding. I was able to see previous exams from past years online, and the time limit as well as the questions given on those exams were much better and more reasonable. I understand that this drop in the quality of exams may be due to COVID-19, remote learning and as an effort to prevent cheating. However, I still believe that it could have been done better. The weights given to each question could have been more reasonable. The exams could also have been administered live through Zoom calls (like other classes) without having to compromise the amount of weight given to each question and the amount of time given to solve each question (like the exams from previous years). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: All the lectures are recorded so you can always go back and rewatch them. The class was split into smaller groups. The homework prepared well for exams and I learned a bulk of the class through the homework
+
+Weakness: Because the class was split and different groups had different profs, sometimes there would be explanations or things one group gets ahead and learns while the other doesn't. The fact that we also couldn't work with students on the homework also made the class a bit difficult. Many times I would get stuck on how to approach a problem and talking with my peers would have helped me get started on them. I also think being able to work with others means you get to learn different ways to approach coding an algorithm, so it was disappointing to learn that there is a strict no collaboration policy in the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked the projects and the coding part. However, I found that I didn't get that much out of the actual class time. I think I did most of my learning by watching the prerecorded lectures and doing the homework. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength is it covers a lot of different areas, so it's comprehensive. The weakness is, personally, I think that the material isn't that interesting. Maybe it's because the fundamentals are always a bit boring, but overall I feel like I wasn't solving challenging problems, and I did not come out of this course with a sense of accomplishment. I know this course isn't coding based, but I would like to code/build something interesting throughout the semester. Also, in homework, I often get points deducted for marginal cases that aren't mentioned in the homework, which is annoying. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The tri-weekly live lectures were extremely short (25 minutes) and made me feel cheated. I had very little time to synchronously learn from the professor and I wish the lectures were longer. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

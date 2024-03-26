@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>327</strong> </p></li>
+<li><p>RESPONSES: <strong>277 </strong> </p></li>
+<li><p>DECLINED: <strong>14</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>36 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2019-Fall</strong>
+     
+    
+         
+        AFAM 170 01/HSHM 241 01/HIST 479 01/WGSS 270 01 
+        Sickness and Health 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>Would you recommend this course to another student? Please explain.<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC409   <strong>CRN:</strong> 10278/10279/12379/14432   <strong>Term:</strong> 201903</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Everyone- and I mean everyone, regardless of what major or year you are in- should take this class. The information is relevant to all students, and it will be one of your most rewarding courses at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This is not even a question. MOST DEFINITELY. Easily one of the best courses I have ever taken. It has changed my view on life and societal ills. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! Everyone at Yale should take this course. This is a course not only about health but in the life we live in. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> ABSOLUTELY!!!!!! SUCH IMPORTANT INFO. BE WOKE. GET OUT OF YOUR COMFORT ZONE. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES YES YES!!! One of my favorite classes I have taken at Yale! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class should be required. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes!!! 100% would recommend this class because it will give you a perspective on black history and healthcare disparities that you can't find anywhere else. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, especially if they are pre med or history students <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> 1000%. everyone needs to take this course. it's academically easy and emotionally/intellectually challenging. If it were academically more rigorous, it would be very difficult because the subject matter is very hard to stomach at times (slavery, rape, abuse, denial of human rights, violence, trauma...). this class changed my life. as a global health student, I feel like this class was crucial and pivotal in my understanding of the social determinants of health and how the healthcare operates...it rests and thrives on racism. PLEASE TAKE THIS COURSE. you won't regret it. there is no other course like this! no one teaches about racism and trauma through the lens of medicine besides prof roberts. she is an angel that wants to help you see critical issues in an approachable way. i LOVED this class. made my semester! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I have recommended this class to countless peers already, as this course was incredibly valuable to me and everyone in the course currently with whom I have spoken. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I have already recommended this course to most of my friends and will continue to do so. Professor Roberts is an excellent professor who values her students and genuinely wishes that her students learn and actively engage with the material; one assignment included creating a sample lesson plan of the material and there was an electronic lottery that allowed some students to create and present one for members of the New Haven community. In fact, throughout this course, there were connections made between the material and New Haven, and specifically how students can use the material to strengthen their own bonds with the community. For the last lecture, Professor Roberts shared her ideas on continuing to teach others the material and her sheer passion and resilience throughout the course brought the class to tears as we left her with a standing ovation. This is the only class I have ever taken where something of this nature occurred as most of us were truly sad to see it end, but were still hopeful now that a new group of students are able to experience what we experienced this past semester. In truth, I wholeheartedly believe that every Yale student and faculty member should be required to take this course in whatever format possible. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! A great course to learn about AfAm history in a low-pressure class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! This class is valuable to anyone, but especially those going into health or medicine. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely. Everyone should take this course regardless of your anticipated profession or career. These are important topics to understand and be able to talk about. With that said, every pre-med student should undoubtedly take this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. please take this class!! essential for every Yale student. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES!!!  It's honestly one of the best courses I've taken at Yale.  If you want to LEARN and come away from each class feeling so much more knowledgeable and motivated to make change in the world take this class! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course should be mandated for all health and science students. It should be a core class for public health students (undergrad and grad) and medical students as well. So yes! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. Carolyn Roberts is reason enough to take this course. She is a superstar teacher, lecturer, and human being and it would be a shame not to experience her passion and kindness, as well as her incredible breadth of knowledge about African-American history. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely I would recommend it to anyone who has medical ambitious as a must take course. It is so sad I had to wait until I came to Yale to have this course. This material should be taught every where and to anyone in medicine. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. Every single student needs to take this, ESPECIALLY white people and also not black POC. This class should be a requirement for graduating. Every major should have a race/ethics/civil rights requirement, especially in STEM. This class is a LOW WORKLOAD and HIGH reward. This class challenges the Yale framework of what a lecture is supposed to look like. There is an INCREDIBLY caring professor, a low workload, and emotional/interesting/important/relevant content. If you take this class and engage with it you will become a better person, see the world in a different way, and be a better ally (if you're not black). PLEASE TAKE THIS CLASS <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, this is an important class to take, as we need to be cognizant of this part of American history to understand where we're at today. It's a great fifth class to take, as Professor Roberts emphasizes that students should care about the material more than the grade. Lectures were consistently engaging, and the assignments had enough freedom to be tailored to personal interests. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would highly, highly recommend this course to anyone who has the chance to take it. You learn so much about African American history and healthcare that is rarely taught anywhere else. Even if it is a topic that you have no experience in, you are given the opportunity to tie your own interests with the course material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This is a must take course. It should honestly be required. Understanding the historical context for all the health disparities and biases that exist in today's society will make you more determined and understanding of how to combat them for the rest of your life. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! This is my favorite class from my four years at Yale, please take if you can! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. This is the most amazing class I've taken at Yale. The subjects discussed are interesting and relevant to life. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Everyone should take this course.  It <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would definitely recommend this course to any student regardless of their major or field of study. This course is the best course that I have taken so far at Yale and has completely changed how I approach my classes and how I live my everyday life. It provides such valuable insight into the lives of African Americans that is not well known. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely. This would be the first course I recommend to anyone asking. Everyone at Yale should take this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. I think it's a class that should be taken for the intellectual benefit and not the easy A. It's an eye-opening class if anything. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Best class I've ever taken at Yale. Every single lecture was fascinating, engaging and important. The way the material was presented made every single topic come to life in a very real way. The material is crucial for all students to know and I think very student at Yale should take this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> 100% don't even hesitate, take this course! It is genuinely in my top 3 best courses I have taken at Yale. Carolyn Roberts is a literal gem and you will learn so much about how healthcare has shaped our society. So good definitely taken! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely. Great class, interesting work, interesting lectures. Very engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! Please take this course. It is such an awesome, low pressure course that forces you to deal with issues such as racism and inequality. I highly encourage you to take this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. Professor Roberts is the best educator I've been able to experience. This class changed my life. I look at the world completely differently now. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. I think every student should take this course, I have told everyone I know to take it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. This class is everything that I thought Yale would be. If you already know a lot about AFAM history, maybe it will be way too easy for you, but as long as you engage in the course, you will have an amazing experience.
+
+I am Asian, I am pre-med. And this might be the single most relevant class to my life and my future I could have ever taken. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would recommend this course, and any other that is taught by Prof. Roberts in a heart beat. To not take this course is a disservice to yourself and the very expensive education we are receiving. This is the only course at Yale that truly means something bigger than itself. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Most definitely <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, I would recommend this course to any student at Yale. I am glad to hear that Dean Chun is a fan of this course and it should be a 'signature course' for Yale. The truths that I learned in this class were way more important than the technical skills I learn in my STEM classes and I believe we're all better people for having participated in this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, I would definitely recommend this course to another student. This course covers a lot of important information that is rarely covered in other courses. It really changed my perspective of things and shocked me to see how little I know about the pain endured by black people. Professor Roberts is also an amazing professor. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely! A must-take at Yale for every student. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely. This class covers a history that is not often told and will revolutionize how you think about health. This class is so so important, and if you can take it, you absolutely should. Especially if you're considering a profession in health, but even if you're not, this information should be known by everyone. It is really hard content though, so definitely be prepared for some difficult lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! Every student who has the opportunity to take this class should take it, regardless of your major or career path. What you learn in this class helps you be a more informed citizen. Would absolutely recommend. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Not only would I recommend this course to another student, I firmly believe that this should be a course that every single student at Yale takes before they graduate. This necessity sprouts from two key aspects of the course: the importance of the content and the experience of taking a course with Dr. Roberts. This class engages with an important history that is almost never talked about. We all know about the slave ships, plantations, Jim Crow, etc. But almost no-one knows about the role that doctors played on the slave ship, or the ways that plantation slaves used medicine as a form of resistance, or of the first black doctors and black medical schools, or of the black women's clubs who transformed community medicine. The course culminated in addressing some of the most pressing issues in modern medicine, such as the black maternal mortality rate and the early physiological aging of black Americans, and how these phenomena are linked to a long-standing history of black medical injustice. This content should be an essential part of a medical student's curriculum and I would strongly suggest to all my fellow premeds that you take this course if you plan on ever engaging with a black patient (so all of you). However, regardless of the content, I have to recommend this course for the chance to work with Dr. Roberts alone. This is my second course with her and I'm very upset that it seems like my last. She is the most dynamic, engaged, caring, well-read professor I have ever had. Every lecture is like a play and she's the lead. She thinks carefully about every word on every slide and delivers lectures with meaning and passion. She is a collector of primary source, news articles, books, and journals and shares it all with everyone. The assignments were creative (your other professors are lazy), well though out, and fun to complete. This course is a masterpiece and you need to take it NOW. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This is one of the best courses I've taken at Yale. Professor Roberts is an incredible lecturer but also took the time to try to get to know everyone that was taking the course, which is not easy in a large lecture course. The course material is emotionally challenging but important and put together in a way that I imagine has rarely if ever been done before. The ways in which Professor Roberts and the TF's challenge you to approach many historical moments in the U.S. and bring them to light in the context of things today is something that everyone, regardless of academic interest or career interest, should be doing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! Should definitely be a class you take before you leave Yale. Will be one of the best classes I'll ever have taken. Everyone should know the information that was taught in this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would recommend this course to everyone. This is the best course I have taken at Yale, and should be a requirement for all students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Okay, so first and foremost, if you have the chance to take this class, drop everything and take it! I literally dropped a class that Ill need to take for my major next year to get into it! I 110% recommend this class to everyone and anyone due to the relevancy of the materials that this course grapples with. I only ask that in taking this class students please be cognizant of their privilege and are truly open to bearing witness to the history and atrocities of racism in America. This class is truly unlike any other that you will encounter here at Yale or anywhere in the world. For once in my time here at Yale, I feel like I am taking a course that will extend with my far beyond Yale and truly make me a more informed citizen of the world. Moreover, Yale and any who has the privilege to take this course under the instruction of Professor Roberts should be honored. Dr. Roberts has a way of making a lecture class of 350+ students in SSS feel as if youre in a seminar of 15 people. She works to connect with all her students and literally has office hours all day for undergrads to speak with us! (like name one other professor that has so many appointments in academia, teaches, conducts independent research, and still finds time to have a meal or individual office hours for undergraduate nearly every day!!) However with that being said, in this semester I had that many individual in the Yale administration have not been supportive of this amazing class and what Professor Roberts is trying to dofacilitate discussion and acknowledgment of the traumatic history that built the US and the problems we are currently facing. This is disheartening to say the least. As a student, it saddens me that educators of such esteem here at Yale are not supportive of such a relevant and pressing discussion based class. As a person of color in this space, I am ashamed, yet not surprised in the slightest that administration at a university such as Yale have pushed back against such a course. Especially as a person with medical interests and from a FGLI minority background, Ive for once seen myself represented in academia. For once in my time here at Yale, Ive truly been able to engage with course content that seems relevant beyond my major, this is why I chose Yaleto have the experiences of taking classes that promoted critical thinking about the world around us. Yale continues to laude itself for being at the forefront, for being a premier institution across many fields, I truly want to believe this, yet if some administration members do not support courses such as this, then I can only see Yale as an archaic institution that continued to propagate inequity in the refusal to truly educate it students. I am however, very appreciative of administration, professors, and students that do support and advocate for course such as this one. To have support from admirations for this class means that they acknowledge the gravity of the materials we are engaging with; it means that the dark history of this country can be brought to the light and ensure that we educate one another. Grading aside, this is a course that should be promoted like Psychology and the Good Life because of it relevancy and the ability to show students to recognize and question the entrench inequities that exists in the US. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would definitely recommend this course to students of all years and all majors/academic backgrounds. I think the content of this course is not only critical, but intriguing and relevant. I think that everyone should also get to experience Professor Roberts teaching. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely! I think everyone should take this course at some point during their time at Yale. So many of these stories go untold in other history classes, but understanding them is vitally important. And Professor Roberts is the most wonderful human being ever. Her lectures are captivating, and she presents the material in a breathtakingly raw, honest way. Plus, the workload is relatively small, which is intentional; it fosters genuine engagement with the course material without the pressure of memorizing things for exams. Cannot recommend highly enough. Please take this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES A MILLION TIMES! Hard material but a fun course overall and necessary <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Highly recommend!! Must take!! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. 100%. I wish more classes were taught this way -- would result in a much more positive college experience. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would recommend this course in a second to another student because it is such an important topic, but most specifically because of the way that Professor Roberts taught the course and engaged all of us. It was an amazing community, both in lecture and in section, and I hope that everyone at Yale can experience a class like this at least once. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Please take this course - it is by far the best course I've ever taken! Learning this history is so important, regardless of what you want to do in life, and you get to learn it from such a caring, passionate, and sensitive instructor. You will learn things in this course that will be very hard to come by at any other institution. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES!!! I would honestly make it a class that every single pre-med and really every single undergraduate should take. It is full of important historical precedents that affect our lives today and helps us better understand relationships with others and the issues at hand in society that need to be altered. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES !! Professor Roberts is amazing and committed to connecting with her students. She puts so much into this course and it would be a shame to be at Yale for 4 years and not take a course with her. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! Take it!!! You will gain so much without too much work, it's a great fifth class <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely! The best class I have taken at Yale so far! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would absolutely recommend this course to another student. The course discusses themes and content that are critical for ALL students to learn, regardless of their major. The class really allows you to reshape your understanding of history and more broadly, knowledge itself. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely. If you have an opportunity to take this class, take it. If I could take this course again I would. By far, THIS is the best class I have ever taken and honestly what I thought at first Yale would be but wasn't. I have left this class in shock and tears and at the same time empowered to enact change. This was not a class but a shared experience by everyone in the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Of course!! Please take this course! PLEASE <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would definitely recommend this course! If you are interested in medicine or the healthcare field, it is so important to learn this material. Even otherwise, learning about this history and its legacies is incredibly essential, so I would recommend it to anyone! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. Please, if you have the chance to take this course, take it! It has honestly been life changing, and I don't mean that to sound too dramatic. This course gives you so much depth and context to issues of racism and prejudice in the US that we still see today. The lectures have oftentimes brought me to tears because of the material and presentation of that material covered daily. It is a class that every person should take no matter what major or career path they choose. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Please please please take this course! It doesn't matter what you are studying, what you plan on doing after school, or how much you may already think you know about this topic. You will take away a whole new understanding of our country's history by confronting both the historical abuse of black people medically and the present day health disparities between black and white populations in the U.S. This is fundamental to the future state of our society, and the more people that arm and humble themselves with knowledge, the better. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class was the best class I have taken at Yale in terms of ratio of things learned / hours doing homework. The assignments felt relevant and forced me to place the concepts we learned in class in conversation with issues in the real world, and lectures were consistently interesting and engaging. This course should be required for all students at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! This material is extremely important for everyone to learn no matter how you're positioned relative to it. I only became more convinced of that as the semester went on. I always looked forward to going to lecture, and the class struck the perfect balance of being engaging but also low-stress. Take it! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would most definitely recommend this class to all students at Yale. The information that is taught in this class are so vital and are linked to the injustices faced by black and brown bodies. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. One of the best classes I've taken at Yale. Professor Roberts is the most incredible lecturer. It is evident that she genuinely cares about the course and every student. Very important things to learn for everyone - especially those going into the medical profession. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, everyone should take this course! This course is low workload but high learning and you get out of it what you put in. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely. This course is extremely important for those who consider a career in medicine and public health. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely!! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely! I could not recommend the class more highly. It is relevant to any major and the workload is not heavy. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. It is something I hope everyone has the opportunity to take, because it is so important, and concerns everyone. It is a history we should not forget. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YESSSSSSS, this should be a MANDATORY pre-med requirement. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> If you truly want to take a class that is made to actually teach you something, TAKE THIS CLASS! It is facilitated in a way like no other class at Yale. It pushes you to truly think past just the readings and the history; you must reflect on yourself. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YESSSS!! Definitely take this course!! I honestly think it should be required for STEM students as well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> MUST TAKE, BEST CLASS EVER <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! Yes! Yes! This class is, by far, the best class I've taken at Yale. Dr. Roberts delivered this history, this dark, challenging, difficult-to-digest history, with so much power and with such a great desire to teach us. She wanted us to engage with the material, to think about it and analyze it and work it into the way that we think. This class taught me so so much and I love that it was Dr. Roberts who taught it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I definitely would recommend this course to another student. EVERY Yale student should take this. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> 100000000000000% yes. This is the best class I have taken at Yale. Everything you learn is so incredibly important- things everyone should know but that I definitely did not before this course. Professor Roberts cares so much about what she teaches and about every single person in the room, and listening to her lectures is something everyone at Yale should get to experience. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES - i strongly believe this class should be taken by every student at Yale, regardless of academic interests. this history is so important to be aware of, learning about the endless trail of abuse/prejudice/stereotypes from the atlantic slave trade to civil war to jim crow segregation to modern medical interactions is horrific but paradigm-shifting. class is low-stress but high-engagement, sections and lectures push you to think fundamentally differently from this point onwards, professor is amazing, the perfect course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Without a doubt in my mind, the only class I recommend to every student here at Yale <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes-- please do yourself a favor and take this amazing course. ESPECIALLY if you are interested in studying medicine or health policy, this course will change your view on the role of race and discrimination in human health. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES, TAKE IT. I shopped the first class and literally had tears in my eyes by the end because I knew it was going to change my life. The material can get really really hard at times, but Professor Roberts knows that and delivers it with the perfect amount of passion and respect. You will leave each class feeling empowered and motivated to make a change in our society. You will learn about history that you didn't even know about. You will learn about historical events that you did know about through a very different lens and it will really open your eyes. Everyone I've talked to this semester that didn't end up taking it, wishes they did. It will be the best class you ever take in your life, and the most valuable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Take it! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes!! This is definitely a must take <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> PLEASE TAKE THIS CLASS!!! This class made me so incredibly thankful that I chose to attend Yale. Professor Roberts is one of the sweetest and most dedicated professors I have ever met. The class clapped after EVERY SINGLE LECTURE. Each lecture was engaging, evocative, and powerful. We discussed a lot of painful material over the course of the semester, but the material is so important. It is everything about U.S. slavery that you should've learned in high school but probably did not - at least I didn't. Everyone should take this class, especially people who will enter the medical field. It gives you new insight into African American history and the history of the U.S. healthcare system. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I could not recommend this course enough. This was the best course I have ever taken in my seven years of university education. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Please take this class. If it is offered, you have to take it. It can make a good fifth (or even 6th) class if you just want to go to lecture and be inspired, or it can be an incredible academic experience if you decide to really engage with the material. Either way, you will not regret taking this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think every student should at least shop the course! It's so interesting and I just feel that everyone should get to know Dr. Roberts. The class really does provide valuable and interesting perspectives on basic American history. I found the amount of knowledge I was completely unaware of astonishing, which made this class all the more gratifying. You really learn with this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would,  this class opened my eyes to the degree of structural racism and how it can even exist at Yale to a level that no other experience has been able to reach. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would 100% recommend this class to everyone I know. I think this class is SO important for people to know. It should be mandatory. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, I would highly recommend this course to every Yale student. The information taught in this course is extremely important and sensitive, and is information that will affect the way I view the the world and change the way approach interactions with people from different backgrounds for the rest of my life. Professor Roberts is so inspiring in the way she conveys this information, and her passion and enthusiasm for the subject matter is contagious. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course should be mandatory for anyone studying medicine or public health. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES!!!! This class will change your understanding of race and United States history. The lectures were so moving. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! This was a very interesting course that sparked lots of meaningful conversations in and out of the classroom. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely, if that student is willing to accept change and grow! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, I think everyone has something to learn from this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I have no words to describe what Professor Roberts class means to me and the impact it has had on my life and academic career. This is the BEST class I have taken at Yale. Period. It is just superb  so take it if it fits into your schedule. Dont even second guess it. She gives you all the assignments we have to do on the first day (including the extra credit questions for the midterm) and the grading is NOT hard she truly just wants you to learn. I have left this class crying so many times just moved by her lectures and I hope everyone gets the opportunity to experience her as a professor. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> 100000%, especially because it breaks the stigma that you need to be worked to death to learn a lot <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely. A very poignant way to put current events into historical perspective. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! This should be a mandatory course for all Yalies. Every single class was like a TED talk. I don't think it would be as good without Professor Roberts. She cares so much about her students and what they learn. This class will teach you that sickness and health is not and has not been the same for all Americans. We learned how Black people have been systematically marginalized and used by the US medical system. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely. I strongly believe that this will be the most rewarding course I will ever take at Yale and would strongly recommended every student to take this course and if not, do yourself a favor and take a class with Carolyn Roberts. It was an experience that was shaped the way I look at the world and regard history and I will be forever grateful for it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely. This was hands down one of the best classes I have taken ever, let alone at Yale. You will gain such an appreciation for this material and will learn about our country's troubled past. As Professor Roberts explains: while this history is intense, disturbing, and difficult to discuss, it is necessary that we use truth and reconciliation to move towards making this country more equitable and equal on the basis of race, because there is a lot of work left to do. She creates an open spaceboth in section and lecturewhere we can discuss these ideas and grapple with them in the presence of each other. We applauded Prof. Roberts at the end of every lecture, if that gives you a sense of how much appreciation the students had for her and for the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely I believe every student at Yale, especially those that want to pursue a career in medicine, should take this course <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, I took this class as just a humanities credit but learned about so many things that I never even had heard of before. I think that this course should be a requirement for every student at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. This is such an important course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> DEFINITELY! The best class <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would most definitely recommend this course. Professor Roberts was an unbelievable professor who opened up my eyes to the world around me. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There are not words for how amazing this class is. As a senior double major I can say that it is hands down the best course I have taken at Yale. I loved everything about this course. To be able to discuss the history of African Americans in the context of medicine and public health, in an academic setting was amazing and I learned so much. Every single day I looked forward to going to lecture and section they were some of the highlights of my entire week. If you are lucky, there are moments in an academic education that make you think and that change you in some way, and you know that that experience impacted the rest of your life. At Yale I have been able to experience a few of these moments, but never in my life have I experienced one as profound as I did in this class. Never have I been in a course where every day was a life shaking moment. Each day, my desire to learn more only grew larger. The learning environment was amazing and if I could take the course again I would over and over again because I know I would take away something different and new every time. If you do not take this class you are doing yourself a huge disservice because it is absolutely amazing. I am so happy that I was able to take it in my senior year and could not speak more highly of the experience. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely! The course material is important, the readings were incredibly interesting, Professor Roberts is INCREDIBLE, the assignments weren't too much work and allowed us a lot of freedom to delve into topics we were invested in. I'm a senior and this is truly one of the best classes I've taken at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES YES YES YES YES YES. I would use the entire character count to keep saying yes. The only person I would not recommend this course to is someone who is weak of heart because the story being told is a tragedy and the content is very raw so if you don't think you can handle this history yet then work on yourself and then take the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! Personally, I believe this course should be required for all potential pre-med students! It is a wonderful overview of the medical experiences of African Americans in this nation and helps add another much needed layer of empathy to the medical field. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! Professor Roberts is amazing and this course provides extremely useful knowledge. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES PLEASE TAKE THIS CLASS. The best class I have taken at Yale so far <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would 100%, without a doubt, recommend this course to another student. The material is not covered in other classes. Even as an anthropology major, I have never been exposed to the racist roots of anthropology, which were presented in this class. I have never learned more in any other class I have taken at Yale, and if I were to recommend a single course out of all the classes I have ever taken at Yale, it would be this. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would a 100% recommend this course to anyone who asked me about it. Professor Roberts is gifted and an excellent lecturer, she changed my life <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, absolutely if at all interested in social issues. Essential if pursuing area of medicine, medicinal practice <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, this is the best class at Yale by far. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> ABSOLUTELY <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would recommend this class to literally every student, and it should be required for every aspiring health professional, if not every student. Learning this history and its direct ties to today's realities is fundamental to achieving any sort of intergroup understanding and empathy, which is essential as the alternative is quite literally the premature and senseless loss of more lives. This course will wake you up. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would absolutely. This class opened my eyes -  most history classes fail to accurately portray these details of historical events, and it is so important, especially in relation to movements today such as Black Lives Matter. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, all students should take this course so that they can improve their understanding of negative social processes that they might contribute to unknowingly. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> TAKE THIS CLASS. It is on another level from every other class I've taken at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was by far my favorite course is the semester and it was probably the best class I could have taken to start my time at Yale. I think that anyone with an interest in history or aspirations to pursue a career in medicine or public health should absolutely take this course. Even if they do not this course would still be a great history course. It gives a historical narrative that is often forgotten and helps make connections from the past to the present. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, I absolutely would. Amazing class. So much to learn. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! Every Yale student should be required to take this class before they graduate. This class has changed the way that I look at the world and for that I will be forever grateful. This class has given me an opportunity to restructure my thinking. I think that I will carry the knowledge that I learned in this class for the rest of my life. It is hands down the best class I have taken at Yale thus far. This class should continue to be offered for years to come <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, you better take it. You will have no regrets! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. Everyone should take this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would definitely recommend this course to any student interested in the intersection of race, medicine, and politics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes!!! Hands down just take it you will learn so much. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The knowledge this class teaches should be mandatory for everyone. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely. Don't hesitate, especially if you're pre-med. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, Professor Roberts is amazing. Her lectures were clear and always taught me something new. The assignments help the learning process as well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, everyone should take this course! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. Obviously many people will take it because it is low stress, but the extremely high attendance rate is a testament to the captivating nature of the material and strength of the professor. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. It is the best class Ive taken at Yale so far. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Everyone Should take this class <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes I would. You absolutely get what you put in to this class. The material is extremely relevant to anyone's life today, and it's not taught in other Yale classes (even ones about public health). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. This course was such a wonderful opportunity to deal with some really emotionally challenging material with a professor who not only is passionate about the material, but also cares deeply for the wellbeing of her students. Many people showed up to this class looking for a gut, but left with a totally different mindset. It's rare to find a class that balances a low workload with really high engagement. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would recommend this course to another student. Most United States history courses ignore the stories of marginalized people, so for someone who is unfamiliar with African American history this class will serve as an excellent introduction. Additionally, this class is well suited for anyone considering entering a career in medicine, since in this class you also discover the events and people that led to the modern day practice of United States medicine. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely needs to be taken <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely recommend. This is a class that everyone should take. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> 100%. Best class at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would 100% recommend this course. It is the best course I have EVER taken at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! Take this class you will not regret it and thats on jebena. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This was the greatest class I have ever taken at Yale. The course should be a requirement. It was the only class I have ever taken where the professor received a standing ovation after every single lecture. Truly amazing!  Professor Roberts is very intelligent and articulate. She truly cares about her students' well being and her passion for this class in particular shows. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> 10/10 would definitely recommend. Everyone should take this class to start getting informed about Americas history in medicine and learn how to change the game in American medicine today. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would absolutely recommend this course to another student. I was scared that this course was too woke for me and that I would have a hard time speaking up because I would be afraid to say something stupid and ignorant, but taking it was the best decision I have made so far during my career at Yale. I learned so, so much and anyone would benefit greatly by taking it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely, this was the best course that Ive taken at Yale! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, it was my favorite class. You will learn so much, and it will evoke strong feelings and move you in a way you probably haven't been before. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> ABSOLUTELY!! The material is definitely difficult to sit with, but I think thats why a course like this is so important! You learn about medicine tied to black history and the injustices black people have gone through, and hopefully come out of the class better informed about the world around us and our privilege as students in this class to go forth and spread this knowledge. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! Best course I have taken at Yale, and I wish there were more like it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES YES YES. Take it, it is a wonderful and informative experience and very low stress. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Definitely. Everyone should take this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! The most important course you can take at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Wow. Sickness and Health in African American History has been the single best and most important class I have taken in my three years at Yale. Professor Roberts has artfully crafted a heartbreaking yet inspiring, and teary yet beautiful journey through Black oppression and powerful Black resilience in the face of adversity. This experience has fundamentally shifted how I plan to continue engaging in anti-racism work. She has raised the stakes and invited us all to join our hand in this fight regardless of how limited the scope of impact we are able to see in our lifetimes may be. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, without a doubt. This course is fantastic in what content it covers and even more so in teaching staff. Although it is not a difficult class to do well in, I think that the challenge lies in how you engage with the course materials. This course leaves room for so much growth in terms of empathy, and I think it is a can't miss for anyone remotely interested in the topic. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, because it teaches important history in an engaging way <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, yes, a million times yes. This class is powerful, has a great purpose, and has great leadership. But, I actually dont recommend you take it if you wont have time to think about it. The way the course is structured, you can only reap the full benefits if you sit with and digest the powerful material. If youre just taking it to get a grade or a credit, youd be cheating yourself and are better off taking some other course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> yes <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, you will learn how to study, you will gain an emotional connection with the material, and you will enjoy the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> PLEASE TAKE THIS COURSE. It should be mandatory for everyone on campus because it teaches empathy for black and brown people. It teaches how deeprooted many issues are. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Without a doubt. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Every student at Yale should be required to take this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES!! Professor Roberts is such a great lecturer. This is a class that everyone at Yale should take. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, it is a course that forces you to think about how the U.S. operates on racism and has used it to thrive for centuries with no thought given to those who have been affected negatively because of it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. I thoroughly enjoyed lectures. The material is interesting, powerful and can get very "heavy." <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> yes <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes!!! This is a class that every student at Yle, everyone should take. The content is extremely relevant and important and the topics covered are interesting and impactful. 10/10 would recommend!! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes I would. This course would be beneficial for any Yale student to take. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is important for everyone. The threads of racism and dehumanization can be followed to every aspect of human life and has its clear impact on the body of African Americans today. Everyone should learn this history and how they can be of help in dismantling this system of oppression. This course will break your heart in the most important way. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A true gem! Dr. Roberts is the most passionate, caring, and inspiring professor I've ever had. Her teaching style makes history more accessible to all her students. The lectures were incredibly engaging and well-organized. The assignments were meaningful and facilitated learning, and the flexibility of the prompts allowed students to delve further into topics that they were interested in. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! This class will not be offered until Prof. Roberts returns from research leave, but once it is available in the Bluebook again - please, please take it! This class is a gem at Yale, and the content is urgent and oft-overlooked. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class is truly fantastic and worth everyone's time (regardless of major or academic interest). Carolyn Roberts was one of the best lectures I have ever seen. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I definitely would. I think every student at Yale should take this course, and that the medical school should have this course as a requirement. That's how illuminating and essential this course is. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> yes, it is vital knowledge for every student <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Every student at Yale should take this course. It is particularly applicable to pre-med students as they embark on doctoral careers, but as a none pre-med I still got SO much out of it and am taking an immense amount away from this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES. please take this course if you have a chance. Professor Roberts is AMAZING. I think everyone at Yale should have to take this course, because it gives you such a deep understanding of how we (all of us, regardless of race) got to where we are today. I can't say enough how much I encourage everyone to take this class!!!!! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! Everyday I walked out of class mind-blown by the things Dr. Roberts lectured today. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, absolutely! This class should be required for every Yale student. It was simply the best course I have ever taken. I learned so much without feeling the typical pressures of normal classes. I found myself engaging in supplemental materials beyond the course syllabus. A necessary warning is that the course content can be very grave and saddening, making the class emotionally and mentally difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would 100% recommend this course to another student solely because of Professor Roberts. She made the course content very interesting and easily engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES!! I think everybody should make an effort to take this class or another AfAm/Hist class from Dr. Roberts. She's truly a life-changing professor and wonderful mentor if you get to know her (which you should!). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES! I believe everyone should take this class at Yale. You have to learn this information and way of thinking with the privilege that you have. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> if you wish to learn the truths pertaining to America, the treatment of black people in America and medicine, this course is the absolute best. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. If you are going into medicine, this course is super important, and I think you almost have a responsibility to take either this course or something like it. I'm not going into medicine, but still thought it was important material to understand as someone living in 21st century America today. Two other bonuses are that Professor Roberts is a fantastic lecturer, and it is extremely low stress; I'm pretty sure all 300+ people taking the class got an A besides those who literally didn't turn in assignments. When Professor Roberts says to focus on the course material rather than the grade, take her advice because you can, and will still turn out just fine. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes!! Should be required for everyone to take, but especially pre-medical students. The subject matter in this course was difficult, and as a pre-med it was especially difficult to reconcile my future goals with the rampant historic injustices in the field. But by the end, I gained valuable knowledge that I know will help me be a better doctor in the future. More than that, it made me more resolute in my pursuit of medicine; there are so many problems, biases, and inequalities, and taking this course made me see ways in which I could make a direct impact. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes! Absolutely would recommend. It is a really hard class to stomach because it is a really tough history, and each class it feels like it only gets worse. But it is so so important and Prof. Roberts is such an amazing professor. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Absolutely. A great way to learn about really important material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes. This was a very informative class. It taught me a lot about contemporary issues that I otherwise wouldn't have been as knowledgable about while connecting said issues to concrete examples in history. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Yes, it opens your eyes to a whole different side of history that is rarely taught. You learn the importance of being critical of history and who is telling it.  I think goes far beyond improving your academic skills in writing and analysis, extending as far as your ability to think critically about the world around you. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> YES this is a great class and I'm sure I'm not the first to say it. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>96</strong> </p></li>
+<li><p>RESPONSES: <strong>79 </strong> </p></li>
+<li><p>DECLINED: <strong>10</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>6 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2021-Spring</strong>
+     
+    
+         
+        PHYS 171 01 
+        UniversityPhysics:LifeSciences 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 21905   <strong>Term:</strong> 202101</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The fact that it was taught by one professor but all the problem sets and exams were written by another really did not help with incentive to attend lecture. We basically studied for exams by the TAs/PTs and study hall. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Study hall and office hours are super frequent which is helpful in that you usually have somewhere to turn to if you don't understand something <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> No textbook to reference for outside help; no method of using the internet to learn difficult topics <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: AMAZING lectures from Prof. Nagai and so much dedication from both Prof. Nagai and Prof. Mochrie. Also incredibly dedicated TAs and ULAs who went above and beyond to help out students throughout the semester.
+
+Weaknesses: None. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: problem-solving skills, lots of resources available to help, great set of TAs (especially Aia)
+weaknesses: difficult material without adequate textbook explanations, "test and forget" type of class
+improved: more interesting/relevant classes that maybe look at research <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strengh of this class is definitely Professor Nagai's lecturing. Professor Nagai is an effective communicator and truly cares that he students learn the topics. I also think that Professor Mochrie's teaching was really essential to learning the topics as well. A weakness of this class is that there seems to be a disconnect between the lecture materials and the difficulty of the exam content. I think that at times the exams were way more difficult than practice materials, quizzes, or anything else seen before. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: study halls and office hours made problem sets doable Weaknesses: the content was extremely difficult and wasn't taught that well, the exams weren't a good reflection on what was taught <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Study halls and TA office hours translated extremely well over Zoom, in my opinion. I'd love to see them continued. The class is organized into modules that correspond to the chapters in the textbook, which also makes it easy to organize notes.
+
+Weaknesses: Just about everything else. Prof. Nagai was good at explaining things, but he would lose himself sometimes in the middle of a problem and confuse everyone. Additionally, he rarely went through the entire problem in class and asked us to derive equations or problems by ourselves using the textbook module. However, the textbook wasn't much help. The diagrams were messy and the explanations convoluted. Many of our problem sets this semester (compared to PHYS170) were literally impossible to try without a TA present, which was discouraging. I rarely learned anything in lecture and instead credit most of my learning this semester to a particular TA's office hours. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class was very strange since the simple fundaments are taught in lecture but then the assigned work and examinations focus on complicated upper-level problems. In some classes, this method can stretch students' thinking and help them learn, however in this class, for the most part (in part due to the circumstances with COVID), the massive discrepancy between class and PSETs only served to leave students utterly reliant on TA help for problem sets. On the exams that were open-note, students did well when the assigned problem was similar to a PSET problem, but did poorly on all other problems, which were often excessively challenging; on the harder problems, students basically just received credit when their guesswork was on the right track. This often advantaged students with more confidence/high school background in physics even though basically everyone was confused to the same degree.
+
+These criticisms were present but to a much lower extent in Phys 170 (fall semester). While the in-class teaching in the spring was more clear, it failed to go to the depth needed to even come close to solving homework and exam problems, so ultimately I preferred how the course was designed in the fall. That being said, the course took up an unreasonable amount of time in the fall, so at least spring had that going for it.
+
+Despite these flaws, I do appreciate the flexibility of Professor Mochrie and his willingness to adapt the course. There are many wonderful things about this class, and I think that a few adjustments can make this a wonderful course. Overall, I am still glad I took it over 180, I think. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The TA system is the BEST. Office hours are so helpful. Make use of the TA's as much as you can. They make the class much better. Also Daisuke and Simon are awesome. The test corrections system is also very good. Sometimes though what we learned in lecture wasn't always very reflective of what the p-sets/tests were like. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked how the professors were flexible. This semester was especially difficult for reasons having beyond just this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I felt that there was often a lack of cohesion among the lectures, problem sets, and exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: the peer tutors and staff were all super supportive, listened to our concerns 
+
+Weakness: things were a bit rushed in terms of organization at times in that I felt there was too much information thrown at me towards the end. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was made manageable by the high amounts of test-corrections/extra credit. However, there needs to be a major shift to not include concepts beyond the mathematical scope of the course. We would be better served by having easier questions with fewer accomodations. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the TAs were amazing and I appreciated the greater flexibility in time provided by the professors for the midterms. 
+
+Weaknesses: The material from the exams reflected 0% of the material learned in the class lectures. There was no way to attend lecture and be fully prepared for the exam or even the PSET because these two things were so different. It was extremely frustrating to be in this class because no matter how much work I put in, the exams/psets were always a curveball. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> - <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Exams were extremely hard and we were not prepared to take the exams with the practice material and problem sets <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Kind and accommodating professors. A lot of office hours and study halls to help students understand course content and psets.
+
+Weaknesses: Fast-paced. Learn to solve very specific types of problems only. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: 
+PSETS are reflective of exams 
+
+Weaknesses: the content is not taught in a straight forward manner; this is an introductory physics course but it not taught clearly. Too much time is spend on proofs and not on the simplified equations and their applications. Additionally, all the work is done using letters instead of real numbers, which makes it very difficult to understand what is happening in the problem conceptually. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Often what we had practiced in class was not reflected in the homework questions, which made it hard to do and understand the homework questions alone without the help of a TA. Not only that, but the format and content of the test was completely different from that of which we had seen in class or in the problem sets. This made it hard for me to understand the information as it was being presented and asked in such different manners that I was not used to seeing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: the availability of TFs and study halls was very helpful and they were all very nice and receptive to questions and explaining confusing concepts. however, students would not need to rely as much on TAs and ULAs had course material been presented in ways that were easier to understand and clearer. the exam accommodations for the course midway through the semester to 24 hr exam window was very helpful.
+
+weaknesses: presentation of material in lectures and provided module notes was confusing to follow and did not seem to match exam/pset questions very well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> teaching could be improved, lectures and test material seemed disjointed at times <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought that Prof. Nagai was kind and a good explainer, but I don't feel like I learned much in this course. The exams and psets were extremely difficult and features material that we had never been taught in class such that in order to complete the psets you needed to go to many hours of office hours to get help from the TAs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think that the professors are very understanding and are willing to accommodate for a lot of issues, but the way that the course was structured was extremely difficult to grasp the concepts. I think going from what I learned in lecture to solving the problems, there was a real dissonance. Each student needs a different approach, some need more of the physics concepts explained better while others need the derivation explained better. Because this course delves into both simultaneously, it was hard for either type of student to obtain the understanding we really needed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors did their best to adapt to a lot of the challenges that online learning posed. I think that having one professor teach the lectures, and the other write the exam and problem set questions was not a good system because at times there would be learning and assessment gaps due to the fact that each professor focused on different parts of the units. The course could be improved by offering a textbook rather than learning from the modules. The modules are not very clear and made learning the concepts very unnecessarily difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength was wide variety of applications of studied topics. Weakness was arguably overwhelming pace and shift of focus with poor communication despite multiple lines of communication available.  The TA dependence on answer keys was also disappointing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There was a significant disconnect between assignments and lecture material. I felt really comfortable with lecture concepts, but applying them to exams and even psets felt pretty impossible. I also think that professors could have been more accommodating to the pandemic/campus crises this semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think we zoomed through the course content post-midterm 1 too quickly in class; we ended up going through each unit in only 2 or 3 classes, and it was quite hard to keep up at times. I also felt as though what we covered in lecture was not at all reflective of what would show up on homework assignments or on the exams; we would do very basic, introductory practice in class and then the questions on assignments would be almost foreign to me in comparison; everything was much more difficult. Also, exams overall were much more difficult than psets and what we covered in class; for the last midterm I really was taken aback by the level of difficulty of the exam. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: this course offers plenty of aid from the TAs, and communicating with the professors was easy and very helpful. They were always ready to respond and adjust the course based on our current progress and circumstances.
+
+Weaknesses: occasionally, TAs could not help with problems as answer keys came out late, or were confusing. Some of the problems were hard to follow and confusing, even for the TAs, so there was not very much hope in students themselves being able to engage with the material. The modules were not always clear, and certain concepts were covered very quickly despite being large parts of psets and exams -- like neurons. Additionally, for students who aren't very familiar with calculus or linear algebra, it was difficult to follow the examples because steps in proofs were jumped without explanation.
+
+Improvements: fleshing out the modules, and properly supporting the TAs would be a big help to students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Overall the biggest strength was the investment of the professors. It was clear that they truly cared about our learning and wanted us to do well and engage with the material. The weakness, I think, was the structure. It was very confusing at times and hard to follow given the quantity of material in the last third of the semester. The first midterm had a very appropriate amount of material that increased exponentially over the remainder of the semester. By the end of the year, I felt incredibly overwhelmed by the quantity of material that we were expected to be responsible for and I feel this was reflected in the overall scores of the final exam. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: entirely live lecturing
+weaknesses: exams not in sync with lecture material or homework material; similarly excessive reliance on reading external modules that don't exactly mesh with lecture material. probably due to these responsibilities being divvied up between two professors <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Daisuke was very kind, and he and Simon were both flexible - if students felt unprepared for an exam, accommodations were often made. That being said, I feel like I learned nothing from the class. Daisuke handled lectures exclusively while Simon wrote PSETs and exams. As a result, I would leave Daisuke's lectures (interspersed with PollEverywhere questions and practice problems) feeling like the material made perfect sense. However, the lectures were NOTHING like the PSETs or exams. I had to go through every one of Simon's PSET problems with a TA to even begin to understand the material, and the exams were twice as difficult. More often than not, the exams tested material that was never even covered in the class to begin with (exams covered material that was never even in the TEXTBOOK, which was written and provided by Simon). Because of that, even though I understood the material as it was taught in Daisuke's lectures, PSETs and exams took this material to a ridiculous extreme beyond the scope of the textbook, which left me and other students feeling frustrated and demoralized. Furthermore, because Simon wrote all the material for the course/textbook, it was impossible to get help beyond TAs - I couldn't even get clarity from a different physics textbook. Even some TAs admitted that they sometimes couldn't understand Simon's answer keys for the PSETs. The instructors are really trying to make it possible for students to learn by offering corrections and group quizzes, but the material taught and the material tested upon are too different for that to happen. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors were super accomodating and kind, but the content was entirely too much and too complex for the scope of a college level intro course. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

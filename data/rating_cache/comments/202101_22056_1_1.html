@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>111</strong> </p></li>
+<li><p>RESPONSES: <strong>87 </strong> </p></li>
+<li><p>DECLINED: <strong>8</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>10 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2021-Spring</strong>
+     
+    
+         
+        CPSC 365 01/ECON 365 01 
+        Algorithms 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 22056/22057   <strong>Term:</strong> 202101</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> its hard <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: PSETs were helpful for exams
+Weakness: recorded videos from 2020 were hard to follow - too fast. Also, we got no grades back for our homeworks for the second exam - and Glenn actively ignored questions on Ed inquiring when we will get them back. There was 0 feedback on our work done after mid-March until last exam in May. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The only strength I can possibly see for this awful course is that the pure subject matter (like in the textbook) is interesting. But the poor execution of this course on the part of Glenn makes the course uniquely traumatizing and the content uninteresting. The only way for this class to improve is with a different professor. Glenn is a nice guy, but he doesn't understand how stressful this class is from our perspective as students. By giving us one day to study for the midterm (by making a problem set two days before the midterm) or by having a final a week BEFORE reading period while we have classes including in Algos (that had content relevant to the final exam). His lectures are also very confusing and concepts that can be easily explained are made to be way more complicated than they need to be. He also reversed the grading distribution for some reason during the pandemic (to be 70% exams and 30% psets) which added another level of stress to this course experience. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The tests were hard. But I guess that was just the content. Would have been helpful if the recorded lectures were named after the topics covered in class (though this is specific to online learning). Could have given more examples on how to actually write up a proof/explanation to questions like those that appeared on the hw and exams - still am not sure what the level of detail necessary was. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: GLENN IS THE BEST. Course has a nice variety of topics without being too broad.
+Weaknesses: poorly designed office hours infrastructure and scheduling led to scarcity of resources. Some ULAs were unprepared. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Can't think of many.
+
+Weaknesses: Way harder than it needs to be. Way more work than it needs to be. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It's algorithms.  It's hard.  This is the type of class you expect by taking algorithms.  I might make the psets count for more though.  It's kinda rough that 80% of our grade is exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Technically, an incredibly good course. Not a lot of student collaboration is encouraged though, which could be good for learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures are pretty dry but Professor Glenn does his best to make them interesting. This is one of those classes where you just have to grunt through even though the material is tough and dry, because it is definitely helpful if you are looking to have a career in CS <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There's a LOT of material and it isn't always clear what is necessary to know (or even helpful to know, as some of the topics covered in lecture/videos are just never brought up again). 
+
+Also, office hours was set up extremely unintuitively this semester, with extremely long wait times that often resulted in very little help after waiting for ~2 hours. There also was not a queue until a fair way into the semester, so there was always a lot of confusion about how long the wait was? Previous CS classes had already solved this problem with a Google Docs queue (or Rob's really cool web app office hours system, csofficehours.org) so I'm not sure why office hours was so chaotic for this class. 
+
+Also, there was a cheating scandal for the midterm and to me it seemed to be handled really poorly because I (as someone who did not cheat) was terrified at the ensuing series of vaguely ominous, threatening posts that Professor Glenn made on Ed because I was worried that the teaching staff may have thought I had cheated since some of my answers were similar to the homeworks, which was totally allowed since it was open-book, and it was just really really stressful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I very much liked the style of lecture combining both prerecorded videos that we could watch at our leisure and live virtual lectures where we could ask questions to solidify our knowledge. Also the topics in the later half of the course were very interesting. One weakness in my eyes was that it seemed the discussion on loop invariants went on for too long and it could have been cut down a lecture or two to make more room for the survey of approximation algorithms at the end of the semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Glenn is meticulous and the problem sets and exams are well-set. Exams are challenging enough to produce a curve that actually looks like a proper curve (whereas in other classes, you have 80% of people getting 90+ on an exam), so you don't have to worry about getting perfect answers or getting a low raw score. In the remote setting, the ability to pause and rewatch lectures makes it easier to understand and follow the lectures, which I think was a problem students faced in past years.
+
+Weaknesses: Professor Glenn speaks like a robot in his recorded videos, which is very unfortunate because it makes it really difficult to understand and follow his train of thought. He spends a lot of effort in making the videos, but I suggest that he not follow a script while teaching. The natural intonations that come with teaching and explaining are lost, which seriously affects the intuitive understandability of the recorded lectures. I have struggled to follow the recorded lectures and find them a pain to watch. It might be better to do more explaining and teaching live. Also, problem sets were not returned on time (HW 4-6 returned after final). There is also inconsistency in grading the homeworks, with some students getting off with mistakes, while some students getting really strict and nitpicky graders. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: having the optionality between attending class and solely viewing the recorded mini videos made learning efficient. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course has a lot of resources, which is a great thing, but I found it difficult to navigate them sometimes. Especially towards the end, it seemed like there were a lot of videos from sort through when looking for a particular concept. But overall, this course is fantastic-- its remarkable how much Glenn is able to cover while remaining succinct and thorough. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are that it exposes students to the fundamentals of algorithm design. It also challenges students with some of the most common problems in computer science, which can then be used as a knowledge base for solving more complex issues. Weaknesses are that the pacing is sometimes inconsistent, and the material can sometimes feel like it doesn't flow naturally. Providing a clearer topic roadmap at the beginning of each major unit would provide better clarity and an intuitive explanation for the importance of each concept. Faster grading of homeworks would also provide more instant feedback of progress and areas-of-improvement to students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Overall I thought that the course was well designed for student learning. The recorded mini lectures on each topic were a nice format for the virtual semester. Professor Glenn was dedicated to student learning and answering student questions. The ULAs were very helpful and I appreciated the problem overview sessions for the psets. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures, recorded videos were good <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought that the pre-recorded videos were incredibly helpful to look back to. I think that live lectures were sometimes a little long and therefore hard to follow for the entire hour and 15 min. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: good psets and materials 
+Weakness: office hours were a mess on the second week of each pset; pre-recorded videos on Thursdays were insanely fast (we would cover an entire live lecture of material which is usually 75 minutes in a 6-minute recorded video sometimes). Live lectures were sometimes very boring and just introduced new topics/examples - I feel like the hard material like difficult proofs should be in love lectures and the easy stuff like examples should be in the pre-recorded videos to make it easier. They also only graded 3/6 psets by the time of our final exam, but honestly it didnt matter that much <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The material is pretty interesting and some of the homework assignments were actually somewhat enjoyable if you like thinking about problems. However, I found the lectures pretty boring, and a few problems on the homework/exams felt needlessly tedious and long. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths are definitely the lectures, both the prerecorded ones and the live ones. Professor Glenn does an excellent job of being engaging while also being extremely clear in his proofs and algorithms. Another strength was office hours with Glenn, often times I would be almost there with a solution and just needed him to point out something obvious we had mentioned in class which was nice. Also, he is very kind and always willing to help students. Another strength was the problem sets. They were often fun to do! On the other hand, sometimes I think the problem sets were too short or not difficult enough. This is especially true when we have two weeks to do about 2-3 problems but then the exams consist of 4-5 homework problems with way less time. What would be good if we had more practice homework problems and maybe one more challenging question. Another weakness is probably the exams. While fair in the sense that all the questions are doable, they often got me with the time constraints and had I maybe a few more minutes I'd've been able to finish up some of the questions more cleanly. That being said, the class is curved so its not a big deal. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the beginning of the course is a bit theoretical. I feel like invariants are kind of pointless thing to understand. Learned a good amount --- but wish it wass more focused on different algorithms and less on proof/theory <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think some of the topics are very interesting, but the first half of the semester is kind of boring / a slog. It's also unclear most of the time exactly how specific we needed to be in our proofs and grading could sometimes feel a little arbitrary. I loved Glenn's prerecorded videos, he is an acting icon. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength of the course is that it covers much more material than other algorithm courses at peer institutions (according to Professor Glenn). A significant weakness to this aspect is that we do not have enough time in the semester to go through the material so my classmates and I can fully understand what we are expected to learn, especially if the only lecture material on any topic is a seven-minute pre-recorded video packed with dense material with little additional examples, explanation, or discussion. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the videos and live lectures sometimes did not feel cohesive and it look a long time for the grading of psets. This made it extremely hard to keep track of progress. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: 
+
+- several of the algorithms we discussed were interesting and applicable to the real world
+- the recorded lecture format (which Prof Glenn puts a ton of work into) really helps a lot for allowing us to see notes, pause the video, and re-record
+- I like that finals and psets end before reading period - it takes a lot of load off us students in terms of staggering workload at the end of the semester.
+
+Weaknesses and improvements:
+
+- I think the lectures could be even more helpful by explaining things not so much in mathematical terms but in laymans terms, that is, by adding more examples with real numbers of lemmas and proofs and theorems in action (showing how we could find intuition for figuring it out ourselves)
+- I'm not sure why psets were made from 75% of our grade to 36% of our grade this year, but that made the class much more stressful in what has already been a stressful pandemic year.
+- Didn't like how the break day on 4/8/21 was ignored, and that we were still assigned pre-recorded videos to watch <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Glenn covers a great amount of material (including things not in the Kleinberg-Tardos text but also from CLRS and other sources) to make the course very valuable in terms of teaching us a wide breadth of the design and analysis of algorithms. However, I do wish there were a more organized form of lecture notes than just the copies of his OneNote markups. I think a more organized LaTeX-style set of concise notes (or even topics) would have helped. The teaching staff was great, but office hours' sign-up and meeting system could be improved. I also wish we spent less time on loop invariants (which became pedantic very quickly) and more time on the topics at the end of the course, e.g. PSPACE, approximation algorithms, and randomized algorithms, since those were very interesting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Could be improved with more practical applications such as evaluating/writing actual code instead of just pseudocode <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Half of the course was Khan Academy (series of pre-recorded videos) which always take more than the time specified on the video to actually watch, learn, and digest. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course used to primarily based on homework grades and minor exam grades  they switched it last year and I think that was a mistake. You spend a decent amount of time completing the problem sets anyways because they're still the same difficulty, but now they're worth like 3% of your grade. Which is frustrating. Instead now the exams count for a lot more, which I think makes less sense. Also, there needs to be a well established office hours system. There was no queue at the start of the semester and this led to chaos -- or even worse, the queue was on the zoom chat which not everyone could see. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> For me it felt like a kind of slow start, getting the meticulous points about loop variants done. I greatly preferred the second half of the course. Sometimes we would go through a proof or something in class for a really long time. It was really hard to stay focused for that long with a switch up in topic or break. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think that having the short videos were very helpful. In general, maybe it was me but I was very lost in the lectures that I stopped going to them. They were so boring and dense and there were way too many equations. I'm not sure how to fix that in the class, but the class was so exhausting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weaknesses: Office hours over zoom sucked and were inefficient. Additionally, the course should work to hire competent ULAs who are able to help with problems
+Strengths: Glenn is a fantastic faculty member in the CS department. He clearly cares about the course and his students and is responsive to their needs. I loved the short videos and definitely think they should be integrated into the general course (instead of zoom classes) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: A lot of the material seems to naturally flow from one another. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is just too hard for the required algorithms component of the CS major. Glenn says that he has done reviews of our peer institutions, and that our required algorithms course is significantly harder than theirs. Why? Why does our version of algos have to be significantly harder than Harvard's? It makes absolutely no sense. 
+
+Throughout, it's difficult to understand what exactly you need to know for the exams, and in order to do the homework assignments you often have to pull "widgets" out of thin air or it's impossible to solve them. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Not great for different learning styles <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The teaching assistants were really helpful <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the material was interesting and engaging.  However, the grading scheme feels very unfair. If it could be adjusted to give more weight to the problem sets that take hours upon hours to complete, I feel the grading would be more fair. To make timed tests that contain questions as difficult (and more unintuitive) worth 64% of the grade is unreasonable in my opinion. You can do poorly in the course even if you put in hours of work and effort into it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Clear expectations of what was required on the problem sets were not given, and then a relatively large amount of points were deducted for such mistakes made <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: learn a lot about different algorithms <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> class could've been more engaging. quizzes in the middle of the recordings were helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The mini lecture videos were amazing and much appreciated, however the large lecture videos should be supplemented by typed out slides with pre-written examples, because they were still largely disorganized and somewhat messy/difficult to understand. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The collaboration policy for homeworks (as opposed to 366) makes a huge difference and makes the course much more engaging and enjoyable. I think the problem sets could be constructed in a more engaging manner. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

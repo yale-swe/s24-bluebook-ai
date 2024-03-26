@@ -1,0 +1,194 @@
+{
+ "crn_code": "12423",
+ "season": "201603",
+ "legacy_coursetable_course_id": 39122,
+ "enrollment": {
+  "enrolled": 60,
+  "responses": null,
+  "declined": null,
+  "no response": null
+ },
+ "ratings": [
+  {
+   "question_id": "YC402",
+   "question_text": "Your level of engagement with the course was:",
+   "options": [
+    "very low",
+    "low",
+    "medium",
+    "high",
+    "very high"
+   ],
+   "data": [
+    0,
+    7,
+    9,
+    10,
+    1
+   ]
+  },
+  {
+   "question_id": "YC404",
+   "question_text": "What is your overall assessment of this course?",
+   "options": [
+    "poor",
+    "fair",
+    "good",
+    "very good",
+    "excellent"
+   ],
+   "data": [
+    2,
+    3,
+    6,
+    12,
+    5
+   ]
+  },
+  {
+   "question_id": "YC405",
+   "question_text": "The course was well organized to facilitate student learning.",
+   "options": [
+    "strongly disagree",
+    "disagree",
+    "neutral",
+    "agree",
+    "strongly agree"
+   ],
+   "data": [
+    1,
+    6,
+    5,
+    14,
+    1
+   ]
+  },
+  {
+   "question_id": "YC406",
+   "question_text": "I received clear feedback that improved my learning.",
+   "options": [
+    "strongly disagree",
+    "disagree",
+    "neutral",
+    "agree",
+    "strongly agree"
+   ],
+   "data": [
+    1,
+    10,
+    9,
+    6,
+    1
+   ]
+  },
+  {
+   "question_id": "YC407",
+   "question_text": "Relative to other courses you have taken at Yale, the level of intellectual challenge of this course was:",
+   "options": [
+    "much less",
+    "less",
+    "same",
+    "greater",
+    "much greater"
+   ],
+   "data": [
+    3,
+    5,
+    14,
+    6,
+    0
+   ]
+  },
+  {
+   "question_id": "YC408",
+   "question_text": "Relative to other courses you have taken at Yale, the workload of this course was:",
+   "options": [
+    "much less",
+    "less",
+    "same",
+    "greater",
+    "much greater"
+   ],
+   "data": [
+    1,
+    10,
+    15,
+    2,
+    0
+   ]
+  }
+ ],
+ "narratives": [
+  {
+   "question_id": "YC401",
+   "question_text": "What knowledge, skills, and insights did you develop by taking this course?",
+   "comments": [
+    "Got a decent overview of cloud computing and got to play around with Google Compute Engine.",
+    "How distributed systems work and what some of the modern technologies in these areas look like.",
+    "I learned important information about distributed systems.",
+    "I learned about the theory and practice of building scalable computing systems. This course involved building a project over the course of the semester. Each lab built a layer on top of the previous lab. It was interesting getting to use some of today's most commonly used technologies such RPC and webserver libraries. In class we also learned a lot about the terminology and concepts related to distributed systems in industry. It was fascinating.",
+    "Not much, as I had taken Databases with Prof. Abadi before and was taking this course concurrently with Operating System by Prof. Shao. I found the material in this course to lie in between Databases, OS, and Networks, thus I didn't learn anything new. The PSETs were fun but I didn't gain any new knowledge by doing them.",
+    "The psets were informative and taught you stuff, although there was also a lot of self teaching involved. The lecture material gives a broad overview of the topic but nothing too deep",
+    "Distributed systems was a good CS elective, very practical and useful for SWE roles. Learned about how the systems behind google, fb, amazon are structured and all the protocols behind them.",
+    "Working with systems that scale across multiple machines",
+    "Finally understand basics of networking, databases, and cloud computing.",
+    "The biggest skill I picked up was how to use and integrate third party libraries for projects. We used mongoose for running a server, thrift for handling RPC, and google cloud for serving our code in the cloud. I also learned about replication in coding and sharding, though I would not say this course did a great job at teaching me things I couldn't have learned on my own.",
+    "I learned how to keep a system running consistently across a number of machines without a centralized server",
+    "This class covers the basics of networking, storage interfaces, and some databases\/OS concepts. There is a small amount of practical distributed systems content, but the nuances of different approaches aren't really approached, nor is there any serious theoretical discussion. The only distributed algorithm we discussed was Paxos. Most of the material is a review of Computer Networks, Operating Systems or Databases. The problem sets are helpful for developing some engineering ability in C++ if you are not already familiar. If you are, they will not be challenging, just typing. If you are not familiar, I expect they will be quite challenging as there is very little support in terms of implementing these systems.",
+    "By taking this course, I was able to design and implement a graph server. With each iteration of the graph server, a different ACID guarantee was implemented. I appreciated that I had complete free reign to make all design decisions (there was no skeleton code to guide the process). In each iteration of the graph server, we only were required to maintain one guarantee. I learned that distributing a system and maintaining all guarantees is very difficult! The take away from the class is, keep your systems centralized for as long as possible if at all possible.",
+    "As the name suggests, in this course you learn how to design and build a distributed system. Specifically, there are four problem sets building on top of each other. By the completion of all four problem sets, we had built a distributed graph store, with replication, partitioning, and persistence. In other words, you learn: 1. persistence: how not to lose data when the servers crash 2. replication: how not to lose data when drives fail 3. availability: how to scale a service across many machines to increase availability for end users among other things, such as consistency, failure atomicity, etc..."
+   ]
+  },
+  {
+   "question_id": "YC403",
+   "question_text": "What are the strengths and weaknesses of this course and how could it be improved?",
+   "comments": [
+    "Could be improved by adding more content, more assignments, and more structure.",
+    "The lectures were good but the workload was a little too spread out to continuously retain and grow my knowledge base consistently (while I learned a lot, I felt that with each pset I had to do a quick refresher of the information from the last one).",
+    "This class has a lot of potential. I ultimately enjoyed parts of the projects and it wasn't an impossible workload. Overall, though, the course's organization was extremely poor. First, the overall assessment style was incredibly frustrating. There was little direction. The instructors did not seem to have thought out the assignments or tested parts. For example, for the third assignment, they provided little suggestions for how to install a gRPC library on the virtual machines. The result is that many students like myself spent literal hours trying to figure it out independently. This was not an intention of the assignment, it was simply poor planning on their part. Questions were not answered responsively. Currently, there is a queue of questions that the instructor and the ta have ignored. People with experience with using C++ structures in C had a significant advantage. The instructors were little help and were not responsive to student questions. The test was random and didn't seem like a particular good assessment of understanding of the material. Class material was not related to the work and was presented in an unplanned way. The instructor would frequently trail off at the end of sentences and it was difficult to hear what he was saying.",
+    "Strengths: The labs were interesting and the content was fascinating. Weaknesses: The course could have benefited from a little more structure later in the semester. Also, The exam had weird weightings for the questions. Some questions were weighted far more than others despite being similar in difficulty\/length\/scope. If you got one of those questions wrong, you would lose all points for it and it would drop your test grade significantly. The exam could have been less punishing in this regard.",
+    "Lectures seem disorganized and are not easy to pay attention to. The psets are good for giving you a sense of what you're doing in the class but the specifications are very unspecific and often vague or ambiguous. Although we were never penalized for that vagueness, questions were not answered quickly by class staff but from classmates",
+    "I really liked that the course was practical and related to how engineering at large tech companies works -- plenty of examples from industry to supplement the theoretical ideas we discussed. This is probably the best CS course in the department in that respect. Programming assignments were good, but could be more detailed and better specced out. Midterm was fair and reasonable. The lectures were generally good but perhaps could be more structured.",
+    "-Interesting material -Lectures and notes could be a bit more organized",
+    "The material is generally interesting but a little all over the place when it is presented in lecture. Not a lot of what is presented in lecture is used on the psets. The psets were generally interesting though.",
+    "Assignments were perfect level of instructive and challenging and interesting. Lectures were disorganized but at the same time very engaging and useful. Midterm was also great format and level of difficulty-- learned so much by studying for it. Loved having four psets and no final.",
+    "The biggest strength of the course was its coursework. It does a very good job of designing assignments to teach relevant materials for distributed systems. I also think it does a good job at giving us enough of a spec to get us started, but not too much that we are being hand-held through the development process. The biggest weakness of the course was its lectures. Lectures were often all over the place, had little to do with one another, and were not very relevant to the course material. More structured lectures would be very helpful.",
+    "the material is very practical but covered at a very high level without going into the actua papers; the problem sets are ridiculously oversimplified",
+    "I wish the lectures were recorded- Mahesh often says very insightful things, but it's easy to miss and fall behind in lecture",
+    "The instructor should prepare a more coherent schedule. Less classes should be cancelled. Use of lecture slides, notes or other aid may help for lectures to seem more structured and less rambling. There should be readings on distributed systems topics that are required. There should be more consensus algorithms besides Paxos covered. The practicalities of using Paxos for replication should be discussed. The lectures should be shortened to 45 minutes if the instructor plans on routinely not using the allotted hour and fifteen minutes. The midterm should be more than 15 or so true\/false questions if there will be a midterm, or there should be no exam.",
+    "The course had a good overall organization, and the lectures were organized at the beginning. Near the middle and end of the course, I felt like the lectures were lacking in substance. The homework specifications were sometimes underspecified and confusing, but it ended up being okay since a graph server is relatively straightforward to understand. I remember having some initial difficulties with figuring out how to test things on the VMs hosted through Google cloud, but luckily, I found answers to my problems on the class Piazza even if the homework spec did not cover everything. I feel like I gained a general understanding of system distribution through the lectures and especially through the implementation of the graph server in layers. However, I don't think I understand any topic deeply. We talked about things like Paxos in the class without going in-depth. I think assigned readings\/reading respnses or a textbook would help improve the class, as it's difficult for the professor to cover many details in the span of one lecture.",
+    "Strengths: Material is interesting and very practical, Mahesh knows what he's talking about, lectures are good at explaining the context of various systems (good for quickly understanding a company's stack or seeing where new systems fit in), psets touch some interesting real world stuff (O_DIRECT, thrift RPCs, etc) Weaknesses: Lecture is disorganized, psets involve a significant amount of setup\/configuration work, psets aren't usually too conceptually challenging Improve: Assigning papers, blog posts, or textbook chapters to skim\/read before lecture would be nice because you wouldn't have to describe everything from scratch. This works really well for Prof Abadi's databases course--people come to class already understanding the easy 40% of the material, which generally improves the quality of questions. Plus a lot of the cool stuff (paxos, spanner, etc.) is too hard to cram into class.",
+    "I loved the structure of the homework assignments: - building on top of each other taught us how to build larger systems - working with a partner eased the stress \/ was a good opportunity to practice collaboration skills - the end product was really cool, for lack of a better term"
+   ]
+  },
+  {
+   "question_id": "YC409",
+   "question_text": "Would you recommend this course to another student? Please explain.",
+   "comments": [
+    "A decent intro to cloud computing. Not very rigorous, but you get to play around with Google Compute Engine and explore some open source C\/C++ libraries (Mongoose, gRPC, etc). Take it if you need a gut, as you'll see from my...Advice from a senior CS major: do not take any elective course taught by Silberschatz (423, 437), Fischer (427), Petersen (431, 432), Rokhlin (440), Gelernter (451), or Slade (458). All of these courses are a complete waste of time (although they consume very little of it) and a huge waste of a Yale education. You will literally learn nothing from these courses except that half of the Yale computer science faculty is abysmal (the other half ranges from decent to stellar). By all means, major in computer science, but do yourself a favor and limit yourself to taking only the rigorous, well-regarded CS electives that every CS major should take: 421: Compilers and Interpreters (Shao), 422: Operating System Design and Implementation (Shao), 438\/638: Database Systems (Abadi), and 478: Computer Graphics (Rushmeier). Together with 201, 202\/244, 223, 323, 365, and 490, all of which are required for the major, this will get you 10 credits and lots of job offers (a rigorous, well-rounded BA is worth more than a gutty BS). When you're applying to jobs, you can say you're planning to complete a BS, and then switch in your final semester (by which point you'll have already accepted a job offer), and nobody will ever know or care. If you're planning to apply to grad school you should consider 480: Directed Reading. If you need a gut that is still practical, consider 426: Building Distributed Systems (Balakrishnan). If you're feeling masochistic, consider 433: Computer Networks (Yang), but beware that it is a LOT of work. Godspeed.",
+    "A pretty good course overall. Only 4 assignments which are conceptually pretty easy but can be annoying to implement due to dealing with third-party systems (this semester we ran our code on VMs in Google Cloud). I would recommend it since distributed systems are all over the place in industry and this is a good introduction to them.",
+    "I guess. There aren't a lot of good options and it seems less frustrating than some other options.",
+    "Great class!!!",
+    "I think this course covers important subject material. It gives students experience building distributed computing infrastructure from scratch in C++. These skills are valuable if you plan to go into industry. The workload is not too bad. Each lab takes a little while, but there are only 4 of them.",
+    "Yes for a light elective and a pretty broad overview of cloud computing",
+    "Distributed systems was a good CS elective, very practical and useful for SWE roles. Learned about how the systems behind google, fb, amazon are structured and all the protocols behind them. I really liked that the course was practical and related to how engineering at large tech companies works -- plenty of examples from industry to supplement the theoretical ideas we discussed. This is probably the best CS course in the department in that respect. Fairly straightforward, and mahesh is great!",
+    "Take it. It's a chill CS elective. Mahesh is awesome and you'll learn a lot.",
+    "This is one of the better CS electives. Mahesh is a little disorganized but very smart and if you really pay attention the lecture can be engaging. The material can be really good and the work isn't too hard.",
+    "Yes absolutely!! My favorite CS elective by far. You learn a ton of useful things and are challenged, but the workload is very reasonable.",
+    "I would recommend this course to someone looking for a CS elective. It is not extremely work-heavy and the coursework is very interesting. Lectures are a bit boring and tough to follow, but I did find myself enjoying the course.",
+    "easy cs elective but doesn't teach a whole lot -- not really worth it",
+    "I'd definitely recommend this course- you learn a lot and Mahesh is great. Relative to other CS classes at Yale, it's pretty applied and also not terribly difficult.",
+    "Absolutely not. The course was incredibly disorganized. There is no depth in any distributed systems topics. The instructor just comes in and talks off the top of his head on various topics that he has encountered in previous engagements. Lectures were often cancelled or ended early. I didn't gain any new knowledge about distributed systems from this class which is incredibly disappointing. Nor did I gain new knowledge about systems programming. If you haven't taken Networking, OS, or Databases the topics covered briefly in this course might be useful to you if you are seeking for an overview of a few practical aspects of systems programming. Other than that, you will be on your own to learn C++ if you don't know it and implement the problem sets.",
+    "Great fifth class and easy CS elective.",
+    "Take the class if you enjoy building things and designing a system from scratch. I found the design and implementation of the distributed graph server to be very rewarding. I appreciated that we learned how to use existing cloud services and remote procedure call APIs. Professor Mahesh brings a lot of knowledge from industry, and the course he designed leans towards practicality. The lectures themselves could be more fleshed out, especially after the midway point. I would appreciate if the homework assignments had solutions, since each assignment builds off the previous, which means errors from your first lab will propagate to your last lab.",
+    "This course was a little disappointing because it has potential to be so much better. As a topic of study, distributed systems are both and interesting to think about and ubiquitous in industry work, and Mahesh is incredibly knowledgeable on both the theory and practice of building them. However, the lectures, while often interesting, did not seem well organized--some material was covered multiple times, and overall it felt like we could have either covered many more topics or gone into greater depth if lecture time were better allocated. The (apparent) lack of planning for lecture did allow for some really interesting tangents on the current state of the tech world, so I do feel like I have better context for understanding real systems, but lecture never really felt like a critical part of the course. . The work for the course consists of four programming assignments and a midterm exam, so compared to most CS courses it's very light. Distributed systems is very close to real work in that setting up tools and debugging strange errors can be kind of a pain, especially if you don't have a background in networking. Once we got over the setup hump, the assignments were kinda cool: we built a graph database (datastore and server) and played around with (super simple) distributed transactions and crash recovery. I think that making the psets more conceptually difficult would have been nice because it often felt like the boring setup work was actually the majority of the assignment, and you didn't get that feeling of conquering something truly difficult that other systems classes (323) give. I'm guessing that one limiting factor here is the difficulty of testing distributed systems, which limits how involved the assignments can be. . Overall, I enjoyed being in this class even though I felt like it could have been more. If you enjoy thinking about these systems outside of class, getting the chance to talk to an expert is pretty cool, but otherwise I might look elsewhere.",
+    "Yes, this course is fascinating. Distributed systems serve as the backbone of modern major tech companies today. As discussed in class, companies such as Google, Amazon, Facebook, etc are all built on top of distributed systems. Therefore, if you're at all interested in how Google can answer the billions of queries it does, or how Facebook supports its billions of users, or how Amazon manages all the products it sells, then this class is perfect for you. In addition to practical applications, the subject matter is interesting in and of itself. How to partition, replicate, persist, etc? Each question individually has non-trivial answers and when combined everything becomes complicated. As such, each of the aforementioned companies has their own, uniquely tailored, solution to the task of distribution. As an added bonus, the problem sets were awesome. Over the course of the semester, you'll build a fully distributed graph store, with a partner should you choose."
+   ]
+  }
+ ],
+ "extras": {
+  "subject": "CPSC",
+  "number": "526",
+  "section": 1
+ }
+}

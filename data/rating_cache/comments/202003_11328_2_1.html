@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>443</strong> </p></li>
+<li><p>RESPONSES: <strong>357 </strong> </p></li>
+<li><p>DECLINED: <strong>44</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>27 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        ECON 115 01 
+        Introductory Microeconomics 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 11328   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strenghts- a lot of opportunities besides the main lecture to learn concepts - games, special activities, discussion sections, review sessions. Fair grading and assignments. Engaging lectures. Incredible professors and TA'S.
+No weakness. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Practice for midterms did not always properly reflect the actual tests themselves <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The peer tutors are amazing!!! There is always Office Hours going on which was super helpful! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths are that the teachers are great. The content itself is a little difficult and abstract at times, but they did a good job of navigating us through it. I would say the weaknesses are that the TA's were not always on the same page as what was being taught since they did not attend lectures. Some of them are grad students who are certainly qualified to help us, but they may explain it in a way that we did not learn which can almost make things confusing to be told two different methods about the same topic. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I loved professor Berry and Polak. They are the best! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professors are excellent at lecturing, the content is relatively accessible. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The classes are way too long!! Could be condensed and this would improve engagement as well! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Lots of office hours, review sessions, etc; able to drop 2 problem sets, weekly homework not too overloaded. 
+Weaknesses: Weird grading. For both of the midterms, which are 1/2 the class grade, the score is "curved", but not really. An approximate point range was sent out for each letter grade (like less than 35/75 = C, 35-55 out of = B, 55+ = A), but the actual grades weren't assigned specific grades or reflected in Canvas. If you're anxious or like to know your exact amount of points, it can be confusing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this course gives many resources to succeed! A weakness could be that it goes through a lot of material quickly. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The production quality of the lectures and the availability of office hours was a huge positive for this course. The professors were fantastic and had great perspectives on everything from the course content, to being a student at Yale, to real-world events. 
+
+The pace of the lectures felt very slow at times, while on other occasions a topic that ended up being on exams was scarcely covered. This was most noticeable on the second midterm, where most of the class performed very poorly because it felt like the exam content was much different and much more difficult than the class content. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the content is very well organized throughout the semester; the problem sets are well designed and help reinforce what was learned in class; the professors are very experienced; many concepts that we learned were explained using both graphs and algebra.
+Weaknesses: the lectures could be a bit slow at times (although this may be the result of the virtual format); one or two problem sets took significantly longer than the others to complete because of the length of the questions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The organization of this course was a strength. The class did a good job of teaching essential knowledge for microeconomics. However, some exam questions felt unnecessarily difficult and were not directly covered by the course. Besides that, everything else was good. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: relatively simple information if you are good at math/logical reasoning. I'm not.
+
+Weaknesses: lots of information, not very interesting if you don't really enjoy Economics, curve is killer. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength is that it covers many interesting topics and goes into some depth about how the concepts we are learning show up in real life (i.e. the discussion about examples of price discrimination).
+
+A slight weakness would be the large amount of students can make it difficult to be heard, but that issue is largely alleviated by office hours and discussion sections. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It didn't feel as if the problem sets were comparable in terms of difficulty to many of the problems present on the midterm exams and final. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Some of the strengths of this course are its asynchronous nature, the focus on how to use the concepts learned to come to our own conclusions, and the extra activities created by the professors on Mondays and Fridays (Mon-an extra session to go over 1 problem in the pset, Fri-an extra session for extensions and applications of the concepts learned that week, i.e. a focus on COVID).  The biggest weakness was the lack of connectivity between the oldest concepts and the newest. It would have been helpful to have an extra session or something, not necessarily for review, but just to get the big picture of the concepts we learned and how some of them connect. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures were disorganised and rambling. Class held outside of scheduled hours. Professors unresponsive to student concerns. Discussion sections pointless. No feedback given on any exams or problem sets. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths is that everything was recorded and posted. They did a great job accommodating to the pandemic by answering questions in the P-Set and giving extra lectures and so much study material.
+Weaknesses was that this years lectures were way harder then the previous years but they are curved so it doesn't matter much. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures done over Zoom were very good. They were engaging and were just as effective as a large in-person lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It can be very easy to feel lost and alone throughout the course. The peer tutoring sessions, however, help you find a community and people to work with. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The number of staff members involved with this course is phenomenal. Not only did we have Steve and Ben in lecture, but the TA's and section leaders' office hours were in no short supply. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It's hard to say given the COVID-19 situation, which makes it so that the Fall 2020 course format will likely not be repeated in future years. I personally enjoyed Professor Berry's and Professor Polak's high level of enthusiasm. It was somewhat contagious and helped keep me engaged even though it was an online lecture course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is a good introduction to microeconomics for someone who has essentially no background in economics at all. However, it it taught at a math level that is too low for someone who has a strong mathematics background. As someone who expected an introductory microeconomics class to consider at least the basics of calculus (e.g. derivatives), I was disappointed when I learned (from the syllabus and the first lecture) that we would not be doing any math beyond algebra. While I understand that that is necessary for the least math-experienced student understand what is happening, the class was not very engaging for me as a result. As a follow-up to that comment, much of the math in economics seemed "hand-wavy" (for lack of a better expression) because of this absence of harder mathematics. We did not need to go into partial derivatives of multivariable functions, and even non-linear functions are not often used. Again, Economics 115 is a good introductory course for someone who is interested in Economics and does not have a strong mathematics background, but it is lacking in the rigor necessary to keep more advanced mathematics students interested. I understand certain things "have to be saved for Intermediate" microeconomics, but I think this course saves a little too much. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures often left me dazed and confused. It was only until sections, PSETS, and activities that I began making the connections and concepts that lectures laid out. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There are a wealth of resources, OHs, sections, peer tutor hours, and recordings provided by the teaching team and all of these were very helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course has great professors and a great team overall, including TFs and the other faculty that helped organize the course. Also, being a very large lecture class, it was very easy to work together with other students. However, it was too easy to become disengaged with the class because of its large class size, and even more easy to become disengaged this semester because the class was on Zoom. That's not a weakness of the class, but more of a comment on myself that I prefer smaller seminar-style classes as opposed to large lectures (usually). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Great professor and pretty interesting material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class provides a solid basis for future studies in economics. The course is very refined, and there is little room for improvement. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class's lectures were overall fantastic, although a few topics were, in my opinion, explained a bit less than they should've been. I very much appreciate how the course seemed to build over time, using old material on new concepts, and I also appreciate all of the help provided to us through study groups, sections, flipped classrooms, etc. My biggest wish would honestly just be for more immersive lectures, but I'm sure that's simply a Zoom issue, since the professors themselves were amazing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength of the course was the very experienced faculty. A weakness was the curse's size, which made it very difficult to know our professors peronally. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this course is a very good introduction to microeconomics as it provides a broad overview of the subjects. Additionally, there was not that much math involved so I think this is a very easily accessible course to take and understand the material for it. Similarly, the problem sets were always manageable and the exams were not too difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lecture was very long, with little engagement because it's such a large class. Definitely one of the harder obstacles to overcome in this online era. However, the special activity, flipped session, and discussion sections really helped with that. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - professors kept zoom classes lively and were clearly actually interested in the information they taught us. All the information was presented in a comprehensive manner, and I never  felt like I was drowning in too much new information. Especially with all the office hours available throughout the week, if I ever didn't understand something there were ample resources to ask questions and clarify. 
+Weakness - Honestly nothing super in particular. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are the problem sets to learn how to apply lecture material to questions. Weaknesses are the lack of question like material in lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths-
+Peer Tutor Joe Ribaudo!!!!!!!
+Ben Polak, 
+interesting material, nice professors, organized
+Weakness-
+Exams extremely hard; curve was astronomical (30% exam scores became B's)
+Studying felt pointless
+The large lecture makes engagement difficult <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The content covered in the course was interesting, and there were many opportunities to engage with the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - Lots of TAs and help. PSETS were thorough and good practice for exams. 
+Weaknesses - Large class size and mixing kids of different econ backgrounds made learning harder. With over 400 kids in one class, half of the class was extremely knowledgeable about economics while the other half severely struggled. Because of this, many important concepts in lecture were skimmed or brushed over because it was supposed to be an intuitive topic derived from something else already discussed. Ex. Subsidy from Pigouvian Tax. However, these are not concepts that people who struggled would have ever been able to derive without serious study and careful explanation. This gap made an uncomfortable mesh between reviewing concepts for the top and explaining things slowly for those who struggled. I think it was okay overall, but I remember wanting to review concepts in the recordings, only to find out that the professor had skipped those slides in presentation. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I don't think there were many weaknesses, I liked the professors and my TF. I think the one part that could be improved was that we didn't always cover the material from the readings in class, so possibly more coordination between the assigned readings and lecture material, but I also took the assigned readings from a syllabus draft so it might've been outdated. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are that it is one of the largest undergraduate courses at Yale, so most first-years were enrolled and taking the class. The professors are stellar, especially Ben Polak and Steve Barry, and it is well-organized. The material in lecture was not always relevant to the actual application on problem sets and exams, so if that bridge could be more clear it would be much a better experience. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The virtual lecture style was not conducive to a very engaging class <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Barry and Professor Polak are amazing. They're enthusiastic, funny, explain material clearly, and very well organized. Workload was also low (one problem set per week that didn't take too long), material was important and generally interesting (although dull in nature at times), and exams were fair with plenty of study materials provided. I don't think the course had any major weaknesses. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It didn't hold students accountable for learning the material which is a very abrupt transition since most students are first years. It'll be better to make discussion sections a requirement. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths - good teaching staff, effective communicators, i like the virtual form of notes
+
+weaknesses - let the other professor teach more <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Broad exposure to a lot of topics, while also keeping some consistent themes.
+Weaknesses: Very lecture heavy so disengaging sometimes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Approximately 400 kids on a zoom call doesn't really work. If Professor Berry and Professor Polak taught at separate times, the class would probably be slightly more engaging. A strength is definitely the amount of review material they provide because you get to do a lot of practice before your exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I felt like the information we learned in lecture wasn't what ended up being asked on psets or exams; there was a lot of help available though if you had questions. Also, I felt like the Friday sessions were a waste of time. Two classes a week, plus the Monday flipped classroom activity (which was helpful), plus the discussion section, plus the Friday activity was just too much. Most of it at least felt useful, except the Friday activity. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It is very hard to engage hundreds of students over zoom. I appreciated the polls and other interjections to offer variations to the learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> it was really engaging and intriguing <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> class was good and straightforward <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - Great Profs
+Weaknesses - Few study resources, papers or interactions <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lectures were engaging, overall structure was well-organized, and the professors did their best to relate the information back to real-world situations and ways in which to conceptualize often complex ideas; Weaknesses: practice problems for certain mathematical ideas were scarce (suggest implementing more), and certain concepts were often explained mathematically rather than in broader economic terms (which was detrimental for p-sets and exams, where the questions often required the latter) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I found the subject matter to be rather tedious, but the professors did a good job of breathing some life into it. Joe Ribaudo was a stellar TF, too. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I feel that the lectures could be more entertaining. More visuals and graphics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the expectations are clear and the Canvas site is well organized. 
+
+It is difficult to find a support network (of both fellow students and teachers) in such a large class over Zoom. I think more groups should have been created, especially this year, to help students work through the material with other students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were that there were two professors to clarify parts that I could not understand. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were very long. Since they were conducted on Zoom, rather than in-person as usual, it was hard to remain focused for all 1 hour 15 minutes. I sometimes would skip the lecture and watch the recorded portion so as to fully understand what is happening. Due to the size of the class, also, it might seem intimidating to ask a question in front of the entire class, or to even slow the progress of the class, seeing there are over 500 enrolled students each lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lots of academic support with the material, including some (very idealized) applications to real life
+Weaknesses: the course was crudely technocratic and technical (i.e. boiling down very complex and nuanced issues to a few equations and idealized concepts) at times and could be seen as boring or mundane or incomplete in this respect. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Very good course! Awesome professors <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Great, informative lectures with 2 unique economists' perspectives
+Weaknesses: Discussion section was very fast-paced and basically just review of questions similar to the p-set, which was helpful, but not in understanding the material <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class taught the material very well and offered a lot of resources to help you succeed throughout the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I loved how just about everything was recorded; it made it a lot easier to go back and review parts that I didn't understand right away. Also, the peer tutors were amazing. Shout out in particular to Joseph for his weekly office hours and midterm/final reviews. In terms of weaknesses, the exams often felt significantly more difficult than the material we were provided in psets and past exams. Also, outside of Joseph's review sessions, the other scheduled review sessions were not that helpful since they would just go through old exam questions rather than reviewing the conceptual ideas covered in lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I appreciate that section attendance was not mandatory. I found the TAs' review materials for the exams very helpful. I think the teaching team could have been more clear about what the final curve might look like. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Dynamic duo of Ben Polak and Steven Berry. Micro is not an exciting course at times, but these two made it fun.
+Weaknesses: Those exams are extremely difficult. Is a 54% average actually what they were going for? If so, no worries but I feel like that was unintentionally challenging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: format (recorded lecture), resources, TFs
+Weakness: not requiring a basic level of calculus. Everything could have been explained in a much easier way if calculus were used. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: tried and true, no surprises, Berry is a great instructor. 
+Weaknesses: the class is huge and completely anonymous, finding practice materials beyond the provided practice exams (generally 3 per exam) and problem sets is difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I found discussion sections to be very useful as they helped better grasp the content being explained in the lectures and office hours helped a lot. I also found that the instructors managed to make the class quite interactive (for a 400+ people lecture) by asking questions to students or through Professor Polak's polls. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The Professor was great; he presented all of the concepts effectively and provided many real world examples. There are also so many resources to enhance your learning like office hours and old exams. I think it would have been helpful if we were told which section in the textbook correspond to particular lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: all the resources they offer to students. I genuinely think the difficulty of this course is exaggerated; they provide so many resources (TA office hours, discussion sections, peer tutor office hours, office hours w/ Professor Polak or Berry) that it's impossible to fail if you reach out for help.
+Weaknesses: I don't think they encouraged students to reach out if they needed help, especially at the start of the course. The course doesn't start out too difficult, so a lot of students (myself included) attended section but not office hours. When the course got more difficult, I had to take it upon myself to look through the Canvas calendar and figure out which office hours I could go to. Towards the end of the course, a lot more people used office hours, so by then I think many students have figured out the course can get difficult. Also, lectures feel really long, even if they're only 75 minutes. This might be an effect of staring at a Zoom screen for too long though. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of the course include the organization structure of material, the quality and depth of material provided, and the multiple TAs and peer tutors that were available for assistance. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: It was so nice having so many zoom office hours available to go to. Often times I would either be studying for a test or completing a homework assignment and I could find a zoom meeting to join the same day if I had a question. I really liked having the smaller sections as well. 
+Weaknesses: I tests were hard for sure. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I felt that the exams were MUCH more difficult than any of the material we learned or the practice exams from earlier years. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Excellent professors. Their teaching methods were generally pretty effective, and you could tell they cared a lot about the class, even though this was very basic economics knowledge that didn't always relate to their areas of research. The curve seems pretty generous too. It's hard to get an A, but not nearly as hard to get a B+ or an A-. And it's pretty hard to get a C or to outright fail.
+
+Weaknesses: Since there were so many students, it was hard to get to know the professors very well, unless you went to office hours all the time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course moves very quickly and the smaller discussion sessions were not very helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the class moves a little slowly and spends too much time explaining very basic things. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professors Berry and Polak are absolute gems. They are good teachers and really care about the class. They made the lectures more fun than might be expected. 
+Weaknesses: The class is so big and poorly organized its hard to get good feedback and know who to talk to. I constantly got contesting information from my TF and the course director, and it felt like no one would take responsibility. Definitely give students more feedback and attention. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were very informative, and the psets were good, but it might have helped to have some more practice problems during lecture that were more like the pset questions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: very engaging professors. Weekly discussion sections are very helpful. I like the slides. There were many practice problems available, but I wish there were more. 
+
+Weakness: I felt that there were too many zooms that we had to attend in addition to the weekly lectures, for example there is the flipped activity on Monday and there is a special activity on Friday. Both of which are optional, but it is best to attend them. Also the class was scheduled for 1pm, which did not help with learning because I just get really sleepy and can't listen, so I end up re-watching the recorded sessions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> easier tests <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I appreciated that this course was recorded and had additional sessions to help give all students access to the course materials while reviewing (or if class sessions were missed). The professors and section leaders in this course are undoubtedly super knowledgable and very informed on microecon. However, this sometimes meant that the pacing of the class was too quick and not detailed enough for a first-year student that has never taken an econ course before. Often, the course material and problem sets were significantly less challenging than the material in the midterms, which was frustrating. Instead of harshly curving the testing, I wish they would have made the exams more practical. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course are that it offers multiple opportunities to engage with the material and get support. In addition to the lectures, there were Monday problem set review sessions and Friday special extension activities in addition to many discussion sections and office hours available throughout the week that anybody could attend. I think a big weakness of the course is the fact that the lectures moved at a really fast pace and did not go in depth with any of the concepts. In other words, we were given brief overviews of the concepts, but it was up to us to figure out how to actually use and apply them on problem sets and exams. I think having some example practice problems in the lectures would be a small but helpful way to improve instruction. Also, I felt that the exams, especially the midterms, did not allow us to best demonstrate our knowledge and skills. They were significantly more difficult than midterms from past semesters that we were given as practice, it was always a challenge to finish in time, and given the fact that we were learning all of the material virtually, the exam level/difficulty definitely could have been made more accessible. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+- Professors Polak and Berry are superb lecturers that were able to break down concepts very well
+- There were plenty of resources for extra help, ranging from office hours to tutors to discussion sections to math workshops
+- Incorporates some theories from other social sciences (political science, sociology), making the course especially beneficial if taken concurrently with these classes
+- Optional activities were interesting and engaging, focusing on practical applications of what we learned in class
+
+Weaknesses:
+- Probably an unpopular opinion, but I felt the class suffered from a lack of calculus; it was very obvious where basic calculus could be used to simplify problems/concepts, and I think this should have been addressed for the whole class in order to enhance understanding of these topics
+- Lectures would get very stale; some more interaction with the class (e.g. more interactive polls) would have been appreciated
+- PSETs were graded very generously, with few comments or nitpicks, which did not match the grading system of exams at all
+- Not even necessarily a weakness, but the class is primarily focused on theory rather than data; I think incorporating more of the latter would have made for a better experience <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: professors and TAs both worked really hard to help provide as much support to the students as possible; I can definitely see their passion. 
+Weaknesses: some discussion sections had TAs that didn't really seem to know too much how to teach (though it is not really their fault given our time/circumstances) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Covers the basics of microeconomics very well. There are a ton of office hours from a lot of different TAs so if you were ever confused there was definitely someone available to help.
+
+Weaknesses: The lectures themselves were kind of slow. The professor did a great job staying cheery, but over an hour of online lecture will unavoidably get dull sometimes. The large class size also made it really hard to ask questions in the middle of lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: This is a huge lecture course so you can meet a lot of friends through this class, working on psets with friends made this class better, the TAs are very responsive. Weaknesses: The content is pretty dry. The questions on exams are always worded in a really confusing way and they are always looking for really specific answers so a lot of times you will get points taken off for not explaining something exactly as they word it. Also, lectures move really fast and the content you learn in class doesn't exactly prepare you for the psets (we never go over how to solve the types of problems that we encounter on psets in lecture and the content in discussion sections is usually limited (we only get to a few problems each week). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course are having the professor do problems during lecture to provide students with examples. Another strength is having professor Polak teach an additional Monday session that walks students through one problem on the problem set - this was very helpful. Also, this course has many office hours, which allow students to ask additional questions. 
+
+Regarding weaknesses, the discussion sections can be clearer. In my discussion section, my TA rushed through the problems without giving students time to ask questions about those problems. The discussion sections can be more focused and less time constrained so as to give students a better understanding of the material. Moreover, the professor could make the notes more structured and the lecture slides easier to follow. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the teaching was excellent and very engaging, and the peer tutors were extremely helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was difficult but I think that it would have been much better in person. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors were a major strength of the class, and made the lectures engaging and fun to watch. The biggest weakness was the constant tiptoeing around calculus, which can be frustrating for those with a more advanced mathematical background. It's a good idea to create an intro course that anyone can take, but I think an alternative intro course (or even multiple) should be offered with varying levels of mathematical rigor (no calculus, single variable, multivariable, etc). This would best serve the most students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is very well organized--all of the ingredients for a student's success are there. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would say the biggest strength of the course was the teaching team -- Professor Berry and Professor Polak did a FANTASTIC job introducing me to microeconomics. They were extremely clear, responsive, funny, and they obviously cared a lot about their students. Professor Polak did an extension &amp; application session every Friday afternoon, which helped me develop a better understanding of some of the key economic concepts. He also walked us through a problem from each week's problem set in his weekly flipped classroom sessions, which were incredibly helpful. The workload was very manageable, around 2 hours per week on average. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The activities of this course didn't engage me, and I would suggest incorporating more games throughout the lectures to keep the students' attention. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+I found the content of the class engaging. I liked that the professors summarized the material succinctly on the slides and provided examples. I also enjoyed going to office hours, and I think going over the material again -- such as reading the textbook or reviewing with a peer tutor -- helped greatly.
+
+Weaknesses: 
+Since this was a large lecture class, I disliked the online format, and I got distracted frequently during class. In addition, it was difficult to ask questions while the lecture was going on. I also didn't find the discussion section to be very helpful, and I would often skip the live section and review the section materials individually later in my own time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There was a slight lack of specificity to midterm exam material which made it difficult to know exactly which concepts to apply <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths-- recorded lectures allow me to go back and rewatch and catch things i missed the first time around. The professors are also very engaging and interesting on the zooms, which really helped me stay focused, motivated and engaged. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the strengths are the peer tutors, who are extremely helpful. I think the lectures could go at a slower pace <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I feel if this course was separated into different sections rather than one big lecture, student engagement would be higher. Also, making this mandatory would help students hold themselves accountable. Despite this, I think that Prof Berry and Polak were great teachers, and I truly learned a lot in this class. It covers many aspects of economics that I didn't learn in high school and I know this will prepare me well for future classes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors were great. They made the most of the virtual semester, offering plenty of resources and help. It was really well-organized and a great course to take virtually. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength is the discussion sections. The problems during section are very helpful in applying what we learn from lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I didn't like the discussion sessions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professors Berry and Polak were superb teachers. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: great teachers, peer tutors hosted a lot of review sessions for help with exams/psets, lots of real world applications
+
+weaknesses: profs would occasionally go on tangents, TA wasn't very helpful in discussion section, not much feedback on assignments <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The bi-weekly lectures were very organized and there was a wide variety of topics covered throughout the semester. The course was a good introduction and starting point for anyone interested in continuing economics. I would have liked to see more feedback and engagement with the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Doing a few practice problems during class would have been more helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Not a high workload, very doable <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There were great instructors, but the class was very large and made it hard for it to be personal. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think there could have been options to have more rigorous examples to play around with, without having to worry about grades, which couldve been cool for students looking for some challenging examples <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors are very engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked the teaching and thought the professors really did a good job explaining things. I also think the homework was good at teaching the concepts. I can't complain, except that I thought it would have been fun for the math to have been more detailed, but I doubt that's an opinion shared by most. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The weekly discussion sections were really helpful, but during the lectures I felt there was some less relevant information and examples. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are that I feel like the material was pretty comprehensive and gave me a good foundation in economics. Lectures were also good. Weaknesses are that I feel that it could have been a little more mathematical and I wish we could have done more practice problems. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: well-organized, engaging lectures by prof berry and polak, relevant assignments
+
+Weaknesses: varying degrees of competency between TAs <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Very engaging class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was very good at getting all of the information across. One of the weaknesses was engagement, which is not surprising given that it is a lecture of over 400 students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought it was a great course! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: lots of TAs and help with Psets
+weaknesses: studying for the midterm was a waste of time considering nothing on the review sessions mirror the midterms; tough if you don't have background econ knowledge <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The information reviewed was hit or miss in terms of being relevant for exams which was unfortunate. Sometimes I felt the review materials/resources were super helpful and relevant and sometimes I felt like all the hours I spent taking advantage of the resources had absolutely no effect on the outcome of my exam and wasnt relevant at all. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: engaging lecture, plenty of office hours <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the course was great, the only thing was the exams were worded a bit unclearly <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Steve and Ben are AMAZING professors. I called them the "Abbott and Costello of economics" because they always managed to incorporate some comedy into their lectures, and boy do they know their stuff. It's also relatively low maintenance and has a very manageable workload, which makes it super accessible for everyone at Yale to take it (as I believe they should).
+
+Weaknesses: Can't think of any major ones to be honest, this was a great class overall. My one small gripe was the ranging difficulty of the practice exams compared to the actual thing, but no one comes to Yale to get spoon-fed through reading period/midterm season lol. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength of this course were the plentiful opportunities to reach out for help when I didn't understand something. These included discussion sections, ample office hours, and review sessions before exams. I think that the lectures were also well structured, with material gradually building upon itself as we progressed through the semester. One improvement that could be made would be to include more problem-solving examples in lecture. For example, some more time could have been spent on solving monopoly price-discrimination questions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were the recorded lectures so I could go back and view them as I pleased. The weaknesses were that the math wasnt taught well in the lectures and I had to learn them on my own <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of the strengths was the  abundency of  practice problems that  were  made  available to study with. A weakness was  the fact that the lectures were sometimes not as engaging as they could  have been. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked the extra Friday session that showed us the real-world applications of micro. One weakness is that I wish the sections had been a little more organized. For example, I would have liked to prep for them and work through the problems we didn't understand. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Excellent instructors <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was good except some of the material was really glossed over. I know its an introductory course but a lot of concepts were left without explanation. TAs were very helpful!! Peer tutor was amazing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Really didn't like the discussion sections... Convoluted and confusing. The material was very hard to learn <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was hard to focus with the remote classes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professors were amazing at trying to keep the students engaged with the content even though it was through zoom. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Thorough introduction to a variety of different microeconomics concepts, helped link practical applications to theories discussed in class, encouraged critical thought in completing course assignments. Would have enjoyed more opportunities to apply lessons we learned in lectures via projects or other assignments, alongside the weekly problem sets and exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The review sessions are okay. The lectures were awful <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Though the lectures were engaging, I didn't feel a need to attend my discussion section -- which seemed less helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lecture format was really clear and TA's were always available to answer questions. There were so many review sessions and each TA taught in different style so everyone was able to find one method of teaching that worked for them. However, due to the zoom format and tests being open notes all of the practice exams and problem sets were much easier then the actual exams. This made it very difficult to study. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course include the ability to access materials, review sessions, activities, and extra help. The lecture was very informative and clear and discussion sections were helpful. There were no real weaknesses besides the obvious fact that it was quite a large lecture so dialogue with the main lecturer was quite difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was a good pace and had a good progression of information. Not sure how it could be improved. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The Strengths are that the instructors for the course are passionate and enthusiastic about the material; I actually enjoyed the lectures, even though they were on Zoom because of COVID.
+
+Weaknesses were that it could be hard to get help on more conceptual topics that may not be directly related to a pset question. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this class was really great about generally explaining everything. I wish there was more interaction with the textbook just in case more in depth studying is needed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the strengths were that the concepts were applied to real life examples. I think for some of the lectures, they could improve by being more clear of how the lecture applied to which problems we were engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was great and I loved the style of teaching. Very relaxed so I always felt it was a class I could show up to no matter what mood I was in. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very good because it offered a lot of resources and catered to a lot of different learning styles. I think the homework was also structured well and helped with understanding without being overwhelming. I think that this course could be improved by doing more practice problems during lectures, but discussion sections and peer tutoring were a great alternative. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The virtual lectures can be draining; however, this is very much a zoom issue not a course problem. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the professors are phenomenal and lectures are very engaging. Sections are very helpful to address questions and for additional practice. It is rather a huge lecture though, though I would not say that is necessarily a weakness. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I enjoyed the weekly problem sets and the Monday Flipped Classroom activity as it gave us the chance to regularly practice and go over the topics that were studied throughout the weeks. I also really enjoyed the discussion sections as being in a smaller group really propels one's involvement in an online lesson. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> lectures were engaging and discussion sections are helpful <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: fulfills role as introductory course and provides good starting points for application
+Weaknesses: if the lectures corresponded better with the textbook <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Basic introductory microeconomics course taught by two very good professors, lectures are recorded allowing for us to refer back to them
+Suggestions: More practice problems would be nice <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There were so many people in the class it's easy to feel lost among the crowd. They try to make it more personal with discussions but that is a little discouraging. One of the greatest strengths is also the vast number of people in the class so you can truly talk to it about friends. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors did a great job making the material engaging and interesting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: many opportunities to discuss the material, lectures recorded to be viewed at a slower pace later, many TAs available for help
+Weaknesses: fast-paced course, disorganization amongst professors and TAs <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course are how many resources there are between extra activities on Friday, peer tutor hours, office hours, flipped problem set work, and discussion sections. Having so many resources for help and clarification definitely helps bridge any gaps left from lecture. A weakness of this class: the jump from the first midterm to the second midterm felt a bit abrupt. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths are the fantastic professors--Steve Berry and Ben Polak are incredibly helpful and effectively explain the concepts. The weakness is that this is a virtual class, which is no fault of the professors, for they tried as hard as possible to make class enjoyable <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thoroughly appreciated the teaching staff. The material was presented in a very clear and helpful manner. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Thought real-world application was always very interesting but was somewhat disinterested by theory; more real-world applications tied into lectures or psets would be intriguing <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Rather impersonal because of the massive size of the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I believe this course served its' purpose as a course meant to introduce microeconomic principles while challenging quantitative reasoning skills . The course problem sets were a good measure of my knowledge on the course concepts. The most frustrating thing about the course was the second midterm: the material tested in a very different way compared to problem sets and lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A huge weakness was the way exams were conducted. Completing an exam over zoom while on camera was extremely anxiety-provoking for me. We do not need to be all on zoom. With some people not muting themselves combined with this feeling that I was being watched all made me anxious and distracted.
+I was distracted by knowing that my face was on screen and feeling as if my every move was being watched. At best, I felt it unnecessary to be on zoom for open note exam and at worse I was completely distracting in a way that worsened my performance.
+For future years, I highly suggest doing what many other courses do of using the timer feature on canvas so that the exam is only open for the amount of time permitted by instructors. Then, if there are pressing questions, a TF or instructor can be in a zoom room for questions if students have logistical questions about the exam that need answering. This solution would greatly improve my experience in Econ 115 online. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: STEVE BERRY is a WONDERUL professor! 
+JOE IS THE BEST PEER TUTOR!!!!! Could not have done this class without him. 
+
+Weakness: Why does the comment on Zoom have to be locked? It would be great to be able to text friends in class for more interaction. I do Not think it is a distraction. In fact, it helps with learning too, to be able to text in Zoom chat! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Concepts within lectures were at times confusing. More worked out examples of particular concepts could perhaps be given and explained. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors are excellent, although the material can sometimes be dry. I thought the TAs were not always super helpful, and I usually opted to approach peer tutors with any questions I had. I liked the format of the course, but I sometimes found the Zoom format disengaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> i studied very hard and worked very hard to do well in this course, but I simply don't think my mind is suited to the thought processes of economics. great class, just maybe not my forte in general. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think that the course was very strong. I appreciated that the lectures were both live and recorded so one could watch and take notes the first time and if they missed anything, it could be supplemented by rewatching the lectures or attending the discussion section. I think the course may have gone a little too quickly, so if the professor offered some real-world examples or example questions during or after the lectures that were separate from the P-SET, that would have helped the information not seem too overwhelming. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was comprehensive in teaching its students the fundamentals of basic microeconomics. However, I leave the class still with no knowledge of how the economy works in real-life situations. It would have been fascinating to have investigated the coronavirus recession or other related economic booms/failures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> this was a good course overall I thought the pace was a bit fast when it came to material covered in lectures <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I believe that the course is quite well structured but the content is covered a bit too slowly. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the course is well taught, and I appreciated the flipped classroom sessions.  It was also helpful for review purposes to have recordings of lectures and review sessions.  It would have been nice to have recordings of the sections each week as well, but I understand that in a normal year we might not get recordings of anything, and that is a minor critique. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> More personal connection with professors <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: teaching, availability of teaching fellows and faculty for office hours, review sessions, extra help
+weaknesses: practice questions, exam practice <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: energy of professors was very great and always found different explanations in relation to real life situations.
+Weaknesses: spoke very fast at times and more participation from class would be nice. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I learned a lot over the course of the semester but because it was recorded, it was very hands-off and students often had to learn or master concepts on their own <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was great! The recorded lectures meant that if I got a headache from too much screen time, I had a backup I could watch. Also, I appreciated the extra supplementary sessions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The flipped classrooms and activities are helpful <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Great duo of Berry and Polak. Had trouble keeping motivation to stay focused on giant zoom lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this class were the enthusiasm of the teachers for the subject and the peer tutors. I felt that the teachers really loved the material and on top of this for any material that I did not understand from them, peer tutors were readily available to help explain the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Very organized overall. Could be more engaging during lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I believe there could be more of an emphasis on examples during the lecture, possibly. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The recorded lectures are helpful to go back to but I also think it decreased class attendance. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It could be improved by including more real world connectionsfocusing on concepts that extend beyond just the problem sets <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> great course overall <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: 
+The professors taught the course in an engaging story-like manner where specific life examples of certain topics were brought up such as the lake that burned by Steven Berry's hometown due to the lack of care of assessing the pollution problem. This example helped me develop an understanding of the difference between the selfish optimal maximum quantity and price a company can set vs their social optimal price and quantity which affects everyone that doesn't necessarily interact with the market
+
+Weaknesses:
+The course was helpful in building my understanding of certain economic concepts and models yet I found myself writing more notes than I needed to because of the repetitive nature of the slides on some of the powerpoints. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Exams are stressful and not very positive environments to be working in. Having our cameras on is a stretch. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professor teaches too fast so I have to screenshot the power-point presentation as well as rush to write down important points that he says. There isn't enough time for doing midterms and they are really different from psets, lectures, and review sessions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths are that there is ample resources to guide students, the weakness is that, at times, the course feels as if it is moving through material at a very fast pace, and therefore some understanding is lost. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I greatly enjoyed the discussion sections, but I noticed that attendance was poor. I think that these sections should be required since they were a valuable resource and provided a great opportunity to ask questions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: brilliant professors.
+Improvement: more continuous feedback. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths are the material and the instructors. weakness is the large 400 person lecture style over zoom in which asking questions is exceedingly difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+-The course is structured to have many different modes of engagement,
+-The peer tutors are always available and extremely helpful
+-The pre-exam review sessions were very thorough
+-Problem sets are well-composed, and do a good job of strengthening student understanding of the week's material
+-Lots of resources (such as old problem sets and exams from previous semesters) are available for pre-exam preparation.
+-Professors Berry and Polak are exceptionally skilled lecturers, who manage to be engaging even on zoom.
+Weaknesses:
+-The course could lean more upon the calculus foundations of some topics <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> pay attention more <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lectures were engaging, and pre-exam review sessions were awesome (thank you Tolga and Joe). Weaknesses: discussion section wasn't always engaging: it felt like we went through things slowly and never got through all of the content. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths of the class were how the professors encouraged group learning through the problem sets as well as the abundance of office hours for the professors, TFs and peer tutors. Biggest weakness would be how only one or two TFs/peer tutors would go over information in a way that properly anticipated the types of questions that would be on the exams. This lead to hundreds of people going to these specific review sessions. I feel that if more of the TFs/peer tutors organized their review sessions like the ones the overwhelming majority of people would attend, they would have been more effective resources. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The discussion sections were very beneficial. They allowed us to do problems with a TF before having to do the PSETS by ourselves and the questions were similar to the types of questions on exams too. It really ensured that I could apply what we were learning in class to questions. 
+
+One weakness was because it was such a large class, there was less interaction. There was a lot more lecturing than student responses etc, but that may also be due to the virtual setting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> flexible, detailed, lots of activities
+weakness: not friendly for students from another time zone <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Learning the material was difficult because the course was extremely fast paced. It was also difficult because we were never shown applications to the concepts we learned in class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were great and informative, and the problem sets were helpful and challenging. However, the types of problems that appeared on the problem sets and assessments were overall similar and repetitive, which doesn't help me learn and absorb as much material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Not many weaknesses, loved the availability of office hours. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There were so many people in the class and it moved so fast. I really enjoyed learning, but I never felt like I learned how to actually answer the exam questions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lectures were recorded and topics were explained well. Questions were encouraged in office hours. 
+Weaknesses: lectures were slow at times but that was expected with an intro course <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The combination of professors made this course thoroughly engaging. However, it may be a struggle to interact with the class topics outside of lecture. For me, discussion section every week was not particularly helpful. I think if the discussion section covered questions on previous exams on similar or the same topics, then students may make connections between the topics in lecture and the exams more clearly. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professors were fantastic!
+Weaknesses: I would have liked better engagement with the textbook. It was difficult to study on my own time because of this, and I felt reliant on the sessions &amp; lectures. The exam feedback and grading was also very hard to go over and understand where I made my mistakes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course moved incredibly fast. Now, this must be taken into account with the fact that I am a first year and this was in the middle of an incredibly rough year, both nationally and personally. But I still had a certain grappling on my other courses that I just didn't have with this one. I felt like not enough time was spent on certain concepts that didn't make sense, and at one point, I gave up taking notes on in-person lectures, because the lecture moved too quickly for me to even write things down. The workload was minimal, but the midterms gave me an incredible amount of anxiety, only because the course revolved around the recorded lectures that went too fast and didn't go into depth when needed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength of this course was the inclusion of two instructors, Professor Berry and Professor Polak. Professor Berry was very conceptual, whereas Professor Polak was very precise. In fact, I would have liked to have seen Professor Polak teach a little more of the course. 
+
+Professor Berry did a very good job keeping students engaged, particularly given the challenges that arise from virtual learning platforms. He was very animated, and made sure to incorporate many real-world examples of the concepts we were using. 
+
+Other strengths of the course include the discussion section format and the flipped p-set activities. The smaller group settings, in which students could ask questions, was very helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was pretty much perfect in all honesty. There were always TA's and TF's available for office hours, recitations, and general questions. Every lecture was recorded, so this was also incredibly useful! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of the course's strengths was the wide variety of places to learn and get help. Besides the live lectures, there was a weekly Friday activity session where we could learn more about real-world applications. There was also a weekly problem set session where the professor went over the solutions for one of the problem set questions. There were also weekly discussion sections to go over example problems and a lot of peer tutor/office hour sessions that people could go to seemingly at any time. I think one of the weaknesses of the course (and this is kind of inherent given that it is an introductory course) is that we had to skim over a lot of topics, and the course sometimes felt rushed because it focused on breadth rather than depth. Again, however, this is probably very much because of the introductory-level of the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the professors tried to make their explanations clear, but lectures can be confusing and fast paced. I often had to rewatch parts of the lecture many times in order to semi-understand a concept. Also, I think we spent too much time on real-world examples and on getting people to raise their hand over Zoom to answer questions. Since there were so many students and due to the Zoom semester, I did feel very disengaged and detached from the professors and the rest of the class. However, section and office hours were great and made the class feel more personal. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was extremely well organized, and Professors Berry and Polak are phenomenal lecturers. No particular weaknesses come to mind. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The large size of the class, ECON 115, made it difficult to connect with my professors during class to clarify the material. Overall, I felt it was convenient that each class is recorded; however, I did not feel properly prepared for the midterms or final exam. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> engagement <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors stayed after class to answer questions, which was great. Additionally, they held multiple review and activity sections throughout the week which were also very useful. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

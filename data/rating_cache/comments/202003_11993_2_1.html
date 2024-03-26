@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>127</strong> </p></li>
+<li><p>RESPONSES: <strong>104 </strong> </p></li>
+<li><p>DECLINED: <strong>8</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>14 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        BIOL 103 01 
+        Genetics and Development 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 11993   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the deadlines were a bit early. I liked when the deadlines for homework got moved to Saturday. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Having pre-recorded lectures to allow students to watch the lectures was excellent such that students could pace themselves.
+
+However, there are far too many problems with this course. The first few quizzes were written absolutely terribly will little to no clarity. Considering this is a biology class that values conciseness and clarity, it felt antithetical to have questions that could be interpreted in various ways. Grading among TAs seemed inconsistent and there was no mention whether or not grades would be scaled based on how a TA grade. (For example, in CHEM 222L/223L (Organic Chemistry I/II Lab), grades would be scaled based on how harshly a particular TA graded but there was no mention whether or not this applied to BIOL 103.) [In brief, there is a general lack of clarity behind grading.]
+
+Instructors and/or teaching fellows oftentimes muted Piazza posts asking for clarity about when quizzes would come out or how grades would be determined and this can be extremely stressful for students. On the first day of class, Prof Irish announced that the top 20% of students would achieve an A in this class. This arbitrary cutoff can only make students feel more stressed about their performance to do well in the class. Given that assessments were open note, students' grades were probably going to be in a tighter distribution than if closed book examinations. Further, this only promotes a competitive environment where students feel less inclined to help each other as grading is relative to peers. 
+
+Another major problem with the course was the lack of preparation for quizzes. I understand one goal of the BIOL sequence is to teach students how to write a research proposal. However, not providing students PSETs/practice questions for quizzes makes it especially hard for students to feel prepared before taking a quiz. Thus, the class could be improved by providing practice problems/practice quizzes. If the class would like to continue with a research proposal assignment, I would recommend better pacing and perhaps making example grants available to students. Alternatively, asking groups of students (2-3) to write a proposal and having PSETs similar to BIOL 101/102 would better prepare students for quizzes.
+
+This course could be improved by providing students with greater clarity in the grading and changes in assignments (as aforementioned). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the lectures often covered too much information, and it was hard to gauge what was relevant (due to various examples, concept, etc.).
+grading of quizzes was often slow, and you wouldn't know how you did until last minute.
+the quizzes themselves often had oddly worded questions, it was hard to know what each question was actually asking. in this way, there seemed to be a gap in instructor expectations and student results.
+the teaching team did a good job organizing everything given the situation! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The structure of the class was odd (each week had lectures, an open note quiz, and a discussion section), but that was probably inevitable for distance learning. I think more clarity on the grading structure would've improved the experience and made it feel less "cutthroat" when the quiz distributions were released (maybe I was the only one who felt that way...)
+
+I didn't find the proposal writing homeworks interesting or helpful (for me they were more frustrating, but perhaps that can be chalked up to my personal preferences). I definitely would've preferred more standard problem sets that engaged directly with the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the course content is extremely interesting and the hw assignments are really relevant to our future careers. A lot of useful and relevant feedback.
+Weaknesses: A larger workload than I was expecting. The lectures + papers + sections + hws was a lot <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: professor provided lecture slides and study guides which were quite helpful. Piazza was a good tool to clear up some confusions that may have come up during lecture
+
+Weaknesses: some of the quizzes were poorly designed - oftentimes misleading distribution of points and confusing wording of questions. Discussion sections didn't feel very useful and felt unnecessary <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Irish is awesome. Even with the online format, she made her slides and lectures interesting, the topic was good, and she taught it well. There was a lot of great structure (thanks to Prof. Lin) which made the course go smoothly.
+
+Weaknesses: The Quizzes were on either extreme. They were either pretty easy, or had random, in depth questions that really weren't a good reflection of the lecture. The quizzes take a lot more work than you think to study for, and its hard to get a good grade on them for those who don't have a strong biology background. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The grading had a pretty quick turnaround and clear expectations at the very beginning of the semester. However, a few weeks in the grades started to come in very slowly and we would often be 2 weeks behind on quiz grades which made it really difficult to evaluate our performance in the course. In addition, there was not much response to feedback. The lectures were interesting, but the course organization was a bit odd. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Fascinating content, presented in manageable chunks given the circumstances of online learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I enjoyed the class and the pace of lecture content. I think Professor I wish explained things well and was very transparent in her teachings. One thing that I would improve is test question format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The teaching team is amazing. Professor Irish is a wonderful lecturer and I cannot say enough good things about Professor Lin. My TA was also fabulous and was so responsive to emails and questions. Professors and TAs are very active on Piazza. 
+Weaknesses: Because this class was online and the lectures were pre-recorded, I think there was a disconnect between Professor Irish and the students. I wish there had been an informal office hours of a Q&amp;A section during normal class time so we would have some in-person contact as opposed to just pre-recorded lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Irish does an inredible job at making real world applications to the content that we are learning about and I am so grateful that the homework assignments are so application based. However, I do think that there could be a bit more clarity in terms of what is expected of students in drafting their research proposals, as for many of us it was our first time and some more guidance would have been appreciated! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were that it was very organized, and the professors and TAs explained everything very well.  However, the main weakness was that the quizzes were sometimes confusing, and we didn't have very much time to complete it with thought-out answers. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was well organized to faciliate understanding, quizzes were a little difficult and could benefit from being explained better (in terms of the wording of the questions to prevent any ambiguities). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the papers were a bit dense, but other than that it was very well run even on zoom! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths- good lecture content
+weaknesses- quizzes sometimes difficult <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength was being able to rewatch lectures while some weaknesses were getting used to online quiz format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths- very clearly organized, great TAs, provided lecture study guides which were really helpful, Prof. Irish was very engaging in her video lectures, great feedback
+Weaknesses- i wish we went over some more common biological methodologies prior to starting to write our proposal. We often had to research the technology available outside of class which sometimes led to confusion <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: The prerecorded lectures were good.
+Weakness: Some quiz questions were very vague and could lead to multiple interpretations. For some quizzes, I spent many hours studying, but got full questions marked wrong because I interpreted the questions differently. Also, I feel like some questions have multiple possible answers, but if your answer doesnt match the answer key, then its completely wrong. However, I was scared to do a regrade because I of the chance that I might get an even lower score. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Even though the course was remote, there were many opportunities to interact with faculty and TAs which it made it much more personable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: very well-organized. I never felt as though I had to struggle to find resources to support my learning. I also thought the content was pretty interesting. The homework assignments, while challenging early in the semester, were very interesting and fun. I found the grant-writing portion of this course to be super rewarding. 
+
+Weaknesses: Quizzes were extremely stressful, in part because they were open-note and the average was generally pretty high. As a result, the distinctions between A/A- for this class will largely be arbitrary (very easy to slip to an A- by misreading 1/2 quiz questions). So in that regard, it was a frustrating course to take, although I doubt that these issues will carry over when the class is in-person again. It was an odd choice to refrain from answering most logistical questions on Piazza. It was also suuuuper aggravating to take quizzes without knowing our scores on the previous  2 quizzes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weekly quizzes are a huge strength over midterms. However, I found the course highly inaccessible without enrichment (Sam Lin is amazing) and I feel like it could have been more accommodating for students in hard situations. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I wish that there had been more interaction with Dr. Irish, such as maybe doing half pre-recorded lectures and half live or doing a live Q and A session. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was organized well and all the resources were easily accessible. The TA's were fantastic and the lecture was very clear. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths- Samantha Lin loves her students and any course she is involved in is wonderful. 
+Weakness- Pre-recorded lectures that are nothing but powerpoints are the hardest to pay attention to. I dreaded going to the media library to watch another boring Powerpoint lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Prof Irish's lectures can be kind of disorganized. I spent a LOT of time trying to give them structure to make sense of them in my mind. Really relied on the excellent peer tutors. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked the asynchronous aspect to it, it allowed me to learn at my own pace, while the discussion sections offered support for the readings. The homework was engaging and challenging, but fair. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: amazing prof and teaching team! content was super interesting, great way to learn how to write a proposal
+Weakness: not enough chances to apply knowledge from lecture because psets were all about the proposal <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The only strength that I found for this course was that the pre-recorded lectures allowed us to work at our own pace.
+
+Other than that, I did not enjoy this course at all. Professor Irish's explanations were not always clear. Many times, students would be left extremely confused after the lecture videos, often having to resort to Piazza or other YouTube videos to learn about the lecture content.
+
+The weekly quizzes were extremely stressful and confusing. Most of the time, I would have to guess at what the question was asking. These questions seemed to be designed to trick students. Even if I had studied every day for 10 hours, I do not think my quiz grades would have improved at all. Instead of having us spend so much time on research proposals, I think we should have received problem sets that had questions similar to the quizzes. At the very least, we should have gotten practice problems. The quizzes were 60% of our grade, and I thought it was extremely unfair for us to have to take these quizzes without any practice.
+
+I also thought it took way too long for our quizzes to be graded. Many times, it would take TWO WEEKS for us to receive our quizzes back. This was very inconvenient because it made it hard for us to learn from our mistakes in time for the next quiz.
+
+We were also left in the dark about the grading policy. At the beginning of the semester, we were told that only the top 20% of grades would receive As. This led to a very toxic environment, as students were not always inclined to help others, as their own grades depended on their peers' grades.  
+
+Before this class, the field of genetics seemed very interesting to me, and I even thought of pursuing it as a career path. However, this course gave me 6-weeks of unending stress, and it has caused me to lose almost all interest in genetics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Some strengths of the course were definitely the research proposal we wrote and discussions of different papers since that really helped us develop scientific reasoning and questioning skills. However, the quizzes were often extremely confusing and stressful. Lecture content always seemed straightforward, but we never had any chance to practice our application of that knowledge, making the quizzes really difficult. I don't have a problem with the fact that the quizzes often made us extrapolate or apply the knowledge in an experimental setting, but I do think that it is unfair to do so without giving us any resources to practice these skills. 
+
+Releasing grading for the quizzes was also slow, so we weren't getting feedback quickly enough on where we stood in terms of our understanding. Sometimes, it would take up to 2 weeks to get back our 30-minute quizzes. The grading curve was also super unclear, adding a lot of additional stress. Also, quizzes made up 60% of the grade, greatly outweighing any other work, and further adding stress to students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Due to the circumstances, the class would have been more helpful if they were synchronous. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+Rubric for HW assignments was posted promptly at the start of the semester
+TAs were accessible and the course coordinator did foster class community sentiment by hosting lunches
+Weaknesses:
+At time, quiz grading seemed more based on the ability of the student to guess what precise terms the instructors wanted rather than an understanding of the question. The class also was not well-integrated with the other biology modules such that the HWs and quizzes reflected a cumulative understanding. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> They were very accomodating with the current circumstances of the pandemic. I think what could be improved is a quicker turnaround time for receiving quiz grades back because I was very unsure of how I was doing in the class and didn't realize until too late that I needed do a lot better on future quizzes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The quizzes weren't necessarily always fair provided what was taught in the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: 
+
+I really liked the homework assignments, the TF's were really knowledgeable and helpful, Professor Lin and Professor Irish were always incredibly accessible and helpful, and the course was really well organized in terms of content and material. 
+
+Weaknesses: 
+
+I would have preferred if at least some lectures were synchronous, rather than having them all be recorded. I feel like that would give the class more of a real classroom feel. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths of this course is how organized it is and how much support students are provided. A weakness I believe was the ambiguity of the quiz questions that made it difficult to get good scores at first as I wasn't sure exactly what the questions were asking, and if I thought I did I always seemed to be missing a specific detail that ended up losing me points. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength was definitely the format of the homeworksI loved how they built on each other and that we have a final product that Im very proud of! I think I learned a lot that is very transferrable to actual biological research that Im excited to use in my research lab. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were very good, I would have liked more direction with the quizzes and studying for the quizzes. Also, the HW is inherently confusing, but not sure how that would be fixed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was pretty ok, more live engagement would have been nice <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Irish did a great job making the Zoom material engaging and accessible. However, because it was a Zoom course, it definitely felt impersonal. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thoroughly enjoyed the course, the instructors made sure to have resources available and known, which made it extremely strong. There were no weaknesses. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Lin kept this course extremely organized for me, and Professor Irish did a great job of keeping the lectures engaging and interesting through an online format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The powerpoint were not exactly engaging, but the course was well-formatted, and the material was presented clearly. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The topic was engaging; however, especially towards the beginning, this class was very stressful  with so much homework and difficult quizzes that would have been much better if we were given more time.  (timing of quizzes got better towards the end of the class).  Grading of the quizzes in this class was oftentimes harsh.  My regrade requests received no response. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were pretty straightforward and there wasn't a lot of lecture material. Most of the quiz questions were fair but some probably should have been read over a few times by people looking for ambiguity before releasing them to students. They did not set grade cutoffs prior to the course and so it was clearly competitive. It's entirely possible they scaled down as they were ambiguous in how letter grades would be assigned from the beginning. I sincerely hope they rethink this competitive policy in the future, as it is not supportive of collaboration and potentially drives students away from STEM at Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought some of the quizzes were excessively difficult and did not really recapitulate what we learned in class. More classtime could be spent discussing how to apply the information and facts we learned to solve actual genetics problems before testing us on it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class was well set even remotely. I dont think there were any weaknesses <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think Professor Irish and Prof Lin both did a good job with the lecture content and helping the students in whatever way they could with the homeworks and understanding lecture content. SInce most of the class hasn't written a research proposal before, the profs were very understanding and wanted us to know that we were going to be confused since it was our first time, but Prof Lin really did help through additional sessions. However, I do think that the quizzes were kind of very specific and asked of us things that I didn't know we were supposed to explicitly mention, but otherwise the class I think was overall well done. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of the course were the topic materials and the lecture information by Professor Irish. It was difficult to take the quizzes due to the wide range of interpretation for each question. I found myself spending more time trying to decipher what the questions were asking than focusing on thinking through the question. Similarly, I found that studying and course engagement did not correlate as much with the quizzes as with past bio modules. This could be improved by adding more problem-set based questions or going through more content during discussion section. The course could also be improved by including a semester feedback tool or something similar. It was difficult to have no place to give feedback until the end of the semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was online when I took it, so it wasn't as good as an in-person class. However, it is was still an amazing course and well-organized. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was structured very well and I want to acknowledge the work that the teaching team did to adjust this course to the online format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would have appreciated more interactions with the professor as well as more opportunties to ask her about the lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors are really engaging and open to feedback. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would like to learn more about plant development and other non-human animal development. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this course was executed well given the tribulations of COVID. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I loved the straightforward lecture and quiz format. It could be improved by revamping the quiz preparation. I don't think we were always well prepared to do what the quizzes we're asking us in regards to experiment analysis. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was phenomenal. The lectures were very interesting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I really enjoyed the structure of the class. It was very consistent never had any big surprises. I wish we had a review session at the end of the week so we can ask questions. Piazza was a great addition! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The quizzes were unfair and graded harshly. However, the instructors were kind. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: teaching team and willingness to adapt to students and really help students learn.
+
+Weaknesses: sometimes quiz questions seemed very obscure, but this was mostly changed towards the end of the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was taught well considering online school. Practice quiz questions could have been available. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Irish is a very good lecturer, even online, and I did enjoy her recordings. Out of the four aspects of this course (lectures, section, homework, and quiz), the lectures were by far and away the best part. 
+
+That being said, this class was lacking in actually engaging the students in the class. I'm not so certain, but I don't think that a single lecture a week + boring section that talks about a paper remotely related to the topic of the class + homework that doesn't relate to the material is the best way to teach the course material, especially when it's so technical and difficult. The class was too ambitious, in my opinion, in trying to make the students develop their own hypotheses and conduct their own research. Maybe an entire BIOL class dedicated to biological research would do this job justice, but trying to do that AND teach genetics is too much. In addition, section, like in previous BIOL sequence classes, felt too disconnected from the main material and was even outright boring at times (though this may have to do more with the section leaders than the material).
+
+And don't get me started on the quizzes. Other than Q4 and Q5, the other 4 quizzes were outright confusing and convoluted. I'm not sure exactly what changed between BIOL101 and 103, but the quizzes in 101 were much easier to comprehend and answer. The quizzes in this class felt like I was deciphering an enigma code before answering the actual questions. I appreciate that you are trying to really test our understanding and not just surface knowledge, but there's only so much deep understanding you can examine in a 10-question, 30-minute quiz. If you want to do that, why not add midterms and finals to the class, where we can have much more time? I think it's not fair to the students to disguise these quizzes as quick and easy tests of knowledge and throw out extremely convoluted questions, where the tiniest mistake can get you 3.5 points out of 4 off. 
+
+Finally, the grading in this class. I'm writing this after the grades have been released, but I can't view it yet since I haven't submitted this form yet. A genuine concern that I have is that I might not end up with an A in this class even with a 96 average. This could be a stupid fear to have, but valid when considering that this class is percentage based in grading. Why make an introductory class 20% A when most of the students are also premed? Do you understand the kind of culture you create when you do something like this among the most competitive portion of the student body? Without a doubt, BIOL103 was the most toxic class I've been in. 
+
+Maybe the class is more engaging and enjoyable when live instead of remote. However, I kind of doubt it. The only thing that would severely be affected by being remote are the lectures and sections, and the lecture, as I said, is the best part of this class; and section, from my experience in 101 and 102, aren't really that much better live. And unless something is done to change the culture and atmosphere of the class, the class will continue to be a cesspool of toxicity and unnecessary competitiveness that shouldn't belong in an introductory class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It felt like the quizzes were disproportionately more advanced than the extent to which we covered them in lecture. The topics themselves were very interesting though. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - very clear lectures, maps well to quizzes, much support from teaching staff, homeworks all lead to final project so had constant feedback
+
+Weaknesses - not very engaging if not very interested in the topic <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the lectures were structured great but I felt that what could have been nice was practice problems for the quizzes because then we could have a better sense of what to expect <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course presented information in the lectures very clearly. The one way that it can be improved would be fixing the wording of quiz questions so they are less vague. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the lectures were effective at explaining the material and the papers for discussion section made valuable ties between course material and real-world experiments. The research proposal was an intense time commitment and I think the Saturday extension was really helpful. It was hard to know where to draw the line between real-world evidence and research for the proposal and more hypothetical or arbitrary connections between for instance our gene of interest and the transcription factor. I think it was a valuable way of learning how to work with genetics databases and do background research and learn methodologies, but it would be helpful if the expectations around the project as a learning exercise versus a realistic proposal were more clear. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Working on the research proposal in addition to the many lectures and quizzes was very overwhelming at times. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Especially online, the bio 103 team did a wonderful job of organizing all the information and required things for the class. The weekly email laying everything out was really helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the course was very well organized and taught very well. I thought Professor Irish's lectures were well put together and the slides were very informative. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Comprehensive study guides, grading rubrics, and helpful TAs made for a smooth course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The research proposal was a major strength. I felt that the curved grading system was a weakness as the quizzes generally had little spread on scoring. I would like to see solid cutoffs for each grade made available at either the start of the year or at least midway through the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this course was really well taught, especially in the circumstances under which all students are due to COVID-19. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class was well-taught and provided a very accessible teaching style. This lack of a need for background knowledge made the class easy to follow along but at times left me wanting a bit more information. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths  the course coordinator was very good! I always knew what I was supposed to do and when. The transition into 104 was smooth. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

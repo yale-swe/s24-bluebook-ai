@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>257</strong> </p></li>
+<li><p>RESPONSES: <strong>200 </strong> </p></li>
+<li><p>DECLINED: <strong>12</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>31 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        PHYS 165L 01 
+        General Physics Laboratory 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 12280   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A well executed class. I'm personally not in love with physics <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would never pay attention to the actual methodology of the labs because I didn't need to. I would just extract the information I needed. Therefore, this was more of a physics class than a lab for me specifically. I understand though that there's not much that can be done about that though, since it is all virtual. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class is a lot of fun. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The amount of work needed to go into submitting a lab report and post lab is far higher than in-person labs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I appreciate all of the effort that the teaching team put in to make sure students were able to have some form of physics lab albeit remotely. The kits were very well-done and useful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the course instructors are really helpful and responsive, chill lab environment, lots of options in take-home assignments, lab reports are straightforward
+Could be improved by having more experimental freedom in the labs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths were that the materials were all very well prepared and distributed and labs were all very well adapted to online learning while trying to maintain as much actual experimenting as possible. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Given the current situation, I think this course was organized in the best way possible. The weekly classes to complete our assignments were typically divided into breakout rooms similar to how an in-person lab would work I presume. The post-lab activities were creative ways to further apply our understanding of the concepts learned in the labs. I particularly enjoyed watching the WTF videos Professor Cahn made. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Since we worked virtually, we watched videos of the experiments being conducted properly. This was very helpful in developing an understanding of proper experimental procedure.
+Weaknesses: The Post Lab Activities (PLAs) were often very time consuming and vague so that they added unnecessary pressure and work, especially since they were due at the same time as the regular labs. The PLAs only asked you to work for around 2 hours, but in order to set up your experiment properly with limited resources and gather enough data (and 'correct' data at that), you had to spend much more time or else points would be taken off for lack of 'insight'. These felt like the course requiring you to do double the lab reports for half the course credit. *I believe this format has been altered for the spring 166L course based on student feedback* <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Though the videos and lab handouts were very effective at communicating the spirit, if not the letter, of a physics lab course, in the virtual format the presence of the TA added little, and the course would likely have gone smoother if we had spent the entirety of it in breakout rooms. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Ample opportunity to ask questions to the TF and/or one of the course professors <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were the teaching team and the quality of the videos, and also the couple times we did lab experiments together when they were simple. Maybe one weakness was sometimes when the experiments they included in the kit were too complicated and/or didn't work for me, I would have to panic and have to wait for others' results or the TA to know what to do. Maybe another weakness was how awkward the breakout rooms would get sometimes as it ended up just silence until one of us would ask for answers or results from each other. I DO see the need for breakout rooms though, because all of us in one meeting room would make it hard for the TA to attend to our individual/group questions. A major weakness: Sometimes it would get a bit long to sit in the same place watching physics videos or doing lab calculations/data recording for 3 hours. A shorter lab activity (max 2 hours) would be preferred. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I love how considerate the instructors were. The workload was a bit high at first with a lab report and the post lab due in the same week in certain weeks. However, the instructors were super understanding and eventually lessened the load. I felt like they spent so much time trying to send lab equipment but because it arrived so late, I didn't really get to use it. Not their fault though. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: supportive instructional staff 
+weakness: disorganized, did not learn much, kits were not helpful <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: did well given the circumstances of virtual learning and were very, very on top of ensuring every student in class received a physical kit to work with if they wanted to which must have been a logistical nightmare. TAs and professors very responsive and helpful in and out of lab, pretty clear with what was expected from assignments save for the post lab experiments which were very low pressure but almost too freeform.
+
+weaknesses: some components were repetitive but once again could not really do much in making a physics lab go virtual. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked how well this lab course adapted to the online format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought it was well taught, but the PLAs and WTFs weren't needed and were just a hassle. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course was the patients and commitment of the teaching team. I thought the professors and TFs were very considerate and always spent time answering questions. I learned a lot through the in-person activities, especially if they were more hands-on. The weaknesses are that I sometimes felt like I did not get very much out of the lab if we just watched videos and did calculations. Labs like the gyroscope lab was more informational since we could explore phenomena. Post-lab activities (PLAs) also caused a lot of stress because it was unclear what was expected and seemed very much open in the air. I spent more time than what was indicated just to collect data and make sure I had enough. I also thought that PLAs did not really add to my learning experience. I also wish that answer keys would be given for the quizzes or the practice practical. Otherwise, physics lab was very informational. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: well organized
+Weakness: I understand that since it was online we couldn't do hands on things often or at all, but because it was mostly just taking notes obviously we didn't learn the techniques as deeply as we would in a normal year <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course did an excellent job as establishing physical principles and experimental practices to be used throughout the semester as a whole. The labs made sense and, with just a couple exceptions, were readily completable within the 3 hour timeframe. Obviously it was difficult transferring an in-person lab to a virtual format, but I think this class did a good job at it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength was that there was a lot of time given to ensure completion of any lab report or activity. One weakness was the online structure this past year as it created an environment unfit for bonding with lab partners and classmates. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Dr. Cahn did a wonderful job at providing the physics kits that allowed students to complete projects at home/dorm. However, it was also a bit of a double edged sword because they increased the workload of the course a lot. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the PHYS 165L teaching team did an excellent job with the course. I did however think the number of post-labs was a bit much and could be lowered in the future if PHYS 165L is taught virtually again. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The Post lab assignments, like the WTFs, while funny were not helpful. Most of them were the same thing and felt like busy work rather than learning <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The instructors are super passionate which is great. Generally good course especially given the circumstances. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were being able to do our own experiments with the kits and that the workload was reasonable. The professors clearly wanted to make this course engaging despite the virtual format. The main weakness was that sometimes directions were confusing or unclear, and also I didn't really receive feedback on my lab reports and post lab activities since many of them still have not been graded so it was frustrating to not be able to correct mistakes in future lab reports since grades were so delayed. For example, only my first post-lab activity has been graded which was due in September, with no comments about why points were taken off, and we had one due every other week of the semester. Therefore, I have no idea if I did the rest of them correctly or if I made the same mistakes on each one, and I don't even know what my mistakes were on the first one were. This was not a problem in every section, but having so few assignments graded in my section was very frustrating. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the professors did a great job at moving the lab from in person to virtual. The kits really helped me get hands-on experience, and the TAs were very helpful during class time. Also, I liked the small group break-out group format because that was much easier to ask questions. I think early on in the course, the expectations for what a lab report or PLA looked like could have been a little more clear, and an example report would have been helpful. After the first lab, however, I understood the expectations. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lab was a ton of work for a .5 credit course- the lab reports took a long time outside of the 3 hour lab session, and then on top of that the PLAs took several hours. I understand the purpose of them and I honestly enjoyed using the kits to do experiments at home but in addition to all of the other work it just got super overwhelming. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I think the topics were super engaging and the team was helpful in making sure students had fun while completing these labs
+
+Weaknesses: a lot of work for a lab course, I don't think I understood as much of the physics concepts as I should have? The act of setting up the lab right, getting results, and structuring a neat lab notebook took away from the relationship I was supposed to get from the lab itself and the concept it's connected to <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors really cared and worked hard to transition to a productive and engaging virtual format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Very flexible and between the lab and the PLAs, you get comfortable with the concepts. Weaknesses: The online format made it very different and we were often watching the experiments being done rather than doing them. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was very well organized and I think the labs were thoughtful. I wish it were less work for the large portion of students taking it who learned all of it prior to Yale. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I learned nothing in this class except for how to use logger pro and graph data. The labs were extremely long, monotonous and pointless. I still do not have grades for 8 assignments I turned in ON TIME, so there was absolutely no feedback to help guide my learning or help me improve throughout the semester. A waste of time and energy to be blunt. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was well thought through. All labs had a very thorough guide with easy to follow steps. However, the individual additional experiments became time consuming and difficult to do at times. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Given COVID-19, the lab was handled very well. Learning to analyze data in LoggerPro using the video feature was a great adaptation. At times the post labs were pretty tedious on top of the lab reports, though (since they were basically repeating concepts). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course's strengths include clear explanations of physics concepts, and seeing them demonstrated in experiments and analysis. An inevitable challenge in the course was the virtual format. I thought that watching recorded experiments and conducting experiments of our own were both interesting, but given that most labs were based on the recorded videos, I found that the biggest weakness/issue of the course was in having a practical lab final when we hadn't had too much experience with doing labs ourselves. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: It was a fun class and I learned a lot of basic statistical error analysis, I'm a personal fan of the take-home lab materials and I think they made the lab much more accessible and enjoyable
+Weaknesses: Chaotic to say the least (last minute emails, sudden changes to the labs, confusing assignment schedule, combination of over- and under-communication) but equally forgiving, the emails were a bit archaic and confusing and veeeery long I still haven't uncovered the meanings of a few of them <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Too great a workload for a .5 credit lab and especially for a virutal semester <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was engaging and required critical thinking about topics being studied in other physics courses. The lab reports were reasonably-sized and fairly simple to complete within the timeframe. The use of extra "Do it Yourself" experiments every other week was a bit excessive on top of the other lab work, and given the open nature of these projects with very little instruction it was a bit tough to judge the level of work expected. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The teaching staff worked very hard to make this class work, mailing every student a kit to use. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very well organized even in the online format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength of this course is that the instructors cared about the class and were quite enthusiastic. However, there were many weaknesses. First, the post lab assignments were unhelpful. After writing a full lab report and finishing the experiment, we had to complete busy work assignments. These post lab assignments taught me nothing I hadn't learned from the lab, and took well more than an hour to complete. The professors insisted the assignments shouldn't take long, but in order to finish assignments and receive full credit, we had to spend much more time than the professors suggested. Otherwise we would lose points for leaving out details or not watching the entire video series. Second, Professor Cahn's emails, while funny at the beginning of the semester, quickly became immensely frustrating. It's very stressful to receive an incredibly long email from a professor and not even understand what the professor was trying to convey. These emails took time to read and decipher, and often conveyed important information about assignment changes and deadlines. I often had to email my teaching fellow to figure out what was required of me, and my teaching fellow often couldn't tell. Clear and concise communication is essential. Finally, the sindYkits were fairly annoying-- they were large, difficult to pack and unpack, took up space in our small dorm rooms, weren't used very much at all, and required us to pick them up in person multiple times in a semester with a global pandemic. In short, I really do feel that the professors meant well, but I don't think they fully realized how stressful poor communication, complicated physical pick-ups, and changing assignment dates and deadlines are. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength was the ease in finding all the necessary videos and lab worksheets on Canvas. I think the videos and the layout of the class was very engaging and I had fun despite doing lab over zoom. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> this class had a lot of work in my view - though I do think some students were able to finish the lab in time, I personally found it difficult as did some of my friends. It would be nice to have more talking about the physics concepts in simple terms at the beginning, as I have no previous experience with the content. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I personally see no weaknesses in the current course. More practical experience would be great, but I do believe the post-lab assignments creatively remedy that problem given our current situation. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Really liked the set-up, except when we had a PLA and lab due the same week <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of the strengths of this course is that the lab handouts are very clear and easy to follow. It was great that, while we had to think through and do many things on our own, we weren't just stranded. Also, the course expectations were always very clear, and I never felt overwhelmed by them. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was definitely challenging to have online!
+Strengths: good professor and TA, interesting labs
+Weaknesses: having to do the experiments via recordings for the most part, a very intense workload at the beginning - this was improved however as the semester went on <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I believe that the format of the class works well in terms of the zoom call with students going into small breakout rooms where they can call on their TA to help. This format allows for small group collaboration or independent exploration while keeping someone who can help close by at all times. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Great course, the physics team really put a lot of time and planning to ensure the students learned the maximal amount (given remote situations) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class was a really good companion course to PHYS 180 since we covered all of the topics in PHYS 180 <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The faculty is very enthusiastic. The TFs were very kind and helpful, and the passion the instructors put into making the videos entertaining and enjoyable was very palpable. The professors also prepared kits for activities at home/in the dorm room, which were very interesting, though our engagement with the kits were limited. The virtual setup of the course made it very difficult to be engaged, however; most of our time was spent on watching videos and recording things from watching videos, which were difficult to engage with. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There were many parts of the course that were inefficient for learning. For example, emails sent by the professor were long and written in a riddle format. This was unnecessary. There were also WTF and do it yourself labs that did not display my knowledge nor deepen it. I felt that these were a waste of time and could have been replaced by legitimate learning opportunities. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The instructors were really excited and dedicated to making the online experience work and listen to feedback. The class was too much work for most of the semester for only a half credit lab as we were doing the in-person lab component, writing up lab reports, and doing diy experiments on our own, but the instructors recognized this and tried to change it later in the semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: "Insight Points" encouraged out-of-the-box thinking and thorough reflection.
+Weakness: Time-consuming assignments that yield little personal/educational value <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: Providing kits of materials to student for use in the second half of the semester was a game changer and very appreciated. Weakness: In this semester, it was very disorganized. There were way too many videos in the media library, many of which were extraneous, that made it overwhelming to find the relevant material. The intention for how the course would be formatted was not clearly communicated, especially with regards to assignments - probably because decisions were made on the go -  but this was stressful and not great. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was strong because  it provided each student with all the information necessary to succeed and it emphasized intellectual interest and the pursuit of knowledge rather than perfect test results when it came to creating our own experiment. This was appreciated because it allowed for students to develop their skills creating an experiment rather than always playing it safe to get the best results. This courses biggest weakness was occasional technological glitches and the fact that some labs were not ideal for at home experiments. This will be easily resolved once classes are back in person, but for now the best thing that the teachers are doing is being understanding about the process. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The weaknesses of this course stem from the virtual lab setting. There is little to no point in doing the lab section in a synchronous manner. I think the course could be improved if the lab was conducted using videos in an asynchronous lab. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength was that the labs were done together so there was a TA or professor to help. The weakness was the first few labs went overtime. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: it was fun to see everyone each week and get to do an experiment together online! 
+Improvement: a lot of confusion on sending/receiving physics lab supplies <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It seems too boring to have student sit in front of their computer screens for 3 hours just to watch videos and answer questions for the actual in lab portion. I suggest shortening the amount of videos and questions we have to answer in class and allowing us to perform our DIYs during this time as well, to make the course more engaging. It seems as though the courseload for the virtual semester is more than what is given to students in a regular semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The at home component with the sindeYkits was a strength of the course. Despite the course being online, it was still possible to engage with the concepts at home and learn all the necessary material in an engaging way. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Too many assignments. Very thorough. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A lot of it wasn't the instructors fault, but it's really hard to do physics lab virtually, it's not very engaging. The labs were also in general far too long. Most classes I barely finished on time or had work to do after the three hours in addition to the reports which isn't really fair for a half credit course. The instructions or assignments for each week were also often unclear and confusing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was kind of weird having to go to lab on zoom but then just work silently in breakout rooms. Basically all my work was individual. It might be helpful instead to just host office hours during the time that the lab is usually scheduled so that while working on the lab students can stop in and ask questions as necessary. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course can often feel disorganized during an actual lab, but overall, I thought it was very well-taught and the material was interesting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I was happy the labs were due a week after they were done in class; I finished within the class time frame only once. I liked that we were placed in groups to do the labs; I loved my group and it was very helpful having other students I could contact with questions outside of class! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength was the ability to ask questions during the lab, but a weakness was having a 3 hour zoom where it was hard to stay focused the whole time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The instruction prior to a lab regarding what would be done during the lab and what the students she record regarding their work was very weak. However, the grading and feedback was very good. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The instructors made sure that students understood the concepts taught. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> As far as an online lab can go, I would say that this course went pretty smoothly. I liked that we were placed in breakout rooms during labs because it really allowed us to collaborate without the pressure of having to talk in front of the whole class. The lab handouts were always useful--as long as you read the handout before class, you were good to go. I also liked having the kits sent out to us to allow us to experiment at home. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: easy to get into a routine with the class, good way to introduce physics material and how to deal with errors in physics
+Weaknesses: excessive workload and time commitment for a 1/2 credit class <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The lab packets are very informative and I have found myself using them to study concepts that I have found challenging in class. I also like the practical component of the labs. Great instructors. 
+
+Weaknesses: I just dislike the amount of hours that you would have to spend each week just to prepare and write notes/reports. Not to mention the post lab assignments and the weekly quizzes that we had on top of that. In some lab modules, the tasks were very repetitive and it felt like we were just filling time which I could have used for something more productive. I also dislike the break-out rooms mode of instruction, as we would all just shut the cameras and the microphones and work independently. It would have been better if we stayed in one Zoom room, with the TA available at all times. In addition, it would have been helpful if TAs would brush over the experiments at the start of each lecture to speed up the work done. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Prof. Cahn and the other professors put in a lot of thought and hard work into making this course (a physics lab course !!) work remotely. The videos we used to collect data from were always interesting to watch, and I really appreciated the thoughtfulness. It was a fair amount of work to do lab reports and post-lab assignments, but not as much work as several other lab courses. I liked having break-out rooms with other students where we could ask each other questions, check answers, or call the TF for assistance. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the labs we did were well planned and well selected to demonstrate some of the most important concepts. I found that the labs we did really helped me better understand concepts I was simultaneously learning in PHYS 180. I really like Professor Cahn a lot because he made the course so entertaining and more fun, and he never hesitated to challenge us to dive deeper into the lab and try new experiments and learn more. 
+
+I think it could be improved by reducing some of the work at the start of the course, like what happened in the last few weeks. As a course of half a credit, I think it demanded a bit too much (at least at the beginning) because I essentially did every lab twice at first: once during class and once after to complete everything I didn't finish/understand the first time. It felt like I was repeating a lot of information from my notebook in my lab report, which felt unnecessary. I suppose it may have somewhat helped in teaching me to write scientific paper in a succinct way, but repeating the information from my notebook in a lab report every week felt redundant. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Workload was a bit high but overall engaging material - instead of 3 labs/2 weeks, 1 lab/week would have been more manageable <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was obviously dampened by the online format due to the COVID-19 pandemic. We had to watch pre-recorded videos by the instructor and analyze data that he made, which was slightly dull. However, a strength of this format is that we don't have to worry about errors that we students make, nor worry about putting the setup correctly and waste time making mistakes.
+
+Overall, Professor Sidney Cahn is an enthusiastic and knowledgeable professor. Our TA was also incredibly knowledgeable and helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> workload was a little much at first, but it leveled out by the end of the semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength was the phenomenal job of the lead instructor, Sidney Cahn. The idea of shipping materials and making themed videos and inspiring enthusiasm was The Best. 
+The weakness was the workload of Post lab assignments which seemed often like busy work which was unfortunate to add onto the workload of finalizing lab reports. That was the only thing I didn't quite enjoy in the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think a strength of this course was how we were still able to learn the basics of in-person lab from our homes/dorms. A major strength was the amount of handouts and files provided to help us understand the information and topics beforehand and the walkthroughs for the procedure. I think one way it could be improved is taking into account struggles with the SindeyKit and time constraints. For the one or two labs where we needed to build something by hand, I believe the amount of time needed to build the apparatus and get meaningful results was underestimated, especially during the final exam. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: online lab worked well, although I think the lab sessions were too long at times.  The block of time required for this class in the schedule isn't great if you're not a STEM major and it conflicted with a lot of other classes I wanted to take.  The TAs are very helpful and nice.
+Weaknesses: 3 hour time block not fun to have in schedule, too many conflicts.  Could be boring at times if your lab group didn't take a lot. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course sent each student a lab kit to do experiments at home and I really appreciate the dedication and resources that were allocated to students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I enjoyed the format. It was a bit tedious though. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I want to preface all the comments I will make by saying that I acknowledge that it was an insanely hard and peculiar task to try to navigate the intricacies of structuring a lab course in an online format. I believe that the fact that this course was possible is testament to the fact that the educators running this course are extremely passionate about helping students in any way they can, and I sincerely appreciate that. Having said that, I think it is simply impossible to replicate a lab course in an online format. Contrary to other courses I had this semester, this course did not feel feasible taking place online. First and foremost, I found the lab sessions themselves to be extremely draining over Zoom. Having students sit in front of a computer on a Zoom call for 3 hours straight is definitely something that is not sustainable. I found myself extremely drained many times throughout the semester, and I believe that that definitely took away from my learning experience in the course. Many times the fact that we were sitting in a Zoom room even felt counter productive. For many of the labs in my breakout room we would just sit silent working individually on the lab tasks at hand, seeing no apparent reason why we had to sit in front of the call working. Moreover, I know that this is a problem with many lab courses, but this was one of the times that I felt that the 0.5 credit was not sufficient for the work I was putting into this course. I would spend hours and hours during the week attending the lab sessions and working on the lab reports and the PLAs  more time than I frankly spent on a lot of my 1-credit classes  and this class still awarded me only one credit. I know this is by no means the fault of the instructors of this course, but I think it is important to acknowledge that lab courses like this are very time-intensive. On that note, I believe that the format of having PLAs as an additional assignment  this semester make this course all that more hectic. The workload was significant as it was and having to spend additional hours during the week working on the PLA was definitely something that added a lot of stress and took a lot of time. When it comes to the grading scheme itself, I believe that many times I would lose points for things that were not extremely clear and that I would spend hours and hours trying to improve on those mistakes by polishing my reports, seeing no tangible change reflected in the grades I would get back, losing the same points on things like insight. Again, I want to stress that this was a Herculean task, and that the fallacies I found in the lab were certainly not things that the instructors were to blame for. If I had to make one board suggestions for the next semester of the course that would be to try and be cognizant of the time that the students have to spend in front of a screen doing online school. It may end up being better to cut out things like the PLAs altogether, as they make students spend more time in the course than they would spend during a normal year. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: professors and teaching fellows were good, labs were reasonable in length, lab reports were fair 
+
+Weaknesses: some of the labs felt like they were pointless (ex. the coin flipping lab). Just because you are given 3 hrs of lab time/week doesn't mean you have to use it all <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the amount of preparation by the professors and teaching assistants to make a virtual lab possible. The SYNDEY kits were great, and the at-home experiment options were creative and made up for the virtual environment. Kudos to all who made PHYS 165L possible this semester! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: well organized with clear expectations, the instructors/TAs are always willing to accomodate and adjust the content to best suit the needs of the students
+Weakness: watching recorded clips of experiments may not be the most exciting, especially for students learning remotely while waiting for the kits to arrive <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was interesting but it was honestly too much work. In addition to the lab report which took much longer than the assigned 2ish hours after which they said you should submit to complete we also had to do post lab assignments which took forever. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The labs were interesting and helpful. It was a bit difficult having both a lab report as well as a DIY lab report due in the same week. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I did not really enjoy the PLA's. I felt that they didn't really serve their purpose of reinforcing the concepts learned during lab but felt like just another assignment I had to get done. I think a better idea would be to assign something related to the application of the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors and instructors are absolute gems and really helped us through the course despite everything being so unfamiliar due to the online format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> At the beginning of the semester, the amount of work and assignments was overwhelming. There were multiple lab reports/activities/quizzes each week, and the labs were too long for the allotted time. However, this was addressed towards the end of the semester, and the class significantly improved. I hope they continue those improvements in Phys166L next semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Hard to be done online, missing out on a lot of lab stuff, gets kind of boring. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Labs were much less engaging through Zoom, most labs just involved watching videos of the experiment being performed, lab groups didn't feel as close as they would have been in-person; not sure how things could be changed given the circumstances <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the teaching team is very invested in student learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the PLAs were the most fun/engaging part of this course. I think using the SINDeKITS and doing experimentation ourselves was exceptionally helpful in actually understanding the physics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I hate doing labs over zoom. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength of this course was that we worked on experiments as groups, promoting teamwork with classmates and also making it easier to solve problems as they arose. Also, the workload was very fair, especially compared to general chemistry lab. The TFs were very helpful and I also think the grading was fair for the most part.
+
+The only weakness of this course was maybe the lab practical exam. It felt a little rushed and it was kind of a stressful experience. However, for 166L, I think they are eliminating the practical exam component altogether. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lab packets did a great job of introducing the fundamental material and equations to allow us to complete the labs. I really enjoyed the pre-lab videos and my TA was very nice and willing to answer any questions throughout the lab. Sometimes it was tough to get through the 3 hour lab just sitting in my room, but this was not a fault of the course itself and more a difficulty with taking a lab online. I still think this is probably better than condensing the live lab sessions/having more take home activities on our own time because it was nice to ask questions to the TA/other classmates in real time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Great physics lab! Very well organized, suitable for learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I do not believe that this lab transitioned to remote learning well. So much insight into the course was lost on me, and other students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was well-organized, and the selected teaching staff effectively supported student learning. The kits sent to us were very fun to conduct labs with, but logistically it seemed very difficult to distribute kits to so many people across the world. At times certain lab procedures seemed to be somewhat repetitive or even tedious at times, but perhaps this was an artifact of the virtual world we live in. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I really wished I got to do the labs in person. The SindeYkits and the PLA allowed us to do some hands-on activities, but they seemed repetitive because we already did the labs during our assigned lab day. The chemistry department had in-person labs. Could this be implemented for physics lab? <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths include strong teaching staff and experiments, weaknesses were only due to limitations caused by virtual format <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I felt this course had many weaknesses. Namely, there was so much work! The pre-lab quizzes, lab reports, PLA's. It was very time-consuming to put together full-point-worthy DIY's using the kit...sometimes, I got points off for not "improving the experiment"; there were few feasible improvements I could come up with and what with setting up the experiment and writing up the report, took well over 2 hours!!!! Overall, I felt that the kits did NOT teach me anything, other than how to stay up late. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the whole sugar with water analogy from the last fill in the blank was correct, but I guess you can't expect us to do rocket science either so there's no remedy. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I think the best way to describe Professor Cahn is whimsical. His enthusiasm for teaching really shone through this semester. The instructors were all very creative and worked hard to make sure we still got a physics lab experience despite the COVID-19-related challenges. The pre-recorded lectures were great as well as the sidneYkits.
+
+Weaknesses: The organization was sometimes unclear given the virtual structure (a LOT of announcements). <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

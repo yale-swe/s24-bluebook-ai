@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>48</strong> </p></li>
+<li><p>RESPONSES: <strong>31 </strong> </p></li>
+<li><p>DECLINED: <strong>1</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>6 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        PHYS 260 01 
+        Intensive Introductory Physics 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 12288   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course went a bit slow in some parts, so we ended up getting behind. As such, Prof. Harris rushed through all the ending sections, and we still didn't get to relativity. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: This is the best intro physics class for a high-level conceptual understanding of mechanics. The textbook (Kleppner &amp; Kolenkow) helped describe physics in a new light, and was the perfect text to accompany the class. The lecture slides were also very helpful and made for a good set of notes for reference. 
+Weaknesses: Professor Harriss lectures often spent too much time on concepts that were covered in the prerequisites of the course, and too little time on new material that was required for some of the problem sets. Overall, the classs pace was a little slower than it could have been, and we didnt get to cover some more interesting ground (the likes of special relativity and the details of rotational motion in 3 dimensions). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of this course's strengths was how it managed to connect myriad concepts through a relatively similar process of solving with calculus and infinitesimal reasoning. Overall, the lectures were very interesting, and Professor Harris was always open to answering questions and did an excellent job at it.
+I think the greatest weakness of the course was that the content we covered in class was often not applicable for our problem sets and general use. We might do the occasional example; however, it was often not useful for the book-derived homework problems. This meant relying a great deal on the textbook, whose examples and writing was not always the clearest, and office hours.
+That said, office hours were usually very helpful. In particular, if he still TAs this class next time around, Tausif is an absolute hero. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> While the course did provide an introduction to mechanics, there could have been less review so that we could have spent more time on the new topics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+I thought Professor Harris was a good lecturer.
+The questions on the midterms were similar in difficulty to questions on the problem sets, which helped in studying for the exams.
+Only rarely did we need to know things that were in the textbook but not mentioned in lecture.
+
+Weaknesses:
+There were occasionally mistakes (mostly dropped minus signs) in the slides. We usually caught them during lecture or at least by the next lecture, but they occasionally led to some confusion. This is a fairly minor problem. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The content of the course is interesting, and Professor Harris is a good and approachable professor. However, the online format of the course wasn't ideal. The PowerPoint presentations were sometimes a bit dry and occasionally had small errors in their formulas, which wasn't ideal. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I enjoyed the lectures, although sometimes the material was contradictory with what was in the textbook and took time to clarify. Grading is also usually late, which did not affect learning too much since solutions were usually posted promptly. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I interacted with a lot of knowledgable and smart people who I would describe as pretty nerdy at physics. I was challenged when new concepts and pset problems didn't come to me as easily, and I learned the hard way the importance of figuring out what confused you. This can be done by actually attending office hours, discussing with a smart friend, or spending the time to do the dirty math and (re-)derive a result. Additionally, I generally found it helpful whenever we derived results that didn't include many skipped steps and whenever we walked through example problems in class.
+
+(Just a disclaimer that this was the first time Professor Harris taught 260)
+Weaknesses: I struggled to learn new topics from Harris' lecture style. His format was preprepared slides, where each slide was heavily packed with paragraphs, math, and diagrams. For me, this was a bit overwhelming. The class moved fast, and I sometimes felt there were steps in logic or math that we skipped. Since I couldn't clearly identify them, even though Harris regularly paused to check for questions, I wasn't sure what to ask to resolve my confusion. It would take rereading the slides and the textbooks multiple times after class to really understand some points. 
+
+Additionally, so much of the pset and test questions we got were much more math heavy than interesting in terms of physics concepts. While I understand that this level of classical mechanics necessarily involves much more math, I felt it didn't always have to be so messy. 
+
+I think Professor Harris can definitely teach a better class the next iteration. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The content of this course is excellent for anyone looking for a very rigorous introduction to university mechanics. The lectures were well-written and easy to follow, and the problem sets while extremely time-consumingwere instrumental in my learning and understanding the material. The midterm exams were fine (while difficult), but the final left much to be desired. Instead of being a cumulative final (as advertised), it covered maybe three topics while including very little physical reasoning and an immense amount of difficult by-hand calculation. I felt frustrated with the exam, not for a grading reason, but because I studied so hard and learned so much and didn't get to show any of that on the final. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> You REALLY learn classical mechanics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The exams did not seem to reflect the homework/class content. I often wondered why our professor chose our textbook, as he did not seem to be very fond of it. Although most of our homework problems were from the book, our exam problems had a very different flavor. It was extremely helpful when extra problems were given by the professor to help in preparation. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course could be improved by varying the format more, with the goal of creating a more collaborative climate. In contrast to MATH 230, where office hours and group study were a common feature that made the lectures less important, this class was condensed into longer lectures, with less out-of-class exposure to the material. Otherwise, I was happy witth the lectures and engaged frequently with the TA's. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Some strengths are that the homework assignments are very fair, and the TAs are great at helping with them. It could be improved by having practice tests/past tests to use to study before the exams, as they were usually much harder than the Psets. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Harris's lectures are really informative and it was fun going to them.
+
+Weaknesses: The TAs and course staff were extremely underwhelming. I heard from classmates that office hours were often cancelled, and for the ones I went to (with one notable exception: Tausif) they didn't seem keen on really helping us understand the content; they just told us what part of our solution was wrong and very vaguely told us how to fix it. Furthermore, the grading seemed very arbitrary at times and the exam difficulty was totally uncorrelated with the lectures, textbook, and problem sets. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The major strength of this course was the existence of undergraduate peer tutors. They were essential for understanding the content and for clarifying textbook content, since office hours with the instructor and with some graduate TAs were not particularly helpful. 
+Weaknesses: too many. The professor often lacks patience and sometimes avoids students' questions; there were unacceptable delays with homework feedback. This last point, combined with the fact that lecture notes and PSet solutions are riddled with algebra mistakes, made studying for exams unnecessarily difficult. For instance, we did not get feedback on our last PSets before the final exam, and the final exam was dependent on our results from the psets. Additionally, lectures were often dedicated to tangential topics and we were left with a shallower understanding of some topics (such as rigid body motion) than if we had just gone through the textbook in class. The course should change the textbook to (perhaps) Morin's Introduction to Classical Mechanics, since it has much better problems (and explanations) than K&amp;K, and the fact that K&amp;K has an abundance of typos for a 2nd edition book. Finally, grading is erratic. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I believe that I got a lot better at solving Physics problems as a result of taking this course.
+
+Weaknesses: The lectures didn't prepare me adequately for the problem sets and exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Overall quite strong. The only weakness for me was that problem sets could become a bit tedious. I don't think this is anybody's fault in particular. There were good problems that did a good job of reinforcing the material. Just a bit tedious. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The grading was terrible. There was a lot of variation between the graders, problem sets weren't turned back in time for studying for the midterms, and the grading seemed unfair. Too many points were taken off for simple sign errors and mistakes. The midterms and finals did not provide enough time; a two-day take-home final would have been much more reflective of how we did the problem sets and how I learned the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Study groups were made at the beginning of the semester but I wish more was done to promote their use. Most of my psets I done solo, or with one person. Overall, the course was largely as advertised: an intensive Newtonian physics course <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course provided a rigorous treatment of Newtonian mechanics. I feel like I have a firm grasp of physical concepts and their mathematical formalizations (using vector calculus, complex numbers, and differential equations). We covered oscillators in great detail, which was fantastic. The PSETs are at the proper difficulty. There is a very good community surrounding the class; we would often check our work with friends and review the week's problems. Professor Harris brings an interesting perspective to the subject by exploring the philosophy of physics, discussing the useful but technically unnecessary relationship between math and physics and determinism/chaos.
+However, feedback was often delayed and minimal. When we took the final, we didn't have our last three PSETs back. The final, which was supposed to be comprehensive, overly emphasized the last few weeks of content and did not seem to accurately represent what we learned throughout the semester. Additionally, we did not get to topics like Lagrangian or Hamiltonian formulations (although they were mentioned) and most of the new content (details about noninertial frames and the central force problem) were pushed to the end. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were perfect. I would have watched them for fun on my own. They always involved derivations or interesting applications/thought experiments related to our current unit. Professor Harris is a really talented lecturer, and gives ample time for questions.
+The problem sets were fun, relevant, encouraged collaboration, and really strengthened my understanding of the material.
+The exams werent great. They tested our problem-solving skills (and for the final, our ability to integrate by hand without making a careless mistake or simply losing interest...) far more than our understanding of mechanics. The exams consistently involved problems unrelated to and far more advanced than any pset problems we had seen (this despite the fact that we were promised several times that nothing would be on the exams that we had not seen on psets). On the final in particular, many of my classmates were only able to solve particular problems because of what they had learned in multivariable calculus, in phys lab, or high school physics competitions. If the course is to be improved, the exams relevance and level of intellectuality would have to be raised substantially to meet the lectures and psets. 
+I suspect that the exams were the way they were as a form of grade deflation, since nearly everyone aced nearly every pset. Most of us in 260 this semester believe that the solution to this problem is to have more difficult psets graded more stringently, and not to have exams like this. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: Interesting lectures
+
+Weaknesses: The problem sets often felt impossible to complete due to the difficulty of the problems. It was a bit discouraging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There is no strength of this course. Weaknesses: Disorganized - lecture notes weren't posted until one minute before class and problem sets were constantly posted late and covered material outside of the course. The instructor - prof. Harris was terrible and didn't help students understand concepts further then the textbook, in fact many of his lectures would have mistakes and fail to show how any result was gotten without using Mathematica. TAs - to be fair 2/4 of the TAs were great, however the other two were horrible and didn't even know how to solve many of the problems correctly. They would give hints that were wrong and make solving a problem harder. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

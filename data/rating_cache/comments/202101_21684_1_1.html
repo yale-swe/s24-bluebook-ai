@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>188</strong> </p></li>
+<li><p>RESPONSES: <strong>156 </strong> </p></li>
+<li><p>DECLINED: <strong>10</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>16 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2021-Spring</strong>
+     
+    
+         
+        BIOL 102 01 
+        Cell Bio 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 21684   <strong>Term:</strong> 202101</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Sometimes hard with just recorded lectures <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course are in the depth of knowledge that we develop in half a semester. The peer tutoring sessions were critical to my understanding of the problem sets, and the discussion sections were crucial to my understanding of the weekly paper. It could be improved by breaking up the videos into 30 minutes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was a bigger jump from BIOL 101, and I struggled in the transition. I think while BIOL 101 is easier to get through because of the overlap with AP Bio, BIOL 102 is a lot harder because the information is all very new and the PSETs are all about applying this new information. Thank goodness for office hours with the peer tutors because they are all super helpful with helping us understand and complete the PSETs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Good class good format <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class was extremely informative. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Loreng and the peer tutors! They really helped me get through content and problem sets each week. Weakness: Professor Mooseker. He clearly knows what hes talking about, but he never articulates anything in a way that wed be able to understand. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: problem sets were very fair and representative of the material taught. The course was very well structured and organized. The weekly review sessions with Professor Mooseker were very helpful and engaging. Feedback was delivered in a clear way. All in all, I felt like I actually learned some interesting bio in this class. 
+weakness: none! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course was the preciseness of the content provided in lecture, which helped the student's understanding of topics in cell biology. The problem sets directly supplemented the material presented in lecture. One of the weaknesses of this course was that the material presented in lecture, although in depth, was sometimes presented in a way that made it difficult to understand for an introductory biology student. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was not very organized and the amount of content presented in the lectures was overwhelming. I did not feel like I absorbed any of the information from the lectures. There was also not a lot of coherence between the lectures every week. Several details about very specific topics were presented and were never touched on again. BIOL 101 was much more organized and the content was formatted better. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the strength was how focused the psets were on reasoning. Any necessary factual information could be looked up so the focus was on thinking through problems. This was hard at first, but very fun and rewarding. I did find the papers we read for discussion section were sometimes very related to concepts in class and provided useful case studies of the procedures we were discussing, but sometimes were further removed and felt less relevant to course materials. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: cohesive, problem sets were useful to synthesize the material
+Weaknesses: lectures could be dull and it seemed arbitrary what material was chosen to be important or to be covered at all <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lack of focus on grading. more on learning.
+
+weaknesses: PSETs are pretty tough--huge transition from 101 <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I thought the experimental techniques were really annoying to learn, but I learned a ton about biology and how researchers find things out. I also appreciated the fact we focused on a few important topics, instead of having to cram a bunch of facts about unrelated systems. Finally, the only assessments we had were quizzes on course content and weekly psets, which was nice.
+
+Weaknesses: Sections felt basically useless -- we listened to a TA talk for a bit, had a really short breakout room, then left without gaining much. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The discussion section and peer tutoring session added a lot to make the material easier to understand. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+- The discussion sections were very helpful with the readings.
+- lots of resources to ask questions about psets and concepts
+- psets were collaborative and working with peers helped strengthen my knowledge of the material
+Weaknesses:
+- content of the course seemed very specific to microtubules and not as general to cell biology <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor super willing to help and accommodate the class.  He really cared about our well-being and made himself available throughout the course.  Discussion sections were helpful.  Peer tutor office hours were ESSENTIAL and SO helpful for completing the problem sets, which weren't that bad with the help of the peer tutors.  I appreciated how the professor gave us quiz worksheets to fill out as we viewed the lectures.
+Weaknesses: I constantly felt confused by the lectures and what we were supposed to be learning.  On many occasions, lectures were filled with vocab and concepts that I did not understand, having not taken AP Bio in high school.  Many times, I would get through the entire lecture and only realize at the very end what the main point was supposed to be (ex: describing the pathway a protein takes through the cell once it is made).  At the end of the course, I didn't really know what the main takeaways were supposed to be. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The powerpoints were often packed very densely with information, which did not always appear on problem sets. This made it difficult to focus on what the professor was saying, as their was so much material moving so quickly, and also made it difficult to identify the important topics. The pre-recorded format was helpful, however, for enabling pausing and re-watching of this material. Additionally, the peer-tutor OHs were invaluable, but this does suggest that the lectures themselves did not enable a sufficient understanding to complete the assignments. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very information-heavy, which made it difficult at times to properly digest the material each week. I appreciated the asynchronous recorded lectures that allowed me to go back and clarify any information I struggled to understand. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Great course.  Very well taught and facilitated. I wish discussion sections were not journal clubs because the content covered in lecture was challenging, and a section for clarity would have been helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Covered a lot of content in a short period of time.
+Weaknesses: I enjoyed BIOL 101 much more than BIOL 102. In BIOL 102, I felt like more of my focus was on maintaining my grade, while in BIOL 101, I was more concerned about mastering the content. The two courses feel severely disjointed, and my shift from 101 to 102 felt staggering. I think this course would benefit by being more cohesive with 101, especially since I felt like I learned more effectively in 101 as a result of less emphasis on grades than in 102. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course is good at helping to decide if you want to keep going with biology, for better or for worse. It is rigorous and challenging enough to let you see if you truly wish to keep learning about it. The course is interesting and the collaborative PSETs embolden us to be better biologists. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - collaborative PSETs and the peer tutors Kevin and Drew
+Weaknesses - I honestly learned nothing from this class. It was a huge jump from Bio 101 to 102. The lectures were so dense and I didn't see where everything was going and how everything tied together. I honestly cannot point to a single thing that I learned from this course. The lectures were packed with big words that only super smart people can understand, and given that the Psets were due on Mondays, you only had Monday afternoon to Wednesday morning to watch all the lectures since the quizzes were due in the morning. This is not the only class I was taking! So of course I did not have time to digest every lecture (would have required me watching them over and over again). Everything was really hard to follow. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course covers very specific topics and goes through material very quickly. It really helped in my understanding of how cells behave but otherwise, the engagement was low and sometimes felt very tedious. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures were not really engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The recorded lectures were extremely difficult to learn from and hard to understand. The material was not clearly presented and it was hard to understand. The quizzes were supposed to have questions in plain sight and they were not at all. Prof Mooseker did not explain things well he would just say certain terms that were not previously mentioned in one quick sentence and we were expected to have in depth knowledge about it. Strength was my TF <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Dr. Moosekar seems very kind and passionate; unfortunately, his teaching is esoteric and difficult to follow. He goes into extreme detail without giving a larger picture, making lectures very very difficult to follow. I really did not retain anything from lectures; all of my learning came from doing the PSETs and completing my own independent work. That being said, the Peer Tutors were a HUGE strength--they were extremely helpful and were great at breaking down work and helping with the PSETs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: TA office hours helped tremendously with the PSETS, which without the TA's help, would be extremely difficult to complete (they were not straightforward from lectures). Weaknesses: PSETS and Quizzes. The PSETs contained ambiguous, difficult questions that were not easily answered by referring to the lecture videos. The weekly quizzes were definitely the worst part of this course. The questions contained incredibly ambiguous answers and they were extremely time-consuming even after pausing while watching the videos (e.g. the lecture videos may add up to 90 minutes, but the quizzes, which were only 10-15 or so multiple-choice questions, would add another 1-2 hours to that time). These could be improved by using wording and vocabulary that matches up with the videos to reduce ambiguity and confusion. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A weakness of the course was the prerecorded lectures. They were very difficult to get through because of the specificity and complexity of the content. Also, there was no evident path of learning. That is to say, it seemed that we were learning things at random and it was hard to decide what content related to what. A strength of the course was the fact that all documents, hand outs, and notes were available to download on Canvas. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were the review sessions with the red questions causing us to delve deeper into each topic. These sessions truly helped me succinctly understand the material because while the lectures are very informative, a lot of information can be overwhelming when understanding the information. A weakness was the weekly quizzes that were 30 percent of our grade. While it was really good because it helped us figure out what to focus on from the sea of information, each question's length was so long. One sentence was 4 lines long which only complicated the idea it was trying to portray. Next time make the questions multiple sentences to increase understanding and sometimes there were some things that Professor Mooseker would not talk about in the quiz. Please make the questions less specific if not referenced in the lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class couldve benefitted from more tailored lectures or a more streamlined lecture so as to not confuse concepts that have overlap. Besides, that the lectures were very helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Collaborative psets and peer tutoring were a great way to learn the material while engaging with peers. It was the only way to understand the lectures that were really dense, and a lot of the time felt like they weren't getting straight to the point. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: It was very well organized, and they were very proactive about answering questions people had on Ed discussion. There we also a lot of opportunities for support, including the weekly review sessions or the peer tutor review sessions
+Weaknesses:  The lectures weren't very engaging, but I think this was more of a product of having asynchronous, virtual lectures.  While I appreciated that the course was centered more towards applying the content to laboratory settings as opposed to memorization, I didn't retain as much elementary information as I would have liked for more advanced biology courses. However, learning to apply concepts is a vital skill, and this may be a necessary trade-off. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course lectures, although long, were packed with lots of information that was presented very clearly. It was very easy to follow what was being taught at the time. The problem sets were very well created in that they really made you think about the content and apply it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I personally loved the format of the class and being able to learn at my own pace. The information taught in this class is much deeper than AP biology and really gives you a good overview of the specific mechanisms that cells use. The weekly discussion sections were also very useful in helping us understand how to read scientific literature. I do not think there were any weaknesses for me. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course worked very well online! The recorded lectures were great, Prof. M's review sessions were extremely helpful and section was relevant. Perhaps less weight on the quizzes would be a good idea, since multiple choice questions are not conducive to critical thinking, which is a hallmark of the course.
+
+Prof. M is the strenght of this course. He makes things not too complex and not too simple, so you end the course with very specific knowledge while not being overwhelmed by nomenclature. His way of explaining things is perfect for an intro course that actually tries to teach. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Prof. Mooseker truly cares about his students and was always available one email away. Although the recorded lectures could drag and get boring, he was always willing to explain something over email and engage with students.
+
+Weaknesses: The course was very unengaging as a result of the remote adaptations. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> - <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was very highly organized and Professor Mooseker was extremely helpful and warm. He was keen to help whenever I had any questions. I can say the same thing about the TFs - they were all extremely kind and keen to help. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is helpful in using the scientific journal papers assigned each week to explain and supplement the lecture information about cell biology topics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The material is interesting and the homework is not too difficult while still being engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were that the lectures greatly prepared me for psets and quizzes. However, I think some of the weeks, there was a lot of material covered in lecture that sometimes got hard to manage. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were relatively well taught, however the psets often had questions that could be difficult to discern, and in many cases asked for plausible explanations, but would award no points for explanations which weren't a perfect explanation for the phenomena. This also encouraged a very heavy reliance upon the office hours where students would simply be given the answers to the psets or present their answers to the ULAs until their answers perfectly matched the rubric, which hurt learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weaknesses: Unclear/jargony
+Strengths: I became so much better at biology and synthesizing info <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: A TON of content, the review sessions were helpful, lots of support.
+Weakness: Content would get extremely complex very quickly with little to no in depth explanations. Most of the topics I was learning and applying to the PSets were just going off of what I was told and saw in the notes, not what I actually understood. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: super helpful peer tutors and kind professors. ULA's and TA's are super helpful too!
+
+Weaknesses: Content is really dense and definitely not intro-material, so that can be kind of intimidating at first, but don't let that scare you away because there are SO MANY other students who feel the same way! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Discussion sections (journal clubs) were taught well and organized. Problem sets were hard but did a good job testing our understanding of the material. Peer tutors/office hours were extremely helpful
+
+Weaknesses: recorded lectures were fast-paced and felt disjumbled at times. Think it will be better in person though <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: TFs and Peer Tutors were great, very helpful
+Weaknesses: A lot of learning packed into just 48 hours each week, since the lecture quiz is due on Wednesday morning and lectures are only released on Monday (or most students are focusing on the problem set until then). Would you consider moving the lecture quizzes to Thursday morning to give students more time to watch lectures? <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The teachers were so kind and available for help! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The recorded lectures were dense in content and, at times, difficult to understand. Some of the peer tutors at the review sessions were so concerned about "not giving away the answers" to the problem sets that they did not actually help clarify class content. 
+
+However, the weekly lecture quizzes helped to keep me focused while watching lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weakness: the material was too specific to be considered an introductory cell bio course. We learned very intricate pathways and barely discussed any organelles and cellular components beyond vesicles, ER, golgi bodies, and cytoskeleton. The PSET questions are also absurdly vague but have very specific answers (grading was very strict and points were docked off for reasons not made clear in lectures).
+
+Strength: none <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked the idea of having weekly quizzes and the psets were also decently challenging. However, I often found myself not engaging with the quizzes. SOm information was hard to obtain from the lectures alone, and I didn't find the book useful at all. The psets themselves were hard on their own, and if it weren't for office hours, I don't think I would have done as good a job as I did. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were clear and concise and I thought the PSETs were well constructed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Not a very engaging class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was laden with information and fairly difficult to follow along.  We delved into so many small details with each lecture that I struggled at times to fully grasp the information presented to me. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I think Prof. Mooseker was one of the most compassionate and kind professors that I have met at Yale. I think is very genuine, and you can definitely get a sense of that compassion in his interaction with students. I also think his passion for biology lends to him being engaged with the material in a way that can be helpful to students. 
+Weaknesses: While a lot of weaknesses may be due to the virtual format of this class, I think that some can be improved upon for a more beneficial semester for students. Firstly, Prof. Mooseker, while it may seem simple to him, uses very inaccessible and complex vocabulary in his lectures often, to the point where you cannot even understand sentences because it is assumed that you know what he is talking about. Secondly, I think that the problem sets were not great evaluations of what students understood. They were often "pushing" the knowledge of the course material, which, while effective in some questions, is difficult to achieve when every question is "pushing." Thirdly, the discussion section format of discussing papers was wholly ineffective for me learning about those papers, which often seemed just barely germane to that week's course material, made little to no difference in my knowledge. I think discussion sections would be better spent going over course material, as the TAs may be able to explain things in a more accessible way that Mooseker cannot. The last thing I would say is that <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Everything asynchronous was a challenge for staying motivated and it felt like most of the biology information was skipped over. I felt like the content on the psets did not translate very well and I felt like I had not learned very much. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength of this course was that it was focused on learning and assessing the learning through psets, so no tests. One weakness of this course was that the review session sometimes was way too fast to keep up with since there was alot covered in the lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was interesting but I never really understood what I was supposed to be learning. Most of the information communicated in lectures felt tangential to my future science career at Yale. I learned it so I could do well on the quizzes but it felt unnecessary. Also, many of the words used in the lecture were never clearly defined, which complicated an already difficult subject matter. I know scripted lectures can be more boring but they would definitely help in this case because during many lectures Professor Mooseker would start a sentence like "[complicated vocabulary word] refers to..." and then get sidetracked so I never got a clear definition of the word. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A lot of complex content was covered in lecture, so adding review materials such as a study outline or importantly vocabulary list could be useful to summarize each unit. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Lectures are well organized, extremely insightful 
+
+Weaknesses: Lectures are difficult to understand, difficult to retain knowledge <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths of this course includes the approachability of the professor - I felt comfortable emailing him with any questions I had about both the course itself and the content. A weakness of the course was... well, I think it's just that the method through which the professor taught just doesn't match my method of learning, so I really struggled with understanding much of the content, because Professor Mooseker was an auditory presenter while I am much more hands on and actually have an auditory processing disorder. So for me, improvement should find itself in adding versatility in the methods of teaching. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The discussion sections were well organized and the lectures were detailed and interesting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Dr. Mooseker is very kind and accommodating to all his students. The course is also very well organized (at least when I took it virtually). I enjoyed the use of key topics and questions in the study guides and lectures - they helped guide me through the huge amount of information taught in the course. 
+Weaknesses: This course is a major jump from Bio 101, and you're not exactly eased into it. The wording of the quiz questions was tricky, and I was more confused on what the question was asking rather than the concept itself. The PSET questions jumped around the lectures, and I didn't feel like they helped me understand concepts that were taught during the lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> -recorded lectures were a little hard to follow and psets were hard enough that I learned less than I struggled with them. It was almost mandatory (but unsaid) to attend peer tutor sessions to complete the psets with a good grade. Psets were toughly graded! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: great content and interesting journal clubs.
+
+Weaknesses: big step-up from 101, basic concepts are not adequately explained or even discussed before covering new topics and (often unnecessarily long) weekly PSETS. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The material was way too dense. The professor literally has hundreds of slides per week and I do not feel like I absorbed any of it. As someone who hasn't taken a biology course since freshman year of high school (not AP), I felt very unprepared for the course. I believe there was an option to do enrichment, but after succeeding in BIOL 101 without enrichment I did not think I needed it for 102. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course should not be taught only through recorded lectures. This course would of been better with live zoom class format, with recordings for those that cannot attend. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked the recorded lectures, but I wished that somehow they were more entertaining. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The discussion of the various experimental procedures (through both the discussion of scientific literature as well as separate lecture material) used to discover the various biological phenomena in this course as integrated into the current version of the curriculum is an obvious strength of this course. This discussion of experimental procedures will likely be very useful for the students taking this course as a majority of the students will likely find themselves in laboratories at some point throughout their careers. Learning about the experimental techniques used and increasing our literacy in reading scientific literature, especially the materials and methods section of scientific papers, will likely be a useful skill for most of us. I believe that another strength of the course was the inclusion of a weekly informal review session with the instructor. Given the nature of the material discussed, it was beneficial to have this informal review session in order to review the week's lecture material and clear up any misconceptions.
+Nonetheless, there were a lot of points over the semester where I thought that the material was not that easily digestible, mostly due to the overwhelming use of undefined jargon. It would have been beneficial for vocabulary and jargon-y terms to have been discussed a bit more in-depth. In terms of content, I personally thought that a glaring omission from the course was the discussion of cellular signaling pathways. However, while I think that this topic deserves to be covered in this course in some capacity, I'm not sure what I would have detracted from in order to fit this topic into the time constraints of the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lectures were recorded so they could be rewinded, sections were very helpful as journal clubs, pset q's were mostly clear and straightforward. Weakness: other than lots of vocabulary/jargon, not much! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the weekly review sessions were very helpful for concept clarification and the recorded lectures were in-depth and interesting; Weaknesses: the breakout rooms in discussion sections were sometimes rushed <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Material got really advanced pretty fast <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course focuses heavily on lab techniques and procedures, far more so than BIOL 101. Because of this focus, I felt like I didn't develop as strong an understanding of the actual findings and concepts of cell biology. The lectures also felt somewhat haphazard; I would have appreciated a more methodical, streamlined approach. It also often felt as if the lectures were simply read from the slides, and they presumed a greater existing knowledge of certain topics than I had. I found it fairly easy to answer p-set questions based on the lectures, but information that I was no explicitly asked about on p-sets often went over my head. I don't think I've retained much information from this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength is that since lectures were recorded, they could be viewed at your own pace and whenever you had time. A weakness is that it did not really encourage retention of the information because quizzes were open note. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course had a lot of interesting material and the recorded lectures were interesting. However, I think if possible, the quizzes and the problem sets should focus on big concepts rather than small details, because I think that would improve retention. The problem sets were also incredibly difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures and section were informative, format was not very engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The PSETs for this course are difficult, but the ability to collaborate on them makes them doable. Also, discussion sections are very helpful for understanding each week's scientific readings. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I was very satisfied with the support system as well as the overall collaborative atmosphere this course offered. The peer-tutoring sessions, the discussion sections, office hours, and outside collaboration all served as spaces to ask about the material as well as help others. My only suggestion would be to change the peer-tutoring hours to one or two days back as the hours this past semester occurred the night before the problem sets were due. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I fee like a lot of the struggle was based around the online format of the class. I think the class definitely was able to keep a timely format but the quizzes felt rushed and felt that they were needlessly worth as much as PSETS when the amount of work to go into them was less than PSETS. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The focus of the lectures weren't clear. For this part of the curse they can improve by being clear about the learning objective like in 101. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

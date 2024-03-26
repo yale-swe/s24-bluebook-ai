@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>97</strong> </p></li>
+<li><p>RESPONSES: <strong>71 </strong> </p></li>
+<li><p>DECLINED: <strong>2</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>24 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        CHEM 174 01 
+        Organic Chem for First Years I 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 11894   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked how study halls were set up (3 per week). It would be nice to be able to talk with the professor outside of office hours <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Dr. Newhouse is a great teacher because he is very nice and remains after class everyday to answer questions. I always felt like I could send him an email if I had a question or felt like I wasn't performing well. The study halls the night before class are usually quite helpful as well. 
+
+My main complaint with the class is the large discrepancy in student abilities based on past chemistry experiences and the advantages given to students based on friend groups and residential colleges due to the flipped classroom format. To do well in this course, you must (emphasizing must) have a group of friends who understand the content. If you don't, you're bound to underperform. I wish this weren't the case, but the flipped classroom style and Sapling homework assignments essentially require you to have friends who've taken chemistry before, which I think is quite unfair. The class would be better taught if Sapling were not used for homework assignments and if the teaching method were not flipped classroom. The current method gives great privilege to kids who took organic chemistry in the past, which I did not. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The flipped classroom makes it more difficult to learn the material, since Tim expects you know all the material and does practice during class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course definitely has a ton of work. This is not necessarily a strength or a weakness, just something that has to be advertised appropriately to incoming students. Do not take this course if you have never seen orgo before and you already have a rigorous courseload. I had never done any orgo before this class and was surprised to see a ton of kids who had already taken a whole year (some less, some more) of organic chemistry. It goes fast - very fast. The lectures do not stop and wait for questions. But, after rewatching and taking the time to study previous material/lectures, it is definitely doable. There is also a ton of homework every week (really, every day). Some of it is tedious and unnecessary. Other parts of it are helpful. The TAs are amazing - I am speaking only on behalf of my TA, but he was extremely helpful and very approachable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths - knowledgeable instructor
+weaknesses - flipped classroom did not feel compatible with virtual delivery - difficult to engage <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A definite strength was its focus on underlying principles for prediction of reactions, as well as the emphasis on real-life applications. As someone who is pursuing the chemistry major and is overall very interested in all the positive impacts of the subject on the world, this was a perfect first chemistry class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> We really had to learn all the course material on our own. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Extensive support network with several study halls/discussion sections every week along with readily available study groups.
+
+Weaknesses: Quality of the lectures--our lectures primarily consisted of our teacher writing practice problems on a sheet of paper. I often found it hard to see/read the problems and felt that I did most of my learning on my own. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The professor (Timothy Newhouse) is engaging in class and does his best to make the class fun and enjoyable.
+
+Weaknesses: My main complaint is that over the course of the semester, I felt like the tests were getting harder and harder. The first midterm was very straightforward, but the second midterm included a few problems we've never seen before in class or had enough practice with (#1 and #4a). The third midterm also had a question that was a bit unclear (#2a), since the epoxidation reactions didn't give any solvent, which would've been helpful for predicting the product since the solvent is usually involved in epoxidation reactions. Overall, I think there was a sense amongst the students that the tests have been increasingly testing us on things we haven't seen before or weren't fully explained in class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course moved way too fast. With the pre-class assignments due before each class and weekly sets, I felt like I was just trying to keep up with all the assignment rather then actual learn anything. One strength is the study groups that were created for the course; they were extremely helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There are a large amount of resources (study hall and discussion sections) to help the study understand the content. Classes are also very interesting as they are more brief overviews of the content and instead focus much of what was found in readings to interesting applications. 
+
+Problem sets were done on sapling which could at times be rather frustrating; however, in general it made the process fairly simple. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: passionate teacher, helpful teaching fellows, a lot of collaboration amongst the students; Weaknesses: flipped-classroom format hindered the understanding of difficult concepts <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I enjoyed the flipped classroom model and found it very valuable to encounter difficult problems in class and be able to work through them with my peers and professor. At times I wish there were more lectures in class, especially for harder concepts. There were plenty of opportunities to get help from the professor during office hours, work one-on-one with TAs and peer tutors, obtain practice problems, etc.. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think this class fosters a really deep understanding of organic chemistry (such that when you're doing problems or in lab, you haven't just memorized reactions or patterns or what not but really why something occurs). The Sapling homework is helpful in getting a basic understanding, but it can sometimes be finicky and it is not very relevant to assessments. However, with the reading from the textbook, homework, problem sets, discussion section, and lecture, it does take a lot of time but it is worth it in gaining the understanding. I will say that sometimes the flipped classroom model actually made things a little harder, as it felt like I hadn't mastered the material before class and then was trying to do problems or hear about reactions much beyond what I knew already. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength of this course is the fact that there were TA's who had discussion sections and held study halls and were all available to help at some point. The peer tutors were also very helpful and very ready to meet with students. One weakness of the course was that the lectures came after the textbook readings and sapling problems that we were supposed to do, which made it hard to complete the sapling problems many times. Sometimes there were also technical difficulties with sapling which made it time-consuming. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Tim goes through interesting examples during class which helps us build a better understanding of the concept. The TAs are very helpful for explaining things and are very responsive.
+Weaknesses: Tim doesn't go over some of the concepts we read in lectures, so there may be unsettled confusion. Some exam questions can also feel like a surprise but are usually doable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength is definitely how understanding the professor is. However, I find it stupid that we have to pay to do our homework and problem sets. I also never learned anything from the homework/ psets because the questions were just bad from the publisher. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Prof Newhouse. He is genuinely one of the kindest, most passionate, yet chill professors I've had this year. I also think the TAs and the organization of discussion sections was a strength. It was very easy to pop in and ask questions or work on problem sets together.
+Weaknesses: Flipped classroom teaching. I think it did more harm than good - lectures ended up being more concept-focused anyways. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Flipped classroom model was not the most conducive to online learningit only added stress and more work in a time of hardship. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor, TAs, and peer tutors were incredibly helpful and supportive; collaborative set-up of the classroom; discussion sections helped clarify material; the content; practice exams were pretty indicative of what would be on the exam
+Weaknesses: P-sets and pre-class assignments on Sapling; this class was 3x/week for 50 minutes which didn't feel like enough time when it came to midterms; Loudon textbook isn't too student-friendly unless you're incredibly comfortable with chemistry <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This is a very self-motivated class due to the flipped-classroom style. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This is definitely a hard class, content-wise. I think the professor and TFs did a good job of providing resources for class and ahead of each exam, so that we felt pretty prepared. However, I was not a fan of the flipped-learning method, wherein we were expected to learn the topics from a textbook, then immediately apply them in class. For a class where most of the information is new, it wasn't easy to gain an understanding of them by reading out of a book, and I would have preferred being introduced to them in class, in addition to doing practice problems from previous lessons. As was the case, it was sometimes difficult to keep up, and I would not fully understand the live classes until I went back and watched them later. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Good practice content for the exams. Professor Newhouse knows the content very well and will answer any questions. TFs are very responsive to emails and/or questions. 
+
+Weaknesses: During a lot of classes we'd go into breakout rooms and try problems on our own before doing them with Professor Newhouse but most of the time my team and I would just sit in the breakout room confused and it was an discouraging way to start the class. I would much rather prefer to just see Professor Newhouse do example and then have people ask questions along the way. Sometimes the TFs wouldn't understand problems either which just led to more confusion. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths are the office hours and the study hall with peer tutors and TAs. The weakness of this course is the unclear expectations of what we were supposed to know as Sapling required us to know different things than the things that were on the test while the textbooks had a lot of information which were not mentioned in class. The order the lectures were taught also didn't match up with the textbook readings at times, and this was confusing. The weaknesses are also the things that should be improved. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The material taught was very interesting and the flipped classroom format with many different sources to learn from encouraged deep understanding of the material. The only difficulty was the sheer amount of material to cover due to the nature of organic chemistry itself. I easily worked 4 times as hard for this class as my others this semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think that the course gave students many modes of support and opportunity for learning outside of basic lectures through section, study hall, etc. The teaching fellows were great and offered a lot of support in my learning. One thing that could be modified is to have the professor teach the basics a little more thoroughly during lectures as the class material sometimes deviated from the material we learned from reading the textbook, which was a bit confusing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: You will learn quite a lot of organic chemistry by the end of the semester and be quite knowledgeable about the various types of organic reactions. 
+
+Weakness: Unfortunately quite a lot. The class was too focused on the Prof's research (MO theory) which consistently appeared on every single exam. Sometimes, the concepts we were expected to know were not even searchable online and were only briefly and poorly covered in class (Particularly using MO theory to justify every single concept we learned in class even when it was not directly applicable). Often, the TAs were even unable to explain such concepts, and more often than not the TAs even had trouble explaining answers to practice exams. The structure of the class wasn't really organized as the Sapling homework, textbook reading, and class lectures rarely lined up and you weren't really sure what you needed to know and what you didn't. A lot of the grading was also left up in the air and you really did not know how well you were doing until the end of the semester (though Tim curves really well so that is a plus). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There are a lot of office hours for students to get help <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: There is a lot of resources allocated to helping students outside of class, including office hours, peer tutors, TA discussion sections and via email. For the most part, you have a lot of people around you trying to help you do well in this course.
+
+Weaknesses: This course requires a lot of work and practice every day to get good at organic chemistry. You need to make sure you don't fall behind, because once you do you will get very lost in the lecture. There were also times when there is confusion about the content (i.e. the practice exams) that even the TAs may be unsure of, so sometimes you have trouble with clarification <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weaknesses: I found it difficult to get actual help. Study Halls and Discussion Sections didn't facilitate that much understanding since any questions asked were usually in breakout rooms and other students would often be confused. Sometimes our TAs also didn't know how to approach certain problems either, which compounded confusion. Strengths: I think the weekly psets and sapling problems did help facilitate understanding and made sure we were caught up with the material before class time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I'm not completely sure if I liked the flipped classroom format, since there were topics I'd have liked to go over in class that we did not focus any time on. The test questions were kind of abstract (most were fine though) -- sometimes even the teaching assistants had trouble going over them, which was a little frustrating. 
+Tim is very engaging and fun, as are the teaching assistants, so that is definitely a strength. 
+In terms of Sapling (the online homework/problem set website), many of the problems only accepted a very specific answer and marked many other answers as incorrect -- sometimes Sapling went over material that was not discussed in the reading for that day, which was annoying.
+In class, sometimes we went over material that was from the next class's reading, which was frustrating because I did not know what was going on and only understood when I did the reading after the class.
+The class is structured quite nicely, however -- I have heard horror stories about organic chemistry and this was definitely not a horror show. 
+It was a nice introduction to college, -- I liked that everyone was a first-year. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is highly collaborative and creates a supportive environment with the other students because of its flipped classroom structure. At times, this can be a weakness and can make it difficult to understand concepts as we are expected to do the readings and do homework on the topic before class. I think overall, however, the structure of the class works as Tim uses class time really effectively to do examples, prepare us for exams, and answer all questions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It's rigorous, and it encourages self-learning. When you figure out how to do a problem, then, it's quite rewarding. However, the drawbacks of self-learning is that it's very easy to get left behind in class. 
+
+Perhaps the greatest weakness of the class is that the homework is a poor representation of the style and difficulty of the exam. The homework ought to be ameliorated so that it better reflects the exam, and/or more practice exam questions should be made available, and/or practice exam questions should be made available much earlier in the units. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the strength of this course is definitely the students. Most of everyone in 1st year OrgoChem is passionate about chemistry and biology, so the people that you meet with and study have a good chance of having similar career goals as you too. The sections are really helpful too, even though it's understandably hard to motivate yourself to actually go to them. The TAs are responsive, and the section sizes are small enough for students to feel comfortable ask questions. 
+
+Perhaps not a weakness, but one improvement would be to have more practice problems that were available but not necessarily due, such as more midterm practice problems and more past exams for us to work through during high-stress intervals. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the flipped classroom worked for some people but not for others, in my experience, it would have been better to learn things in class during class time instead of being expected to come to class knowing the material because it often made it harder to catch up or to follow when there were some fundamental concepts that were difficult to understand by self-study. The exams were often vastly harder and trickier than the practice exams/practice problems, and so it often felt unfair to have worked a lot and put in a lot of effort to prepare only to be thrown a curveball that no one would be adequately prepared for simply by studying past questions. Even though I'm finishing with a pretty good grade, I felt as though I were way behind the class the entire semester because of these reasons, which was really discouraging and unduly stressful. It also would have been nice to have more organized/summary-type notes or slides because sometimes I felt that the learning goals, practice questions, notes, and slides were disorganized and not aligned with each other. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength of this course was Professor Newhouse and his enthusiasm for the material, which  made lectures enjoyable. I'd say the biggest weakness was the huge emphasis on molecular orbital theory. Since none of the students had the quantum mechanical background to actually understand the theory, the explanations we were given (and expected to interpret and make inferences about) felt more like convoluted hand-waving than a true mechanistic explanation of the chemistry. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lots of preclass and post class work so I had to constantly engage with the material
+
+Weakenesses: there was a participation grade for a 99 person lecture and I don't think this was very productive because the chat was just spammed. I also prefer to process the lecture content at my own pace by rewatching them afterwards, so this participation component meant I wasn't able to efficiently take notes in class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths -- recorded lecture (I could watch it twice to prepare for the exam), TA and discussion sections, sapling (although some questions were flawed), Tim also changed the lecture style (from flipped classroom to a more traditional class) as a response to students' requests. 
+weaknesses -- the textbook was difficult to understand and unnecessarily complicated, as a person who was newly introduced to organic chemistry. The flipped classroom at the beginning of the semester was also quite difficult to follow, and it favored students who had prior experience of learning organic chemistry. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I believe that a more in depth exploration of Molecule Orbital Theory could improve our theoretical understanding of reactions. However, I do believe that the course spends too much time going over the same content multiple times, rather than exploring more content in depth. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Newhouse is knowlegeable and always enthusiastic during lecture. The Sapling homework assignments and problem sets were helpful in getting  practice with the material, although occasionally a problem or two did not correlate with the assigned textbook reading (particularly at the beginning of the term). The class followed a flipped classroom model, where the majority of the learning came from reading the textbook and most lectures involved working through example problems. Personally, I would have preferred the live class sessions to follow more of a traditional lecture format. The practice exams for the midterms and the final were helpful, although it would have been more helpful if there were solutions posted. There was quite a bit of time pressure on the exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: a great community is formed in this class. Professor Newhouse cracks jokes during lectures and the chat is filled with student questions and commentary.
+Weaknesses: this class is structured as a flipped classroom where you read the material and solve the pre-class assignments before you attend the lecture about that subject. This is a very difficult way to learn when there is a lot to read about very confusing material with no guidance until you go to your weekly section. Lectures assume that you already understand the material, and Professor Newhouse uses the time to run through practice problems but that is very hard to follow if you still don't understand the material! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures can have more structured content. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course is a lot of work, but the professors, TAs, and peer tutors are all very supportive. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was generally very strong and very engaging. One problem was that several of the students had a much greater prior knowledge of organic chemistry than the rest, and answering these students' questions about advanced topics took up a larger portion of class time than seemed warranted. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: This class is effective and enjoyable; while the flipped classroom method was a little daunting at first, it became easy to get used to and was highly enjoyable. Professor Newhouse tries to make the class fun and engaging with industrial and medicinal applications of the material. The exams are difficult but manageable, and overall, the course moves at an ideal pace.
+
+Weakness: Sapling Learning for Problem Sets frequently gave us problems, and often times it would count correct answers incorrect. I liked the preclass and problem set organization of the course -- it was just the medium that gave us trouble. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths;The small discussion groups were effective. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were very engaging and Professor Newhouse was very helpful with answering our questions thoroughly. One weakness of the course was that I often felt like the later exams were not very similar to the practice tests so I wish that additional, more relevant practice problems were offered to help us prepare. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the course could have been better organized. Many times during the lectures, materials were referenced that we would not read until later in the week which often left me confused. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The course instructor, Timothy Newhouse, seemed to understand that the class was really difficult and was generous with the curves.
+Weaknesses: This class is very difficult and I personally did not like the flipped classroom structure because if you don't understand the concept going into the lesson, you will not get clarification and you will be lost for the lecture. You very clearly need to have a very strong background in bio and chem to be able to do well in this course. The communication about how we were being graded was also weak and caused much confusion. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked this course because it taught me the foundations of organic chemistry. Some weaknesses would be that there was usually little engagement between the professor and the students, presumably because of the virtual format. The TAs seemed rather overworked and understaffed, and were sometimes unavailable for students. I wish that we did more test review, because we would get our midterms back and not know what our mistakes were due to lack of feedback. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Tim was very funny and engaging during class. There were tons of resources available to get help if you needed it.
+Weaknesses: I'm not sure how well the flipped classroom worked because I would leave every lecture confused and wouldn't understand concepts until we'd passed them in class so I always felt behind even though I wasn't. It would've been nice to have a brief summary or explanation of the different concepts before diving into in-depth examples and assuming the entire class understood. That assumption really hindered my actual learning because there were so many holes of knowledge not filled during lecture so I felt like I was expected to completely learn from a textbook. I think the success and comprehension of the top students in the class, who may have had previous organic chemistry knowledge, convinced the professor that we were all on similar levels of understanding when that was not the case for the majority of the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is extremely difficult but Professor Newhouse is super clear about what needs to be known for the exams and the exams, while difficult, are fair. A strength of this course is definitely Professor Newhouse's expertise and enthusiasm and it is also super organized. There is ample support available via office hours and peer tutors and TAs which one should definitely take advantage of sooner rather than later. The Sapling (homework) was a bit of a weakness as it wasn't always reflective of what we were learning in class and I also wish we had more practice exams, especially for the later midterms and final. The flipped classroom format (where we were expected to read all the material beforehand) wasn't my favorite and I wish we would have spent more time learning the concepts in class as opposed to just practice problems, but it was okay. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The flipped classroom style that the course offered fostered discussion and questions about the material that may have not been present in a typical lecture format. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

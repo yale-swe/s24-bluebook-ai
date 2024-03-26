@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>175</strong> </p></li>
+<li><p>RESPONSES: <strong>148 </strong> </p></li>
+<li><p>DECLINED: <strong>8</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>9 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2021-Spring</strong>
+     
+    
+         
+        CPSC 223 01 
+        DataStructres&amp;ProgrmmngTechnqs 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 21991   <strong>Term:</strong> 202101</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: you will learn A LOT. There is a website with the notes for the entire class that is very comprehensive and super helpful for psets. Office hours are super helpful; even if you've never used them before, you will almost definitely use them in this course.
+Weaknesses: the lectures are very boring and incredibly disorganized; he spends most of his time debugging the code he is writing. It's honestly not worth going to if Aspnes is teaching it again. You should probably just look at the syllabus with the notes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> They need to offer FAR more support/guidance for students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class was well-designed and very informative. One thing I would have preferred was more clarity on the specs of certain assignments. I sometimes found myself a little confused with the specifics of the assignment. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures in the course were not very strong. It was difficult especially virtually to follow along, especially if seeing a concept for the first time. Almost all of the coding I learned through Professor Aspnes' notes (which were excellent), through TAs, or online. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The grade was just the average of 12 psets, no participation or exam component. This makes it pretty scary if you can't figure out one pset because you risk getting a 0, but if you start early and work with other people and GO TO OFFICE HOURS you'll be fine. I loved the automated grading and efficient nature of the course, but it does feel a bit impersonal and intimidating if it's not your style. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course makes you much better at programming in C! Lectures move pretty fast (in this sense having the lectures recorded was a blessing because I could go back and watch stuff I missed) and Aspnes isn't always the most engaging, but overall he's a good lecturer/professor; he tried to answer all of the questions in the chat and adjust based on feedback. Another weakness is that we zipped through a lot of data structures, especially near the end, so I don't really know how much I understand the content covered near the end of the class. One of the strengths of this course is the TAs -- they are SO HELPFUL; however, the set up of OH was also a weakness because the queue would sometimes get super long (like, more than 20 people for 3 or 4 TAs) and you had to be there as soon as OH started. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength of the course was definitely the online notes and code that were provided, they really helped me study the concepts even after the lecture. A weakness was that sometimes certain aspects of the material was brushed over and not clarified very well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the lectures were interesting and that the ULAs and workshops were very helpful. I enjoyed having weekly assignments rather than projects and exams. I did not have a clear sense of where I stood in the class grade-wise, however. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would say the strongest aspects of this course were the extensive resources available to students beyond lectures. Professor Aspnes provided detailed notes with multiple examples, while TAs and ULAs held office hours multiple times of the day ,every day of the week in addition to Professor Aspness instruction. I have no complaints with the course, though I do wish the problem sets were given with longer deadlines because I often found myself pressed for time as some psets took me 12 hours+. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the lectures themselves were quite hard to follow in terms of learning content through live coding sessions. However, there was a clear schedule to the course. The problem sets aligned nicely with what we learned during the lectures. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the lectures were very informative. In addition, there were plenty of teaching assistants who were very helpful in office hours. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Under Dr. Aspnes, this course did not prove as stressful as the typical CPSC 223 experience. We had weekly homework assignments which were quite reasonable, so I never felt overwhelmed by the course. Some assignments took a significant amount of debugging, but it was a mostly enjoyable experience. I think the strengths of this course lie in the support from ULAs. There are plentiful office hours, which is very helpful when working on assignments. To improve the course, I would suggest moving slightly faster through the initial lectures on the C programming language. Everyone should have some programming background, so it felt unnecessary to spend such a considerable amount of time on basic boolean or arithmetic operations. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> During this semester, one of the greatest strengths of the course was the lack of exams. In former CS courses (both at Yale and outside Yale), I have found CS exams to have a negative impact on my learning; instead of bettering my programming abilities and working to optimize my code and increase the rate at which I could solve problems, I had exams which forced me to be bogged down by theoretical subtleties which I inevitably forgot in the weeks after an exam and that failed to assess the problem-solving skills the problem sets build over time. Although the lack of exams likely compressed the grading distribution and thus potentially hindered the ability for course instructors to create distinctions between levels of performance, it greatly boosted my ability to learn.
+
+The workshops were also very useful, and well-executed. Similarly, yet to an even greater extent, the ULA OH were fantastic; the system was quite robust and enabled seemingly the most efficient OH system, and the ULAs themselves were almost always extremely patient, kind, knowledgeable, and helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The assignments were fun to work on. Lectures were enjoyable but especially towards the beginning bogged down by questions of questionable merit. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Really liked the pset format and office hours support, but lectures were not very engaging (mostly just drawing on whiteboard) -- could use more applications / visual supplements <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Aspnes is very engaging and funny. Office hours were helpful a lot of the times! The TA's tried really hard to support students by holding review sessions for topics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Not enough good things can be said about the TAs and ULAs. Holy cow, they are fantastic. Especially in C where there are so many technicalities that could go wrong, their help in office hours was absolutely essential to pass many of the test cases. And despite them often walking you through what you're trying to do (it's hard to give general hints in CS that are also helpful), I still managed to learn so much from them. Truly amazing - every last one of them. :)
+For the rest of the class, Dr. Aspnes is really funny in class and knows his stuff inside out; it was a privilege to attend lectures with him. I also really appreciated the student community in this class (despite being remote, we had an active GroupMe and Discord server) that provided support whenever I needed it.
+
+Weaknesses: I'd say one thing that could be improved is more homogeneity in what development environment we used. The TAs and students were split between Vim (which Dr. Aspnes used in lectures), VS Code (which everyone used in the fall but then didn't like so the staff did not universally recommend it this time) and numerous other text editors. This made it harder to seek help because people weren't seeing eye to eye on debugging strategies, for example. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: ULAs, content of courses
+Weakness: I feel like walkthroughs of code during class could be slightly improved because it's a bit hard to follow along. Also worth considering switching to teaching C++ instead of C. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: problem sets were engaging, did not have exams so coding was a much more realistic task (we could debug, did not have to write code and get it graded in a pedantic manner).
+
+Weakness: so much material; sometimes felt like we were skipping some things; there should have been a better explanation of core C functions and how the work. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of the biggest strengths of this course is its organization, which lies in a large yet well-organized web page with all of the reading, examples, and problem set questions, both past and present. With links to different sections, this web page became greatly useful, not only in learning new information, but also for referencing/looking up old information about past topics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the wonderful support from ULAs, the walkthroughs, the frequency of psets, the responsiveness and accessibility of Aspnes and teaching staff on Ed
+Weaknesses: the lectures can be a bit disorganized, the psets didn't feel challenging enough to prepare us for 223 as there weren't many edge cases, the specs could be more detailed <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The TA sessions were useful but the professor's notes are amazing! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the course notes are a very helpful resource. In terms of what can be improved, I didn't find the textbook helpful for learning data structures. Maybe listing another, more relevant textbook would be helpful. Additionally, some of Prof. Aspnes' lectures are just watching him code in C. I haven't taken any other CS classes so maybe this is the norm, but I feel that something like a Powerpoint may be more effective at conveying the information we need to learn. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked a lot that the course was project based and that there were many assignments which took off the pressure for each one. I learned a lot from the projects about to build data structures. The course didnt emphasize as much how to use data structures (the assignments often told you which one to use) which could be a helpful skill for coding interviews. Additionally, it would have been helpful if the problem sets were posted more in advance. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The amount of office hours were extremely helpful when the assignments became difficult. Some of the ULAs were a bit unhelpful, but most gave excellent advice. I thought that lectures were great because Aspnes would use a whiteboard to explain the abstract goals of a data structure and then switch to his code where he showed implementation. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths  Aspnes is fantastic. Such a clear lecturer and super engaging. He really teaches a lot of material I think will be really relevant in my future career. The psets do really help you work on the material covered in class.
+Weaknesses I wish the psets were a little bit more applicable to the real world  some of the psets were super esoteric or just generally seemed a little pointless. but that's a small complaint! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Prof. Aspnes's online course book was really useful and contained all the information I needed for the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are that the TAs were really great. Sometimes virtual office hours got super busy though. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The problem sets were fun and a good way to implement what we were learning in class. This semester was special due to no tests so it was low stress <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The Ed Discussions were very helpful <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This semester there were no tests so it is unique. However, the problem sets were quite easy compared to what people have described 223 to be (class average was &gt;90%). It teaches C well, but a more rigorous approach might be better to prepare for 323. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was overall quite strong. In particular, the course notes were very detailed and well-organized, the assignments were interesting and helped me internalize the content, and the lectures did a good job of explaining things. I only have a couple minor complaints about lectures - sometimes they got a bit boring, and sometimes when coding live professor Aspnes would do a couple quick things without mentioning what he was doing or would spend a long time doing detailed work without mentioning the big picture/objective of what he was doing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were good but I wish we could do more group office hours <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: data structures are something that you need to know if you want to work with software.
+
+Weaknesses: this is a pretty tough course if you don't have extensive CS experience, not sure if there's much that can be improved that way. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: helpful ULAs and nice walkthroughs toward the end of the semester for harder problem sets, live lectures were pretty engaging, focus on problem sets (no exams this semester) helped me actually hone in the implementation of all the structures and understand how to build them myself (useful towards interviewing); Weaknesses: office hours queues get long with one-on-one set up and sometimes they end before everyone gets helped (an open Zoom room where students can work in groups with ULAs and others would be a helpful addition) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the whole on zoom part made this course weird and not that engaging but I think that's just what happens online <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The Coding assignments are practical, which can make them more interesting to work on and think about. Youre usually implementing things that mildly apply to real life. Theres also a great feeling when you complete them. This may be the case for any CS class, though. The class is also not too difficult if youre able to read between the lines of the spec.They have something they clearly want you to do on every assignment and that direct task is never too difficult. 
+
+Weaknesses: I think this class may not have been as rigorous or as far reaching as some other instances of the class(we may have been rushed in some topics)? I guess Ill wait and see how prepared I am for CS323. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A few exams would be very helpful to give time for thorough review of previous material.
+Slides during class in addition to hand drawing.
+Some small multiple choice quizzes to test knowledge of weekly material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Great course. Hard, but fair. I appreciated that it was all PSET based; if exams were to be brought back, allow them to be open computer, open note and typed, just like solving a problem in the real world. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength of this course was its consistency; the psets were always doable, but difficult enough to learn from, and felt very relevant to what we did in class. they were actually enjoyable. In addition I deeply appreciated the ommitance of any exams; not enough professors understand how different it is to learn in a virtual setting. 
+
+The weakness of this course was probably its office hours occasionally. It was difficult to get help quickly at times. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Exams would help, but otherwise the course content was great. Problem sets were relevant, challenging, and interesting. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think there should've been a final-something to test my cumulative knowledge. Overall, the weekly assignments were helpful in reinforcing what I'd just learned. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> i enjoyed this course, though it was difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was a good course <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Aspnes is a really entertaining lecturer. I felt engaged with the course despite the remote format. There is a lot of support outside of lectures, with office hours and the occasional workshops, but some weeks the queue would be upwards of 40 people. As a result, it would sometimes be tough to get the help needed. I felt that the lectures and PSETs were well connected, and the online notes are really helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - Great Professor, interesting content, interesting Problem Sets
+Weaknesses - More TAs to help out in OH <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the lectures and examples given were designed well to explain things and that I learned a lot from the homework (which was challenging!), which had a good blend of "adapt knowledge from class" and "problem-solve on your own." For improvement: I wish lectures had been more interactive (prof asking students for input as he implemented certain data structures, asking "how should we do [next step]?"). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures were sometimes a little hard to follow regarding the coding. I enjoyed the difficulty level of the coding assignments. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The assignments are interesting and are rewarding to work through. Weaknesses: The specs of the psets can be confusing and unclear. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think being taught virtual is honestly better than in person for this type of class. Virtual office hours is definitely better and would assume most would agree. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were for the most part very instructive and the Aspnes is very knowledgable with C. The assignments were pretty difficult and you spend a ;lot of time debugging <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought this course was well done. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Overall, covering content and weekly exercises were well done. Lectures were occasionally quite fast, but knowing a bit about the material beforehand helped. I think the course could greatly benefit with larger projects that require connecting earlier material with more recent topics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course has many resources available to students taking the course. The ones that I took the most advantage of are the extensive course notes posted on the course's syllabus webpage and the undergraduate learning assistants. One thing I think could be improved are the workshops outside of class. They were helpful, but at times they were not recorded for unknown reasons and it has been quite difficult to attend all meetings being a remote student. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: The absence of exams allowed me to put more emphasis on understanding and implementing specific data structures in the context of a programming language through assignments. Weakness: The course could have more flexibility with turning in assignments, such as offering a small bank of free late days. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were its engaging subject matter and the professor.  Aspnes is a great lecturer although it would have been better if he had prepared more code before class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I think the lack of midterm and final during the virtual semester is very considerate. After all, in real life, programming more often takes the form of projects instead of short-term timed trials.
+
+Weaknesses: Pre-prepared slides would have been helpful. Also, code examples in class often contained lots of bugs, and we spend too much time debugging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Funniest and nicest professor, super informative and knowledgable. Homework problems were challenging but fun, and they train you to think through all the edge cases. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Aspnes, the TAs, the online notes, and the lack of exams (though this last point is probably just a temporary result of the pandemic)
+
+Weaknesses: the virtual office hours queue, which was ridiculously long at times <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Overall the course was very strong. Sometimes I got a bit lost in lecture and frequently did not use the lecture notes. However, there is nothing that is bad in the structure of the course itself. It was very well taught and all the psets were clearly centered around furthering my understanding as a student.
+The course also had both intuitive and very rigorous approaches to explaining concepts which I really liked and help me understand many of the topics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of the definite strengths of this course is the strong ULAs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths include very thorough course notes and well-designed psets. Good evaluation through the autograder. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think a strength of this course was being a computer science class remote learning worked better for this course than some of my other courses. I think that the lecture style with going over new concepts and then actually testing them out in a code editor was helpful. I also think having recorded lectures was a strength of the course that allowed me to review certain concepts while doing psets in a way I wouldn't be able to do with in person live lectures. A weakness would be that having such a large class on zoom made it so I didn't really get to know my fellow classmates but this wouldn't really be an issue in the future hopefully. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It's a tough class. Having more TAs might make it better for the students, since they were really helpful with the homework, but were often overwhelmed later in the week. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: plenty of resources (notes, lectures, slides), engaging lectures, office hours support for psets
+
+Weaknesses: sometimes office hours were overcrowded, likely because virtual learning inhibited students from forming study groups amongst themselves <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were entertaining and clear. Professor Aspnes did a great job with the visualization of the data structures and code in general. The increased tutoring hours, workshops, and consistent Ed discussion replies were god-sends. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: clear material, well organized
+Weakness: could be a bit boring at times <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strength: well structured, nice that notes were online
+weaknesses: zoo is an outdated way to submit assignments, need feedback on assignments <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Course generally seemed to lack structure, ended up covering pretty much all the advertised content but jumped around a bit <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Recordings of lectures were helpful for catching up and review. The class website has all the course content and sample code, which are very helpful for review and psets. Given the below regarding the 2 main learning channels of this course, the website was vital.
+Weaknesses: Lectures are very fast and confusing, and don't fully explain things sometimes. Pset instructions were often unclear. In office hours, when you have to wait 2 hours in the queue, only to get kicked off without even getting to ask your question or only to get no answers or insulted, it feels terribly hopeless. Several ULAs avoided answering my questions, kicked me off the queue, or spent only a few minutes with me. They said it's because "That depends on your implementation" or "I can't tell you the answer" or "I need to get to other people in the queue." One ULA even said, "This is not the kind of question you bring to office hours. You're halfway through the class already" and "Office hours is only for asking conceptual questions" and accused me of making him do my homework for me. Office hours made me feel so lost, alone, discouraged, and invalidated. Students would greatly appreciate if office hours and ULAs are patient, share knowledge generously, and admit it when they don't know how to help, instead of wasting students' time with excuses and negativity. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Very organized course notes and helpful lectures. Professor Aspnes explains concepts and code clearly and honestly, while being one of the funniest professors in lecture I know of. Assignments this semester were pretty chill--cool and concise programming challenges that use what we learn in class without being overbearing in workload. Having no exams in exchange for a couple extra assignments I think was a good call (exams for intro CS classes tend not to be so helpful and effective in my opinion), but not sure if this will be the case for future classes. No weaknesses. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The amount of resources put into this course was remarkable. Between the abundance of notes posted online, the recorded lectures, and the office hours, it was rare to get hung up on a question/bug for too long. That said, the class was content-driven to the point where interaction with peers and TAs was pretty minimal. It might just be a product of covid, but the course felt a bit impersonal at times. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Pure lecture course. Would be nice to have some student interaction with professor. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This is an excellent course -- well-structured from basic C language to more advanced data structures and their applications. The materials are taught well and useful. The class atmosphere is also an enjoyable one. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Virtual lectures were optional and recorded, Aspnes is an extremely chill instructor. You can take the entire class asynchronously, which some students did
+Weaknesses: Problem sets were occasionally varied in difficulty. Office hours could become extremely crowded, and it could take hours to hop in the queue <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course goes over a lot of content - which is very good. The notes for the course are detailed, and the code examples are extremely useful. There are some things that are only mentioned in the course, which I feel should be more detailed in the notes, even if not given much time in lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was very structured -- from the assignments to the lectures. But, I do wish there was some sort of exam that tested my knowledge because the 12 assignments themselves don't require the actual conceptual learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures use a combination of drawings and coding sections, which gives us good visual intubation before diving into the code, so it was much easier to understand, and watching the professor writing and debugging the code live is both instructional and entertaining, and we got to see tools like vim, gdb, and valgrind in action, which is really nice. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The lectures were well taught and enjoyable. The workload was fair.
+Weaknesses: Sometimes you had to wait a super long time to get help from office hours.
+
+Maybe adding more ULAs could help make getting help a smoother process. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was good! But it's easy for students to get lost sometimes and then go to office hours but not really learn as deeply as they could. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Interesting problem sets! Taking this class has made me a least a little excited about taking 323. Aspnes' detailed course notes are online, lecture code was also posted online. This made it easier to review what was discussed in lecture at your own pace, or to even self-study completely. Grades were completely based on assignments this semesterno midterms or finalso your grade was relatively more predictable. TA's could help you debug, and the groupme + discord chats were relatively active and had many helpful people asking and answering questions. Ed discussion posts were responded to quickly, and TA office hours generally had helpful, patient TA's. 
+
+Strength and weakness: For this Aspnes class, aside from a small handful of test cases, most final test cases were very close to the public tests, so there wasn't too much racking your brain over coming up with weird edge cases. Also, especially for some assignments, the set-up of the structures has a lot of copying and pasting lecture code (ex. for tree structures) and then modifying it. The majority of the work is still your thinking, but I could complete assignments while still being lost on how some methods from class worked.
+
+Weaknesses: Although covered in lectures, assignments didn't quite reemphasize some of the trivia-esque knowledge of computers, C, and its programming tricks that probably would be asked about on a test. Not a complaint because I didn't have to study and could solely focus on specs and debugging. However, while I walk away with better coding ability and some understandings, I'm sure I lack some small but useful details that might've made me a better programmer had the class been in person or included some midterms. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: Prof Aspnes is highly knowledgeable and is a very engaging lecturer. The problem sets will take a few hours but are very interesting and rewarding. You will definitely learn a lot from the course.
+Weakness: Aspnes is too smart... Sometimes he doesn't realize he's going over things too fast. But he's always ready to answer questions, so just be prepared to ask lots of questions! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Lectures and assignments were well-organized and clear to understand! No major weaknesses I can think of <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> You definitely learn a lot about data structures in the class, and the class itself isn't too boring or dry, although lectures aren't very engaging. I feel like you end up really learning/understanding the material by doing the problem sets rather than watching the lectures, which feels pretty normal for a STEM class. However, it is sometimes difficult to apply the concepts you learn in lecture to the homework, so I ended up attending office hours a lot during my time in the course, and the queues were sometimes super long (longest I waited was three hours) <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

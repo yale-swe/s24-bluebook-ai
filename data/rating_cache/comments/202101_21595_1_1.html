@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>215</strong> </p></li>
+<li><p>RESPONSES: <strong>187 </strong> </p></li>
+<li><p>DECLINED: <strong>11</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>9 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2021-Spring</strong>
+     
+    
+         
+        CHEM 136L 01 
+        GeneralChemistry Laboratory II 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 21595   <strong>Term:</strong> 202101</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is unfairly hard. It is only 0.5 credits, but the course load is not reflective of that at all. Either the credit needs to be 1 full credit, or the course load needs to be decreased. Most course work was tedious and not necessary, so decreasing course work is definitely doable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There are no strengths. Solely weaknesses. 
+
+The class is unrelentingly harsh, filled with trick questions, abuse of break day policies, and 
+ teaches you nothing. There is no practical knowledge on how to properly write lab reports or to learn the material: if it isnt in Naramshins desired way (which sometimes rejects scientific convention) you will suffer academically. 
+
+The class eats up hours of time, even in a virtual format. There is no oversight on Naramshins absurd policies and pace of work: pre-lab quiz, post-lab quiz, and lab report all due on the same day. To top it all off, the rigor and stress of the class is masked as Naramshins passion for chemistry. This is anything but true. He has single-handedly transformed chemistry into a harsh discipline instead of an interesting one. Every day that Naramshin continues to teach is a day that students are pushed farther and farther away from chemistry. If the goal is to turn people off from chemistry, Naramshin is a superb pick. 
+
+I refer to Naramshin synonymously with the class as he is the driving force behind its awful structure. He is singlehandedly responsible; he refuses to let TAs stray from what be thinks is best, removes points if you dont follow his specific (and scientifically incorrect) rules. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The quizzes I think are too hard overall. With all the prep for them, I still think they are quite difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: some of the experiments were interesting.
+Weaknesses: the instructor is not very helpful or responsive to problems; the lab reports take a ridiculously long time to complete; the number of videos required for each class is ludacris; grading is somewhat unfair; lab reports are dinged more points for wrong significant figures than actually having wrong answers; lab report grades also vary greatly by TA so be wary of that; quizzes are nearly impossible to complete in the time limits and the material covered on the quizzes was often mentioned in passing in one of the millions of videos. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of the course are the TAs and the breadth of the experiments we get to do. The weaknesses are that it is not exactly aligned with the general chemistry syllabus, so you work on something in lab before seeing it in lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> S: Individual TAs doing lab. Easy to get help.
+
+W: Not actually doing the lab. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very well-organized and structured. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: instructor is readily available to help students, lab reinforces concepts learned in chemistry class, a wide variety of skills are taught, course materials are very organized
+
+Weaknesses: no partial credit seems to be given on quiz questions that have multiple parts to them. Why? 
+The workload is a lot - maybe too much - for a half-credit course. I spent more time on this class than some of my one-credit classes.
+It takes a long time to receive feedback on assignments and quizzes. I think there was only one lab report graded by the middle of the term. It's hard incorporate feedback if we don't receive until two weeks later, after which we might have made the same mistake on the week before's quiz or report. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class was very organized, with the lab manual being a great resource! I was also very appreciative of the formatted lab reports so we knew exactly what to provide. I believe the timed quizzes were given with too little time and on topics that were not clearly presented and/or present in the lab manual/pre-lab videos. It also took a long time to get feedback on lab reports, so I didn't know how to improve for the first three lab reports. 
+
+I took Chem 163/7 in the fall/spring. This course does not align well with the lab. I often found myself self-teaching the concepts of the lab because these courses do not align. I didn't mind teaching myself but feel others would benefit more if the courses aligned their topics to occur consecutively or have the lab portion follow the topic background in lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was well adapted for the remote format. I wish we had more time for the pre-lab and post-lab quizzes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Dr. G and the TAs were very passionate about helping me learn Chemistry and keeping me engaged. Also, the fact that some of the labs paired up with each other was nice because it gave a week off from lab reports and lessened the workload for the class. However, one point I didn't like about the class were the weekly pre-lab videos we had to watch. While they were very informative, they took way too long and made the day before lab much more stressful, since not only did we have to watch the videos, but often had to do pre and post labs and at times the lab report as well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Seems very redundant in the virtual lab format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course could absolutely be improved by in person class. Also, pre lab lectures were lengthy and often repetitive to what we watched our individual TF do. This meant that we'd often have 4+ hours of instruction per week for a half credit course which seems excessive. I hope this could be rectified by just having in person lab. Additionally, the pre and post lab quizzes were also excessive. They just added stress with minimal value for online learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The TAs were great and make the lab run smoothly 
+Weaknesses: Dr. G is terrible and adds additional, unneeded stress to the experience. In addition, all the labs were the exact same as when partners were allowed (before COVID) so the labs took twice as long for us to do since we had to do them all alone. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One weakness of this course is the difficulty of the lab reports. Completing the lab reports was very tedious and the questions asked did not aid my understanding of what the experiments entailed. Focusing on more relevant questions and calculation would make the course more enjoyable and less stressful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Virtual lab is very difficult to be engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course was the preciseness of the content and explanations provided in the pre-lab lectures, as well as the experimental setup videos that we watched prior to each experiment's live virtual lab. The engagement during virtual lab sessions was also a strength of this course. The lab reports and quizzes supplemented what was presented in the videos and the zoom lab sessions. The course could be improved by lowering the workload, as well as ensuring that each person has understood certain experimental techniques, as the lab was conducted virtually for some. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was not engaging. The variability in the grading as well as the inconsistency in concepts was frustrating beyond belief. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A standard chem lab course. Very helpful to have so many experiments and lectures recorded, useful in preparing for experiments and filling out lab reports. Thorough feedback provided on lab reports and quizzes, however, feedback was very late. I almost never had the chance to learn from my mistakes on previous lab reports. Quiz feedback was a bit faster though. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Honestly, virtually, it was kind of boring. There were a lot of pre-lab videos which got the concepts across very well, but sometimes felt too long but that was necessary for the content. My lab section felt like it just rehashed all of the information and was simply to get data to then write the lab report. 80% of the lab report feels like busy work and 20% is actually understanding the data and helping my understanding of chemistry. However some of it was useful practice for exams.
+However, the course is very useful if you are in Chem 165 because it is synced perfectly and provides very useful concept review. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Some strengths of the course were that the online lab was a small group that could be interacted with easily and that the data was always accurate because it was gathered by a TA.
+The largest weakness of this course was that it was supposed to teach chemistry via hands on lab experience, but it was in-fact virtual. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think that I had a much better experience in the class once I realize how helpful office hours were. I think that it would be a lot better if the recorded lectures were also live on zoom, so that students could ask questions in class, but I don't know if that would be optimal because students are already going to normal chemistry lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is so hard, there were pre and post-lab quizzes every week that are timed. There is normally not enough time to answer the questions fully and to the best of your ability. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I love Dr. G's passion for chemistry. However, the lab reports are incredibly difficult and tedious. I do far more work for this course than any other course, and it is frustrating that this course only counts as 0.5 credits. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was very helpful in that the material aligned with the content of the lecture class. This made studying for both classes easier. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There is too much time commitment for this course. Start the course earlier so that we can have adequate breaks during midterm week. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: 
+- The course aligned very well with Chem 165
+- office hours were readily available and very helpful
+
+Weaknesses:
+- The grading for the lab reports differed per TA
+- Points were taken off for components that did not reflect our knowledge of the course (e.g. giving the graph a title that took off 6% from one of my lab reports)
+- not enough time for lab quizzes - could not complete all the questions in time <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Quizzes are unfair and based on material not always taught- virtual lab was not engaging and repetitive of pre recorded videos. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A lot of tedious work. Grading was extremely strict for no reason. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the recorded lab lectures and the lab videos were incredibly helpful. 
+
+Weaknesses: The quizzes were given too little time to complete and added unnecessary stress to the course. The course definitely does not feel like a half credit course with the amount of work we had to get done. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It can be a very fun course, however, it is drawn back by the unreasonable expectations. Even though the course is a half credit, it had a similar workload to my 1 credit courses. This could be improved by lowering the workload for an already complicated subject. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Taught very well and lines up especially well with general chemistry. The content was tricky at times, but I always thought it was a healthy challenge. The different experiments were set up well to facilitate a better understanding of whatever concept we were discussing.
+
+Weakness: It was quite a bit of work for a half credit course. I felt that lectures and assignments could be shortened because it became borderline busy work and repetitive. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was a lot of work for a half-credit class. There were usually two quizzes per week plus a long lab report (except for some weeks) and many videos. The videos helped a lot, but the quizzes were hard, required a lot of memorization, and didn't feel helpful or very similar to the lab reports. There is a lot of professor support which makes the course better. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course has a lot of work and time commitment for being only .5 credits, having be worth a whole credit would be nice. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> More additional assistance after lab, such as office hours from TAs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The workload for this course is extremely high for only being half a credit. It takes away from actually being able to learn and understand what's happening. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Im sure this would be great in person but it was just hard to focus online <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Since it was a virtual format, it was not as fun as doing experiments yourself, but my TF and Dr. G. tried their best to still give us a good education <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: Learning a lot of chemistry and how to apply it.
+Weakness: The grading seemed very inconsistent across the different TFs. Also the quizzes felt impossible to finish on time as you had to type out your work which required symbols and canvas buttons and other features that wasted time. The quizzes also required the memorization of certain things that did not seem like there was a need to memorize. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I like that the TAs grade but sometimes they can take off points for sig figs that were actually using correct rules, but we cant bring it up to Dr. G because he would no allow us to change the grade without him looking at the report first. Otherwise dr g was actually pretty helpful during office hours this year remote if not a little condescending at times. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Workload is high, but Dr. G is always there to help. He is always there to help. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The quizzes make sure that I am fully understanding the lab content. However, with very limited time I felt really rushed especially with having to input equations into Canvas. The lab reports are a bit long, but they challenge me to think critically about my findings. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Again, lab is a course that should obviously be taken in person to get hands on experience with the techniques we learned. However, strictly from a zoom format I think that the lectures and run through of the lab procedure live were a helpful addition to the prelab lectures. I dont know how I would run the course any differently. It was run very well given the circumstances. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was simply not engaging: multiple hour-long lectures every week and virtual labs that made the experience very difficult to get through. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think a strength of this course was that it was taught well by the teaching team. A weakness of this course was that it did not align with chem 167 at all, meaning that we would have to learn topics in advance in order to do the lab quizzes successfully. I think this could be improved if the course communicated with chem 167 more than it does currently. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I wish it was in person and that the prelab videos were shorter and more succinct. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: the lab works very well with the corresponding chem lecture course and helps to solidify understanding of chemistry principles
+weakness: students are given very little time to do the quizzes as they are timed, its difficult to finish them in time <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are some of the TA's who always try their best to teach content beyond the lecture videos, the lecture videos themselves are sometimes very helpful not only for this class but also for the lecture course. Weaknesses are the arbitrary and unclear grading, at times needlessly long lab reports, and the quizzes which are inexplicably difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think that this is a really valuable course that teaches us the fundamentals of the chemistry lab. However, I think that it's definitely equivalent to more than 0.5 credits. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The structure is nice, and there are a lot of resources for help.
+
+The weakness is that it is very time consuming, and there's a lot of repetition in the lab reports. Sometimes the quizzes ask for seemingly unnecessary details, so pay attention to those. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> graders are too strict and are too picky. hard to actually try to learn when grading is so tough. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is a lot of work and way more than .5 credits worth of labor, but very beneficial if you are considering lab work <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The virtual lab was not interactive enough and I don't feel it improved my lab skills. The lab reports take forever and are graded very harshly, and the quizzes are extremely difficult. So much more work than my 1 credit classes but it was a half credit class <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength: very organized 
+Weakness: a lot of work for 0.5 credits <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Although the course meets once a week and is only 0.5 credits, I think that the course should be worth much more because of the workload. Taking two quizzes and handing in one lab report every week on top of all of the other coursework was very challenging to do, especially online. I think that the fast pace of the course made it hard to learn to understand and it was more learning for completion. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was good considering it was remote lab. It was organized and I dont think much can be improved. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course could be improved with more time for the pre and post lab quizzes but is good with showing a strong lab report. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Perfect course, the virtual setting was a little unengaging. But there was nothing to be done about it! The current situation is not ideal. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course definitely teaches you a lot. You gain some solid knowledge about chemistry concepts within the lab setting, work ethic and time management skills, which are all very valuable. With that said, I do find this course to be incredibly demanding, especially for only 0.5 credit course. Though it was possible to do a lab report, prelab quiz and postlab quiz within the same week, it was quite grueling and draining to keep that up throughout a whole semester that had no breaks. Personally, I think there could be some reworking with the logistics of this course to be a bit more reasonable for students. Overall, this lab class is organized, thorough, and interesting for sure. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> very hard to engage (especially online), very mundane and monotonous - did not feel like I was learning <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Dr. G
+Weaknesses: virtual format <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the strengths are that it really teaches a lot of valuable practical skills, and being in the lab is really interesting and fun. The weakness to me is the amount of work outside the lab especially in the form of quizzes, I feel like that does less for my learning and stresses me out more. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The prerecorded lecture videos were very useful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Dr. G posts prelab videos that are excellent in helping you understand what to expect (and also great for reminding yourself what happened during the lab when you're writing your report.
+
+Weaknesses: Gen chem... it's too varied in the topics that it hits, you may be learning a lot of things for the first time, and it doesn't help that you can lose points on your report for the smallest errors / missed detail (double - no, TRIPLE check those sig figs!). The most stressful part was probably the prelab/postlab quizzes, but work hard on your lab reports and it should balance out nicely! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> CHEM 136L is almost too reliant on the strengths of its Teaching Fellows. I had an amazing experience with this course only because my TF was so engaging, enthusiastic, patient, and kind. While my excellent TF made the course both enjoyable and enriching, students' experience with the course should not be completely decided by the TF they are assigned to. Here lies the weakness of this course. The actual foundation of it does little to involve students as the lab reports themselves are formulaic and designed to test whether you're able to name-drop details of the procedure rather than whether you actually understood the content. The quizzes are similarly confusing, once again focusing on minutiae like the color change of a specific liquid. Moreover, the pre-lab quizzes often include calculations that were briefly touched on (and once not mentioned at all) in the pre-lab reading. Often, only after doing the lab report (so a week after taking the pre-lab quiz) would I understand how to answer some of the pre-lab quiz questions. This makes the course itself feel like a chore, rather than encouraging deeper enthusiasm for and understanding about chemistry, it focuses on whether you can memorize obscure facts. Perhaps that's the intention with the class but I don't think it should be. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Doing lab online was extremely difficult as there was a large challenge as I felt a large disconnect from the lab reports when I am not the one doing the lab. It sometimes felt like we were being asked too much for something we had only watched videos on. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: It's well organized, and it reinforces some of the topics you learn in general chemistry
+Weaknesses: While Dr. G provides pre-lab videos, the content that is tested on the pre-lab and post-lab quizzes is not always presented in the pre-lab videos or the manual. You either already know some of the content, or you don't. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class is very assignments and quiz heavy, and I think it wouldve been nicer if participation during the actual lab had had a bigger part in grading. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I found that I spent most of my time on quizzes scrambling to format my work in Canvas-- maybe a file upload would be an easier way to submit work <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: certain TFs were helpful, satisfied premed requirements
+Weaknesses: everything else <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It takes really long to get the grades back in this course, so if you do not know what you messed up on in one assignment you will not know how to correct it until weeks later. Some assignments took a month to be graded and are always given back so late. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I think the biggest strength of this course is that it's broken up into sections, and that the section T.F.s are extremely helpful (or at least mine was) when I had questions regarding the course material. Additionally, even though he has a reputation for being tough, I do believe Dr. G has each and every student's best interest in mind. He always makes himself available to teach students when they don't understand something, and I believe he has a true passion for chemistry.
+Weaknesses: There were many weaknesses with this course, but I don't believe that many were specific to 136 vs 134, especially since 136 was online for me, and 134 was in-person. The quizzes were considerably more difficult than last semester, but I think that overall, they were fair. As always, there is a severe disconnect between the amount of work required for this course and the amount of credit you receive. I don't know how many students have to say this for Yale to listen, but it's honestly disappointing that they are still under the assumption that this class should be worth half of what a lecture is worth, especially given the fact that I consistently spent 5x the amount of time on lab than lecture. I know that specific change is larger than a decision that Dr. G can make, but it would be wise for Yale to reevaluate the rigor of this course and accredit students accordingly. Secondly, I do believe that there was inconsistencies between how the T.F.s graded lab reports  I believe I consistently produced equal-quality lab reports, yet, my grades varied up to 10 points. Lastly, I think that the purposes section on the lab report is redundant and not at all conducive to learning. The point of it is to make sure that students fully understand the methods and objectives of the experiment, but that is well-covered in the quizzes and the rest of the lab. Instead, it ends up being a place where you lose points over missing, quite literally, a single word. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Virtual lab did feel somewhat less engaging, but it made the best of the situation. The course itself was very well run with regular assignments and clear expectations. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Need to make timing of quizzes more flexible <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strength: it is online, no walking to to lab. 
+
+weakness: bad teaching, too nit picking on grading, which deviates me from actual learning. Dr. G was not good at explanation. Besides the not so good content, his videos are long and unedited (poor quality) , also poor audio, which makes it so hard to watch. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: I liked how the videos of the lab procedure were coupled with the manual. 
+weaknesses: Wasn't really sure what would be on the pre/post labs so it was hard to anticipate how to study for that. Also at times getting the lab data from the TA didn't seem that uniform and knowing what data to use for each experiment was confusing. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Virtual format did not teach lab skills very well, and sometimes it was hard to stay focused during the 2+ hour lab sessions on zoom. The feedback on the lab reports was helpful, and the TAs were great at answering any and all questions about the lab and the report. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class sometimes emphasizes arbitrary skills over general concept knowledge. However, the class has very good and in-depth videos that fully encapsulate the material as well as having incredibly helpful office hours. The amount of videos that we had to watch was overwhelming at times. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Pre and post lab quizzes were tedious and difficult to complete within the given time limit. The lab report grading among TAs was inconsistent. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very strong in terms of teaching concepts through recorded lectures and lab reports. However, I think that keeping up with due dates was really hard, especially with very strict timelines amidst varying time zones. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lab report grading must be more precise. Some TFs grade significantly harder than others which skews the curve. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course is that there is a lot of real life application of concepts learned in chemistry. The experiments are easy to follow, but provide a good level of challenge and focus in order to succeed at the experiment. The lab videos are very easy to follow and understand. They can take quite a while to watch, which makes it difficult to pay attention for the entirety of all the videos. The calculation questions on the quizzes were still something I struggled to answer purely due to the way to input the work for the question. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I really liked the pre-lab lectures but it was hard to understand fully the experiment. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The grading of lab reports very much focuses on the details of graph formatting and significant figures, and I hope in the future the method of grading can be adjusted to focus on drawing logical scientific conclusions and using deliberate thought. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was a good way to reinforce what we learned in Gen Chem II. However, the workload was very high for only half a credit. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The grading of lab reports should be less nit-picky; I think we should be tested on how well we understand the course material in lab reports, not how closely we followed guidelines of the lab report for things like graph formatting and proper use of significant figures. You can easily do poorly on a lab report despite understanding all of the concepts and procedures due to improper formatting (graphs, sig figs, etc), which I don't think is a great test of our knowledge of the concepts learned in the course. 
+
+Pre-lab lecture videos posted online were very very helpful in taking the quizzes and understanding each lab! So is all of the background info in the lab manual and the example calculations. Also, despite being more work, the quizzes before and after lab were helpful in reinforcing course concepts as well. 
+
+Also, despite the fact that this meant some of the lab reports were very long, I preferred having fewer lab reports in total (only 6 in gen chem lab II as opposed to 9 or 10 in gen chem lab I) , because this gave us weeks off where we didn't have to submit anything, which was super nice! For this reason gen chem lab II was actually much more manageable and less stressful than gen chem lab I. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Without fault to Tom or Dr. G, lab is simply not meant to be put forth in a virtual format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Dr. G is very thorough about helping students understand and complete the lab. 
+Weaknesses: There Post-Lab quizzes are extremely tight on time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Release the grades sooner, since one mistake made can be repeated for multiple submissions before the student realizes they made this mistake since grades took around 4 weeks to be released per lab. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class was helpful for understanding concepts taught in CHEM 165, but overall, I really did not benefit much from the class. Dr. G is nice, but I feel like I didn't take much of anything away from the lab. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The workload of this course was a little overwhelming, particularly in the COVID-19 context. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength is that it was taught very clearly which made it easier to understand. A weakness is that I did not gain any actual lab skills because it was all virtual. I cannot think of a way that it could be improved. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very stressful and there was very little flexibility for deadlines, even considering all the circumstances. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The online format of this course was difficult as the purpose of it is to gain hands-on experience. I look forward to taking future labs in person. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I would say that the support from this course was certainly a strength. The TAs always responded in a timely manner and readily made themselves available to answer any questions students had. An obvious weakness was the fact that many students were not able to actually conduct the experiments themselves due to the pandemic, but Dr. G did an amazing job accommodating to the restrictions by creating videos, which I found extremely helpful in my learning experience throughout the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class had so many weaknesses. There wasn't enough time for quizzes, the labs were graded absurdly (they take away a point for a word not in the past tense or if there's the wrong number of significant figures), we had hours of videos to watch each week on top of the class time, my TA often made mistakes and couldn't explain everything to us, and it was way too much work for half a credit. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Through this course, I was able to visually and experimentally witness many of the concepts discussed in the accompanying lecture course. I was able to see a few of the experimental techniques discussed in the lecture course (e.g. the van't Hoff analysis, acid-base titration) performed in real time. The prelab lectures are overall beneficial for situating the week's experiments into a broader context and in order to disseminate key information in an auditory format. That being said, the benefits of this course end there. This course is simply too much work for the amount of credit that it is. The course is quite literally more work than the accompanying lecture course, even Chemistry 167. The lab reports are very involved, which is inherently not detrimental, but when coupled with the fact that there is a prelab quiz for every week's experiment as well as a postlab quiz accompanying each lab report that was often just as difficult than exams in the accompanying lecture course, the involved lab reports (up to 15 pages of work when all was said and done) become overwhelming. Not to mention, the prelab and postlab quizzes often felt more like typing tests rather than chemistry quizzes considering the nature of typing calculations into a computer. While I appreciate the sentiment of teaching all of us the applications and usefulness of chemistry in more of a real-world context, there is absolutely no reason for this course to be more work than the accompanying lecture course. Additionally, in this semester specifically, there was some redundancy in having to watch the entire experiment be performed by the instructor as well as select aspects of the experiment be performed by the Teaching Fellow in every session. However, the experiment being performed by the instructor during in-person instruction is a useful tool and a strength of the class when the class is in its in-person iteration. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

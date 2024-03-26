@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>116</strong> </p></li>
+<li><p>RESPONSES: <strong>85 </strong> </p></li>
+<li><p>DECLINED: <strong>8</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>18 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        PHYS 170 01 
+        UniversityPhysics:LifeSciences 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 12281   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Going through examples in class was more helpful than I expected <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> weaknesses: This class is a lot of work. 3 hours per week of live lectures. 1 hour per week of tutorials. 3 hours per week of recorded lectures. A pset and quiz every week. 
+
+The biggest thing that I think could improve the course would be for it to have a tutorial at the same time every week, rather than rotating it every week and wrecking havoc on the schedule. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: 1) The course content itself is fascinating, 2) Simon is an incredibly knowledgeable and genuinely kind professor, and 3) this fulfills a PHYS requirement for several majors.
+Weaknesses: The course organization was absolutely shambolic. I think this may have been due to the online format, but even so Simon and the constantly-changing TAs seemed overwhelmed in a way that regularly made it hard to learn what we were expected to. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: Simon's passion for the material, interesting biological applications, plenty of TA/office hour availability.
+weaknesses: in-person lecture was not very helpful. module and office hours were best. online format made teaching the course more difficult.
+Could be improved by merging pre-recorded and live virtual lectures into one format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I truly loved the group midterms. It really helped take any extra stress of about careless errors, because I knew someone was checking over my work. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Although the class had a rough start (the group quizzes proved to be very difficult for students, which caused a lot of stress), Professor Mochrie was SO understanding and open to working with his students to structure the class better. He was unbelievably kind and open-minded through what must have been an extremely difficult situation for him as an instructor, and he made sure that each student's voice was heard. Truly, I have never worked with such a caring professor. We saw him at several study halls, where he went over problem set questions with us, and never failed to answer my emails in a timely manner. I hope that he remains active in our learning experience next semester as well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Well first of all, I would just remove this course as a requirement for any major that doesn't lead down the path of biophysics - I am confident that I will never use any of the information from this class in any other course for the three biology-related majors I'm considering
+Second, if you're actually doing everything that this course aims to have students do (and especially without prior experience with physics and/or probability), this course is a ton of work. I was able to get by on prior knowledge and just never watching videos and putting minimal effort in in general, but this is not an approach most people can take, and is certainly not an approach that facilitates learning. Weekly psets, quizzes, practice quizzes, tutorial sections, quiz make-ups, classes AND prerecorded lectures is a lot to work through, and I understand that at least some of this is necessary to cover sheer volume of material, but much of it is just piling on more work for no good reason. Also, some topics could just be excluded from this course since many are kind of niche approaches that aren't really useful elsewhere in physics/biophysics.
+Also there's a kinda halfway approach to teaching mathematica where you still need to spend a lot of time to do the mathematica problems they expect you to do, but you don't reach any meaningful understanding of the language
+I won't speak ill of the lectures because I just had a really hard time focusing during them and stopped showing up or watching them at all pretty early on in the course which may or may not be just me.
+I also generally dislike the heavy reliance of leaning on TAs to give solutions to problems and work through problems with people because there are a lot of complications to many of the problems that are just never addressed in lectures. Most of them are great, and very helpful, but I think this is just demonstrative of the fact that this is just a symptom of the course organization, and that this course would be better as smaller sections or just topically reconstructed, I don't know <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were sometimes entirely unhelpful - the prerecorded lectures were a tiny bit clearer, but it was a bit bad to ask students to watch all the lectures the night before in-person lecture. We were not informed that they would attempt a flipped classroom format, as the time commitment doubles then. The late notices were unhelpful too, as well as late file uploads that left us unable to try to study/work ahead sometimes, and actually made us fall behind as well. Uploading files and grades on a regular schedule or just having them all up at once would be way better. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The exams and grading were very fair. I think however, there was WAY to much work in this course. This course felt like it was 2-3 credits just because I felt like I was engaging with it 2-3 hours each day. It really drains you and makes you not want to learn. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength:
+The questions presented for homework and tests were creative and original.
+
+Weaknesses: 
+This course was essentially entirely self-taught. Except it was even more difficult because the questions were so abstract that you couldn't even consult google for additional help even if you wanted to. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> there is way too much content being expected for us to learn <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Learning in group settings was extremely valuable. However, the system for scheduling was extremely inconvenient. We were randomly placed with groups and then were asked to schedule a different tutorial with a different TA each week, leading some groups to regularly have tutorial at 9 or 10 PM Eastern, or at various times on weekends. In the interest of respecting the time of both students and teaching assistants, this issue could be resolved by simply including a discussion section in the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professor didn't do a good job of explaining systems in class and I thought it was absurd that he was trying to have us code in a physics class <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: class content is absolutely fascinating; professor cares a great deal about his students; great accessibility of peer tutors and teaching fellows to help with difficult problem sets
+Weaknesses: problem sets often required aid from the teaching fellows and would be impossible to do independently, making study halls must-attends <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the study halls were super helpful 
+
+
+Weakness: the prerecorded video lectures were a lot of extra class time that was hard to manage <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Dr. Mochrie is super nice/enthusiastic. The format of the class could definitely have used some adjustment (understandable given the circumstances of the pandemic). Although I understand that the combination of pre-watched lectures and discussion sections and in-person lectures was meant to foster course engagement, fewer more high-priority class items would have made the course more engaging. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the course is focused solely on how much you're learning and as long as you put work into it, then you'll get an A
+
+Weaknesses: experience in the course is heavily dependent on who your peers are, sometimes topics don't really make sense until it all comes together in the end, introduction of Mathematica in the course with limited help from ULAs (who don't know it because it's new) and limited teaching on how to work the program in general <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I really liked how the course has a lot of biology applications. The connections that Professor Mochrie made to DNA, cells, and other biology topics made the course very interesting. One weakness was that the problem sets are super long and difficult, so I found myself more focused on finishing the problem sets than understanding the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think many of the weaknesses this class presented at the beginning of the semester were addressed. The late recordings and the way the weekly quizzes were administered weren't great, but Professor Mochrie adjusted this after hearing our opinions. I liked the fact that all of our assignments were group assignments. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of the strengths of this course was Professor Mochrie and the teaching staff, who seemed quite dedicated and taught well. However, I do think that the combination of live and recorded lectures was a weakness, since sometimes material that was covered in recorded lectures  was essentially just repeated in live lecturesthis sort of repetition felt like it perhaps wasn't the best use of time, during or outside of class time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It had a lot busy work but overall I liked the group project dynamic. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There was too much emphasis put on knowing Mathematica without enough actual teaching on the language. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strength - forgiving TAs 
+
+weaknesses - format of lecture was not always super useful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Simon is truly wonderful. Very caring for students and very good at physics. Great job teaching the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Simon definitely responded to feedback, which was incredibly helpful. The course, as it was at the beginning, was difficult, particularly because the textbook was hard to understand. The pre-class lectures should've come with some kind of powerpoint. Powerpoint in general, with basic ideas and concepts, would've been helpful if posted so we could review slides. It was hard to follow a lot of concepts using only the lectures and module notes. Also, a how-to for the problems would have been great, rather than the somewhat random example problems <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: study halls, professor, and TA/ULAs all provided assistance in a timely manner and seeking assistance outside of lecture/module notes was honestly the only way to do well/learn concepts in class
+
+weaknesses: mandatory lectures; poll everywhere was used as an attendance record in a sense but limitations of a computer screen made it hard to remember what the questions were asking or referring to; eliminating lectures as mandatory or finding a way to keep problems up with references would make poll everywhere more useful. content was taught in a way where physics terms were implicitly taught as needed, making it very difficult to understand some concepts given I've never taken physics before. Learning definitions of terms and what they represent in an applied fashion in a very very explicit and clear manner would make learning more accessible <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course sucks up a huge amount of time. Having live lectures and recorded video makes it really a lot. It helped when Monday quizzes began taking the whole class time on Mondays to slow down the content. I would highly recommend setting a routine schedule for tutorials, if possible. They were helpful, but very hard to schedule. I never really liked the "explain in words" types of problem set/exam questions as they often felt too open-ended and arbitrary, and the TAs often struggled to answer these questions as well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: a lot of help is available 
+Weakness: this class takes SO much time (more than my other classes combined) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was so focused on demonstrating how physics could be related to life science that sometimes it felt as though we were not learning something that would be relevant in terms of physics principles. The course felt much harder than an introductory course and it highly depended on us having prior knowledge of biochemical content or other material in order to succeed. The course was also very time consuming. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course had so many requirements. Not only did it have 3 times a week lecture but also, tutorial with a TA weekly, 3 times a week study hall, a problem set every week, two midterms and a final project. It definitely forced you to be on top of the material but it was a huge time commitment. The tutorial was not beneficial at all, although being able to work with a group during lecture and the group exams honestly helped me to learn the information and stay on top of it much better. Working with a group prevented me from falling behind when I didn't understand and having to cram at the end. This was a great component of the class! Also study hall is super beneficial as time consuming as it is. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think one of the main strengths of this course was that groupwork was encouraged. At times, STEM classes end up being a competition, but in encouraging this and assigning us smaller groups to work in, I think that it was easier to learn and ask for help/ <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The implementation of group quizzes suffered due to the initial difficulty of communicating over Zoom. That being said, I dont believe that the quizzes could have been done better, especially as the process improved over the fall. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The course is very collaborative. The tests, quizes, and psets were collaborative, which was a really nice feature. I think being able to work on physics problems in a group helped to facilitate learning
+
+Weaknesses: The psets contained problems that we were never taught how to do, so they took hours to complete and were nearly impossible to do without visiting office hours. We had to attend live sessions and watch pre-recorded lectures, so it was almost double the amount of class time that we had to attend. I think one way to improve the class would definitely be to get rid of the pre-recorded lectures. We did not cover many of what I would consider basic and essential topics in an introductory physics course in that we did not do any problems that included numbers, so I do not feel as though this class prepared me well at all for future physics courses. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: groups fostered a community feel
+Weaknesses: coding aspect of the class came out of left field and added immense stress to the class, course required excessive time commitment to do well on psets etc. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I think the teaching team did a remarkable job creating a collaborative environment that felt like it was about learning rather than weeding out worse students. This is the best introductory STEM class Ive ever taken, without a doubt. The quality of the teaching was also extremely high compared to other intro STEM classes. 
+
+Weaknesses: The number of components in the course (e.g. tutorials, quizzes, problem sets, exams, exam corrections, final project) was a bit difficult to keep track of, so I feel like the class might be hard to manage if youre in other classes with a high quantity of assignments. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Prof was pretty responsive to feedback and ideas and was flexible which was appreciated during the pandemic. Abundance of study halls was appreciated. Kudos on making a module thing, a bit confusing but great to create a curriculum that follows through in a genuinely interesting way. Weaknesses: TUTORIALS. very obnoxious system to put into place; it was very chaotic on the part of both students and TAs to have to make time and coordinate on a weekly basis to meet for an overall not especially helpful thing. and to have a grade on it? madness. Please don't ever do that again. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The flipped classroom format was tough workload-wise. Watching pre-recorded lectures and reading the textbook ahead of time, before attending lectures during the normal lecture time, in addition to weekly quizzes and psets was a lot of work. It would have been great to do the pre-recorded lectures during normal lecture time, then just use the weekly psets to work through problems. I appreciate the work and preparation that went into the pre-recorded lectures, but the workload ended up being quite high. In addition, more opportunities to work individually would be great (for exams, for example)! I think working in a group made it easier to do well without fully understanding the material and disincentivized staying on top of work. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Prof. Mochrie is really passionate about the course material
+Weaknesses: The TFs and help sessions were disorganized at times and I felt like this class took more time than necessary <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths of the course include the instructor because of his flexibility and enthusiasm. Not only were triweekly study halls scheduled, but Professor Mochrie himself was in attendance at these. He listened to student concerns and adapted the course accordingly when appropriate but also stood his ground to preserve some of the components he studied/believed in such as switching study groups midway since the educational value of group work is lost without occasional changes. Exams were fair/based on the problem sets, example quizzes were given, and it was a big help to have a study group to work with on the assessments. Despite not liking the occasional coding work we were assigned, I was really excited to model something for the final project, and if you attend study hall for the Mathematica problems, you will have sample codes to directly modify to do so. The tutorials were sometimes tough to schedule, but switching the time to an agreed upon one each week actually helped me, and these small group sessions did force you to engage with the material. The course could be improved by slowing down the Poll Everywhere questions so that we could actually work on them rather than feeling pressured to guess before Professor Mochrie moved on and our work wouldn't be counted. The pre-class recordings were a little much in the beginning of the semester, but they slowed down later on. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Kind of pedantic in how we are expected to learn. Too much math manipulation on PSETs. Kind of topical to biology but in a super simplified way. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There are a lot of moving parts that seem somewhat redundant at times, but actually the culmination of all the class aspects make for a solid learning environment. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength was how interesting the course material could be and some of the TAs who were superb at assisting our experiences. 
+The weakness was the format. Unfortunately the module system at times failed due to the density of the material not being broken down into digestible chunks and the harder parts not given more attention  than the basic concepts. 
+There was also a huge advantage to people who knew how to code or took linear algebra despite many students' understanding that this was an intro-physics course requiring only Calc 1 as a pre-req. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is challenging by nature, especially for someone who is not necessarily mathematically prepared. This in conjunction with the high workload and time-investment made this course one of the more challenging for the semester. However, there are so many resources in the form of peer tutors, TFs, and Prof Mochrie himself. I always felt that I could get a question answered if need be, <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - Psets, quizzes and exams were all completed in groups! This was super helpful because physics is not easy, and working with other students helped me understand problems a lot better. Also, tons of support was available throughout the week in the form of office hours and study halls to work on psets way in advance and answer questions about quizzes and exams, which was incredibly helpful; I do not know how I would have gotten through this course without the help  of the amazing team of TA's and learning assistants! They were all incredibly kind, helpful and accessible, and I liked that we could also collaborate with other students in study halls to work on assignments. I also really liked that Simon posted lecture videos before each live lecture; this was very helpful in my understanding of course content, and I liked that we reinforced the video content with example problems in class. This helped me gauge my understanding of the video content. I didn't find the module notes as helpful; personally, the notes in the module were confusing without the context of the videos, which explained everything in a much more accessible way. Finally, I appreciated that Simon posted as many resources as possible on the class website to help us in advance - module notes, psets, lecture videos, practice exams, answer keys, etc. Professors often don't post material in a timely fashion before exams, however Simon always did! This gave you the chance to get a head-start on all the pset assignments as well. I also liked that, in lieu of a final exam, we were able to apply what we learned in class and carry out a creative project; I think I learned more from this project than I would have from a final exam because it applied our knowledge from class in a real-world context! I got to see how physics in the life sciences is actually used in the real world! 
+
+Honestly, I cannot think of any weaknesses of this class; Simon really did everything in his power to make PHYS 170 accessible and not overly-challenging in light of the virtual format. Since Simon clearly dedicated so much time, effort and resources to this class, learning physics online was not nearly as bad as it could have been! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the course improved steadily over the semester. the main issue at the beginning is that mochrie didn't adapt the course to online at all. once he did, it ended up being much better. also, honestly, Yale pre-meds are quite annoying and they mostly populated this class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is challenging but well organized with group work. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Was actually much more enjoyable than expected, and encouraged collaboration with others, TAs were friendly, challenging PSETs were but exams were then made manageable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I liked the group assignments and working together. t was refreshing for a stem course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There was a lot of room given for mistakes due to Covid/online difficulties such as quiz and exam corrections as well as dropped scores; however, the whole course format was poorly planned and executed. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Very well organized. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

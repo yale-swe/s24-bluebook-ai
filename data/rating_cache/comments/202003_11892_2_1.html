@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>89</strong> </p></li>
+<li><p>RESPONSES: <strong>73 </strong> </p></li>
+<li><p>DECLINED: <strong>3</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>11 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        CHEM 163 01 
+        AdvancedUniversityChem I 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 11892   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think Professor Mayer teaches difficult content quite well, and I liked the breakout sessions within lectures. A lot was done to make sure there was sufficient time for students to get personal attention. The peer tutors/teaching fellows were extremely helpful, I would not have survived this class without them. The only cons I experienced during this class were entirely due to the pandemic, and of course, the unfamiliarity of the topics. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weaknesses:
+- complicated content
+- due to remote learning, experiments and demonstrations were significantly limited
+
+Strength
+- a lot of support particularly from TFs
+- the professor was very open to feedback, questions and discussion with students on any matter particularly for accomdations
+- interactive TFs <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Mayer's kindness and understanding is a real highlight in what otherwise would be a pretty relentless and discouraging class. The exams were incredibly difficult and sometimes felt arbitrary in terms of the content that was on the exam (i.e. there would be 3 questions on a topic that didn't seem to be emphasized in class and an error in the first part of a question would significantly lower your score on the rest of the question even if you got all those parts right). However, Professor Mayer was extremely receptive to feedback and offered many options for improvement in the class as well as a clear explanation for why he wrote assessments as he did. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of the course are having resources. Since the class is a bit larger the teaching team is rather large and there are many avenues to which you can reach out and ask for help (which is almost a requirement in this class, you will NOT know everything that is being taught). <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths were that the TFs and Professor Mayer were very very keen to help. I received a ton of support from everyone within the course. I also liked that everything was very clearly laid our on where I could find information on Canvas. The recordings were always posted on an orderly manner. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There should be a little more time devoted to reviewing concepts that we should know as background information. Maybe the peer tutors or TFs could hold sessions where they review background material so that it will be easier to understand for people with not as strong of a background. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course were the accessibility of peer tutors, professor, and TFs and their review sessions. Generally, my email correspondences with any instructor/tutor were well-received and timely.
+The weaknesses of this course lie in the fact that it is extremely difficult to stay engaged with remote learning (not to any fault to the instructors). Moreover, I felt like the course material was rushed at the end of the year, especially after Thanksgiving break, and I didn't feel as prepared for the final as I thought. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The peer tutors are the best thing this class has to offer. They are incredibly kind and helpful and will more often than not be able to explain things in a way that makes sense. The psets and sapling homework were also very helpful. They definitely drove lecture points home. The sample midterms offer good practice. 
+
+Weaknesses: The 4 midterms plus a final were not very fun. I felt like midterm season never really ended for this class as we would have a test about every 2 weeks. It was definitely stressful when coupled with other classes. Sometimes the class did feel a bit all over the place. I am a visual learner so the lecture figures slides helped in that I could see the diagrams, but sometimes it was hard to engage/take notes because I just did not know what he wanted us to take away from the slides. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths- Well-organized, pacing was good, many support systems (TFs, peer tutors, Professor Mayer). Professor Mayer is very responsive to student's comments. Weaknesses- Not many, this course requires a lot of studying though. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Mayer was a really grounded and engaging instructor! His lectures were concise, the structure and content of the class was great, and I really appreciated the professor's philosophy towards teaching this class. Homework and tests were challenging but manageable, discussion sections and breakout rooms provided a nice opportunity to get to know and work with other students, and peer tutors and TFs were generally helpful. Overall, great course and great professor.
+Weaknesses: A few of the TFs and peer tutors were more helpful than others, which I suppose is partially a preference thing, but at the same time, my discussion sections weren't always super helpful relative to reaching out to or working with other TFs or peer tutors during review sessions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: I think the topics of this course are very very interesting, and there are super cool connections that Prof. Mayer makes in problem sets and in lecture figures. I also believe that the course was well designed for virtual learning and collaboration between students.
+
+Weaknesses: I think that the course information is sometimes a little too beyond our pay-grade, and Prof. Mayer doesn't do the best job of making a distinction between what we should know and what is just "icing on the cake," so to say. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strength was that there was alot of time for questions and student concerns. A weakness was that sometimes the lecutres were too slow paced so that parts of the material were not completely covered in depth. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course came with a ton of support from many different people, including the professor who was always very open to answering questions and gave us many opportunities to have one-on-one conversations with him. Also, the problem sets were formulated in a way that prompted us to think and reinforce the concepts we learn in lecture very well. I think the only thing that could be improved is for the lectures to be taken in a slower approach, more carefully explaining the basic concepts in lecture and leaving the concepts that connect the basics for us to figure out through the problem sets on our own time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength of this course is the great learning that you will do. Although the topics are intellectually difficult to understand, looking back, I do like how I learned newer material and now feel pretty comfortable with the past units. There are many more weaknesses however with this course. First of all, having it be online just made learning so much harder. If we were in person and in lecture, I think every person in the class would have done better, and it is so hard to pay attention to Prof Mayers lecture online because there is minimal student participation and he goes very fast. The workload isn't too too bad, but the weekly Problem Sets usually have questions about random material or info that we hadn't even covered yet which made that frustrating. Also, having this on top of the Sapling seemed useless, and the Sapling and Problem Set questions were usually unrelated. Also, there were 4 midterms this year, which is a lot, and they are extremely challenging. Most questions on the exams were very skewed from the questions in class, and even if you studied all the material, there is a great chance you would have no idea how to answer a question. The questions were also confusing in the way that you literally couldn't decide whether you were supposed to draw something of writing something, and the professor really didn't seem to care. Even after numerous errors and obvious confusion by the class, the professor still did the same things on each following test which seemed very unfair. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I really enjoyed how many resources we had with the course. There were many peer tutors and teaching fellows, and the professor was very engaged with his students. I also liked having both ximera and problem sets, because the ximera provided immediate feedback on my answers which helped with the problem sets (which more resembled exams). However, I feel that it was difficult to grasp onto the concepts of quantum mechanics right at the start of the course. I feel like I may have better understood quantum mechanics if it was taught later in the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> You learn a lot from this class, not only about chemistry but science as a whole. If you are interested in chemistry, this is the perfect course. Leaving each lecture, I would be in awe about how interesting chemistry can be and how useful it is in our world. Since you learn so much, the course does go quite fast and Professor Mayer can sometimes get behind if there are too many questions per lecture. However, Professor Mayer is also very reasonable and will not test you under-prepared. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course, in my opinion, was not very well structured or conducive to learning. Lectures themselves were often dull, full of tangents, and explanations didn't really make sense. Further, the overall structure of the course felt not very focused or like the topics really connected to each other. Better organization and optimization of class time as well as an increased focus on the material and optimal ways to explain/demonstrate topics would improve this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The main strength of this course is that it is entirely conceptual so more complex concepts can be learned relatively easily.  However, because the topics covered are complex, the amount of practice needed to understand them is greater, but that's an inherent tradeoff of the course and not anything that can really be improved. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor mayor was a huge strength in this course. He was always calm and collected in class, and insured that everyone had fun learning the material he presented. He would often coordinate to have recorded demonstrations of labs he would typically do in person to be sure that even in this virtual format, we were never left questioning the material from lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One of the  strengths is that the connections between different units is really emphasized, so you get a very comprehensive understanding of chemistry. One of the weaknesses is that you move through material really fast and sometimes topics aren't covered in lecture thoroughly, so you have to do a lot of learning outside of class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The course had many resources available to the students - peer tutors, the teaching fellows, and the professor himself. The large number of peer tutors (and subsequently, peer tutoring sessions) were extremely helpful for those who needed help on the problem sets or had questions about the class, in general. Another part of the class that I would consider a strength was the qualitative consideration of chemistry without a quantitative emphasis. It's not an angle that a typical college chemistry course would seem to take, but I think it was useful in ensuring that the students developed an intuition for chemistry instead of just learning how to plug-and-chug mathematical equations. 
+Weaknesses: The class did not have many weaknesses. I believe that the class/instructor suffered a bit from moving to an online format, and that some of the material was not covered exhaustively in some topics. However, the instructor was aware when this occurred and took it into account when preparing midterms and exams. Besides this, I believe the most glaring weakness was the inclusion of nuclear chemistry in the curriculum. In hindsight, I'm not sure what role it played in the scope of the class. I believe nuclear chemistry would be best either omitted in order to focus on the other topic areas or covered more in-depth than it was in this iteration of the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths- a lot of support from the peer tutors, the TAs, and the professor. I loved that they have multiple review sessions before exams. The course is not based on memorisation. If you go to the peer tutors, its easy to do the psets. You learn A TON and the goal is to make you think about chemistry in a new way
+
+Weaknesses - sometimes you have no idea what to do in order to improve, even if you study for days, you still might be missing a lot; it takes a lot to learn how to think about the material in the way that Prof. Mayer wants you to; the material was very condensed and it moved super quickly, but maybe thats because of the COVID semester <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I feel that the course was very strong in its access to resources. Beyond the professor, there were several TFs and Peer tutors who made it easy to ask questions and have concepts clarified. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The material seemed to be different than what I thought it was going to be. I had hoped it would give me a deeper understanding of chemistry but I often left lectures very confused. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I found the numerous resources provided to us incredibly helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the weakness was the repetitiveness of the class and the Sapling was annoying and not very helpful. The strength was the pace of the class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths are discussion sections and the content of the course.
+
+Weaknesses are the Prof. Mayer's lectures are a little scattershot and there isn't always a great expectation of what one needs to know for the exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The breakout rooms worked well and the support given outside of class (office hours, peer tutors etc) were very helpful. However, lectures were not very engaging, and the sapling homework rarely matched up with the lecture topics. In addition, after essentially self-teaching sapling topics, it was disheartening to see that the material would not show up on exams, or that the topics did not go in enough depth to be of use. Much of the homework felt like busy work. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course teaches you a LOT. It definitely challenges you a lot more than high school chemistry classes, as to be expected. At times it was a bit overwhelming with so many new topics coming at you. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - Professor Mayer is very passionate about teaching and chemistry. TF Linda is absolutely amazing at explaining concepts. Having all the lectures recorded SAVED me this semester because I have no idea how I would have survived if I couldnt go back and watch the lectures. The PEER TUTORS. Cannot emphasize enough how helpful they were. 
+Weaknesses - the workload was QUITE heavy. The psets were really long and studying for the exam took such a long time and you could study for a long time and still get a really bad grade. It felt like you could never put in enough work, which was really demoralizing. And the class average for some of the exams was VERY low. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: An abundance of study resources, including peer tutors and TFs. Weaknesses: The lectures tend to be a little dry, and they're not always laid out in the most approachable way. Sometimes the professor (Mayer, in my case) jumps quickly from talking about big-picture connections to very specific technical details in the material. This can catch you off guard. For me, having the lecture recordings was a life-saver, as I could rewatch any parts of lecture that I had missed the first time around. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The peer tutors, TFs, and Professor Mayer were all very helpful and gave us lots of opportunities to ask questions and review concepts we didn't understand. The biggest weakness was that the lectures weren't super engaging over zoom. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I have no general notes for the improvement of the course.  I thought there were ample learning resources, the material was well-covered, and the course was well-adapted to the online format. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the way the class was set up was really nice, our professor gave us good information that could be kind of confusing at times but attending the peer tutor sessions helped clarify things and learn them to a greater extent. The only thing I did not really enjoy about this class was the four midterms that we had to do because it was a little overwhelming, especially with a midterm only a week before our final. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: lots of support offered by peer tutors and TFs; instructor was understanding of student needs
+Weaknesses: for the first two tests, new material that would be on the test was covered on the day of the exam--a little stressful esp. for those who did not have free time later in the day to review the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course is very thorough. There are many units that cover seemingly disconnected topics, but as you go further into the year, the overlap seems more and more clear. Professor Mayer is very knowledgeable and enthusiastic about chemistry. However, the course is taught in a very unorganized manner. To take notes and review for our four midterms, I could barely refer to the syllabus for guidance; I rewatched some lectures, attended peer tutor and TF sessions, took more notes in discussion sections, attended his office hours, and sometimes I was still confused. There is so much material that is covered in this course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Sometimes Professor Mayer would get sidetracked or not fully explain the slides; 2 of the 4 TFs were FAR better than the other two. (They were better at explaining concepts and answering questions). The Peer Tutors were outstanding. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength is that there really isn't any prior experience needed to learn the material in this course. A weakness is that I don't really feel like I learned a lot of chemistry in this course, rather I learned very specific things in the field of chemistry that don't really seem like something that should be taught in a general chemistry course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course teaches a lot about chemistry, but it is also pretty difficult and requires a lot of work. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course covered a wide range of topics which was a strength as well as having numerous opportunities/review sessions to engage with professors and TFs as well as better learn the information presented. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> When there isnt proper closure to a lecture it feels like we just listened to an elderly  man ramble about teaching stoichiometry to Congress for 50 minutes. That is a weakness. The strength is that the class is organized very well. I like the lesson order and plan. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - tests concepts and understanding instead of memorization
+Weaknesses - sometimes unclear instruction on what to focus on for each test, and test material was very different from lecture/pset material. I and most of my classmates could not have succeeded in this class without regular help from peer tutors who had experience with the professor and class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Amazing support system with Tfs/Peer Tutors/professor 
+Weaknesses: The files in Canvas are very hard to navigate <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The material felt very strange at times, but the office hours, peer tutors, and teaching fellows were a massive help. The problem sets also do a great job of taking you through the course material and reinforcing certain concepts. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course manages to cover very complicated subjects of chemistry in one semester without being too overwhelming. At the same time, though, I felt like there was a lot of information that would have nicely explained the gaps in content. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very interesting. I did like the content. However, I am concerned it did not provide the right step into organic chemistry which I will be taking next. I probably should have taken chem 161, not because I did poorly in this class, but because I feel the chem 161 content is more useful. however, I am still glad I took this class because I still think a lot of what we learned is applicable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: nice teacher 
+Weakness: i did not do well because it was too much content, too little time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I really enjoyed this course and most of the concepts I learned in it were interesting. There were times, however, that I felt that some concepts that were very important were not stressed well enough in lecture. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

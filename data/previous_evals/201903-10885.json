@@ -1,0 +1,158 @@
+{
+ "crn_code": "10885",
+ "season": "201903",
+ "legacy_coursetable_course_id": 53172,
+ "enrollment": {
+  "enrolled": 10,
+  "responses": null,
+  "declined": null,
+  "no response": null
+ },
+ "ratings": [
+  {
+   "question_id": "YC402",
+   "question_text": "Your level of engagement with the course was:",
+   "options": [
+    "very low",
+    "low",
+    "medium",
+    "high",
+    "very high"
+   ],
+   "data": [
+    1,
+    0,
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "question_id": "YC404",
+   "question_text": "What is your overall assessment of this course?",
+   "options": [
+    "poor",
+    "fair",
+    "good",
+    "very good",
+    "excellent"
+   ],
+   "data": [
+    1,
+    0,
+    0,
+    1,
+    2
+   ]
+  },
+  {
+   "question_id": "YC405",
+   "question_text": "The course was well organized to facilitate student learning.",
+   "options": [
+    "strongly disagree",
+    "disagree",
+    "neutral",
+    "agree",
+    "strongly agree"
+   ],
+   "data": [
+    1,
+    0,
+    1,
+    0,
+    2
+   ]
+  },
+  {
+   "question_id": "YC406",
+   "question_text": "I received clear feedback that improved my learning.",
+   "options": [
+    "strongly disagree",
+    "disagree",
+    "neutral",
+    "agree",
+    "strongly agree"
+   ],
+   "data": [
+    1,
+    0,
+    1,
+    0,
+    2
+   ]
+  },
+  {
+   "question_id": "YC407",
+   "question_text": "Relative to other courses you have taken at Yale, the level of intellectual challenge of this course was:",
+   "options": [
+    "much less",
+    "less",
+    "same",
+    "greater",
+    "much greater"
+   ],
+   "data": [
+    1,
+    0,
+    1,
+    2,
+    0
+   ]
+  },
+  {
+   "question_id": "YC408",
+   "question_text": "Relative to other courses you have taken at Yale, the workload of this course was:",
+   "options": [
+    "much less",
+    "less",
+    "same",
+    "greater",
+    "much greater"
+   ],
+   "data": [
+    0,
+    2,
+    1,
+    1,
+    0
+   ]
+  }
+ ],
+ "narratives": [
+  {
+   "question_id": "YC401",
+   "question_text": "What knowledge, skills, and insights did you develop by taking this course?",
+   "comments": [
+    "The course teaches the fundamentals of Verilog and using AWS cloud servers for running custom logic. Emphasis on creating your own design and debugging \/ simulation to get it working. In addition to AWS's FPGA tools, you learn using Vivado and iVerilog for simulation \/ debugging. The proposed projects and talks throughout the semester are all very interesting and correspond to creating designs that may have a significant impact now that FPGA's are easily accessible at scale.",
+    "A basic introduction to the Verilog hardware description language, the AWS computing platform, and some tools for working with FPGAs in AWS.",
+    "I learned quite a bit of Verilog, and a lot of running FPGA simulations on AWS. This was the first project based course I have taken at Yale, so I learned a lot about how to push a project forward and to be realistic about goals and deliverables. After the first few weeks, the lectures are not related to assignments, but thankfully there are only a few homeworks at the beginning before you start learning about how FPGAs work at multiple levels of abstraction and work exclusively on your project and a few tutorials meant to help you with your project.",
+    "I learned a lot about FPGAs and how to program them using Verilog. I also used how to properly load the program onto FPGAs on Amazon AWS."
+   ]
+  },
+  {
+   "question_id": "YC403",
+   "question_text": "What are the strengths and weaknesses of this course and how could it be improved?",
+   "comments": [
+    "My only disappointment is that much of the content necessary for working on the project was released a bit too slow. I think the axi tutorial for running custom logic on the cloud was released a bit too late - I think a lot of people forgot that it was released right before Thanksgiving break and didn't check until afterwards. There was also a huge gap in time where work sort of fell off - basically between the fourth pset and starting to work on the cl adder tutorial there wasn't a crazy amount to do. Granted, the verilog for the project was written and put together, and ran in sim on iVerilog, and other tutorials were done,but the work was less than expected during those couple of weeks. I think by releasing the axi tutorial earlier, people will have more time to debug the design, rather than leaving it for the last two weeks of the semester and trying to cram in everything. Also, perhaps people missed the idea on this, but I think it should be emphasized to simulate the design in Vivado earlier in the semester.",
+    "The main strength of this course is the hands-on experience working with F1, which we got to towards the end of the course. This process is very non-trivial, and there don't seem to be a lot of great online resources to guide you through this process, so having labs that walk you through it and the help of the course staff as we set things up made this process much more painless. The lectures of the course seemed poorly organized much of the material seemed to be repeated week-by-week, giving the impression that there wasn't enough material to really cover in a course. Lectures would consistently end 15-30 minutes early because there was not enough material to cover. I understand that the lectures were following the structure of the Verilog textbook chapters, but in my opinion, it might have been more useful to cover all of Verilog in the first week or two with more involved hands-on labs, and then go all-in on the FPGA material for the rest of the course. I found the earlier lectures on F1\/FPGAs to be repetitive as well I think the later lectures on research directions in FPGAs were more interesting, and would have preferred to have just a single introductory AWS lecture and then move on to more research-based discussions. A more in-depth discussion of FPGA architecture would have been interesting to me as well, the treatment of this material in this year's lectures felt very rushed and shallow.",
+    "There is a lot more that I feel could have been done with the verilog portion of the course, however that may be outside the scope of the class. It is called \"Cloud FPGA\" after all, and we got plenty of that instead. Since all our hardware designs are created in verilog, teaching it is fundamental to making the class accessible, however our homework assignments were all straight from a textbook. If this course is taught in the future, novel assignments or perhaps a mini-project to teach the fundamentals of verilog could better serve as a foundation for the project. One strength that I want to emphasize is the professor's willingness to sit down and look at your code and debug it with you. In initial project meetings he even helped us understand the hardware block diagrams that served as a blueprint for our project. I've never seen anything like it before in my time at Yale!",
+    "This course was very interesting and the projects and homework helped a lot with understanding the material. A weakness of this course was that the information needed to complete the final project was uploaded late and so it made it a bit more difficult to finish the project on time."
+   ]
+  },
+  {
+   "question_id": "YC409",
+   "question_text": "Would you recommend this course to another student? Please explain.",
+   "comments": [
+    "Yes, it's a fun course that teaches you about a pretty new technology for FPGA's that's making them accessible at scale. This may have a significant impact in a variety of fields that require \/ may benefit from custom logic computing solutions (crypto, cryptocurrencys, machine learning, ect.). The projects you can work on all relate to these fields.",
+    "I would not recommend this course to another student in its current iteration. The lectures were repetitive and rehashed a lot of the material covered in the textbook; read the first few chapters of the Verilog book and a blog post on Amazon AWS and you'll have covered the first 3\/4 of the lectures in this class. Hopefully Professor Szefer can find ways to expand the content covered in this course in the future to improve the course.",
+    "Yes, and any other courses taught by Professor Szefer! The intro class he taught gets mixed reviews, although I thoroughly enjoyed it and learned so much, as I did in this class. If you want more computer engineering project experience, and a foundation to preparing for any Verilog\/AWS-involved internship or job, this is a perfect class for that.",
+    "I would definitely recommend this course to other students that are interested in FPGAs and their future in the cloud."
+   ]
+  }
+ ],
+ "extras": {
+  "subject": "EENG",
+  "number": "428",
+  "section": 1
+ }
+}

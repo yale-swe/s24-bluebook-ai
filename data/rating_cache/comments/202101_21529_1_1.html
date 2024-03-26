@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>72</strong> </p></li>
+<li><p>RESPONSES: <strong>62 </strong> </p></li>
+<li><p>DECLINED: <strong>4</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>2 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2021-Spring</strong>
+     
+    
+         
+        CHEM 175 01 
+        Organic Chem for First-YearsII 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 21529   <strong>Term:</strong> 202101</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course time was way too early for students in different time zones. 75 minutes of lecture at 6 or 7 am twice a week, every single week, is brutal. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I believe that changing the style of PSets to a less stress-inducing and learning-focused format would improve the experience. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I swear, there was zero communication between the professor and the TAs/peer tutors. There were so many problems assigned in the PSET that were not covered until later in class (e.g., Baeyer-Villiger, Wittig reaction, malonic ester synthesis). Test content was fair and I appreciated having 75 minutes rather than the 50 minutes that wed get in 174, though Im pretty sure there were several people who cheated on them this year because they were held over Zoom, so fair can only go so far. This class is curved up to a B+/A- average, so I guess thats not terrible if youre doing average in the class. There was only one TA that gave practice problems reflective of the exam, and there was one TA who grade significantly harsher than the others, but thats probably not going to be applicable in future years. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: THE PROFESSOR!! In terms of organic chem, Prof Spiegel is the best professor you could ask for. The class is perfectly-paced, and he is very thorough and clear in his lectures. This class is not a memorization class - you actually LEARN about organic chemistry. Prof Spiegel is also very welcoming and open to questions. He makes time to chat with students and holds review sessions before every exam. Beyond teaching, he is also a terrific human. He is so relatable, funny, and approachable. It makes for the perfect class. 
+Weakness: NONE <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There was some miscommunication between TAs and the professor that made some logistical things confusing, and sections between TAs were very different. TAs and peer tutors were a great help. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: TAs really carried, and the weakly discussion sections really helped to solidify the material covered in class. Also the extra sessions that some of the TAs conducted helped a lot in exam preparation.
+
+Weaknesses: The practice exams sometimes did not match the actual exams, which was only concerning for the final exam. At times I felt lost as to why we were covering a certain subject, and for the greater half of the semester we didn't follow what was on the syllabus. The pacing at times was also kind of slow, especially in the beginning of the semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: A lot of opportunities for learning and studying, good support network (peer tutors were always there to help). TFs were very dedicated and helpful.
+Weaknesses: It felt like there was a little lack of communication or organization between the professor and the TFs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The online lectures were chaotic and the professor was often not prepared/showed up late. He explained reaction mechanisms well, but the PSETs and exams were incredibly difficult and the material covered in lectures was not enough. We rarely received guidance on how to study for this course and it was hard to get a sense of how prepared we were before exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I learned the most through the office hours held weekly with peer tutors. They really did a lovely job breaking down course material into more simple, easy-to-understand terms. I also thought the course was well-organized, and I thought that the problem sets allowed me to grasp material a bit better. I thought exams were significantly more difficult than problem sets, examples in class, and practice problems. I personally believe that neither the totally flipped classroom approach nor a standard lecture is the best format of the class, but rather a mix, explaining concepts and then providing more examples of each reaction. Lectures often went into tangents, which were sometimes interesting, but not always very relevant and often just made the concepts more confusing for me. I really think focusing on explaining the concepts and providing a couple examples, especially for more complex/difficult reactions would be helpful. Often I found myself making mistakes in assignments because I did not fully understand the rules or conditions of reactions.  Additionally, I think that the discussion sections could be redundant at times, and it would be nice to see the sections catered a bit more towards students' needs -- addressing common pitfalls, practicing with examples similar to those on assignments, and really explaining the "why" behind some of the key reactions. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A major weakness of the course is that students are expected to intuit whether or not a certain reaction or mechanistic step will take place, even when no analogous processes have been presented in class. Worse, much of organic chemistry is educated guesswork, and it's extremely frustrating as a student when the TAs, professor, and peer tutors all disagree about the answer to a practice problem and none of them can definitively prove the others wrong. That being said, I did get better over the course of the semester at making these educated guesses, but I wish this had been through specific explanations rather than a gradual process of pattern-recognition on what types of answers tended to be correct. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Sometimes, I felt as if the exam content was disconnected from psets and what was being taught in lecture. Specifically, exam 2 contained a lot of mechanism questions but we had not done much practice with that prior to the exam. It was only after exam 2 where we had extensive practice with mechanisms on the problem sets. 
+
+Overall, it was a well-taught course and I could tell that the professor cared about our learning and well-being. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lecture format was not very engaging over Zoom, but Professor Spiegel tried to make it more interesting with breaks which was nice. There was a lot of support in terms of peer tutor study halls and discussion sections, which was very helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Much of the weakness came from the virtual aspect of the learning environment. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: There is no homework other than 6 psets throughout the semester, so the relative day-to-day workload is pretty small if there isn't an exam coming up. The lecturer also tries to be engaging with the students and includes a break in the middle of the lecture to lighten the mood.
+
+Weaknesses: This isn't necessarily a weakness persay, but the exams and problem sets will challenge you, ESPECIALLY the exams since they are under time pressure and you can't simply go to office hours during an exam to get help on how to solve a problem (you can do that for psets, but obviously not during an exam). Some questions on the exam will feel impossible and sometimes the molecular behavior in the mechanism will also look unfamiliar, which may throw you off during that exam. In fact, for this semester, in my experience, the exams always had at least one question like this, where one has to really think in order to solve the question. Suffice it to say, the exams are hard and you may do worse than you had hoped coming into the exam - the answers aren't always straightforward and you will be challenged. Some of the TAs also grade harshly on the exams, which has definitely happened to me at least twice this semester, so beware. However, the exams are curved though and you do get one exam drop, which is useful to know if you happen to receive a particularly bad grade.
+Personally, I stressed a lot whenever an exam came up because of the difficulty level of the exams, if the difficulty level for these exams could be lowered, that would be nice for future students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: TAs were very helpful and there were lots of opportunities to get help. 
+Weaknesses: Lots of miscommunications between the professor, TAs, and peer tutors on solutions to practice problems as well as what to know for the exams. Large lecture with no group work wasn't great for engagement. Very hard to gauge the level of difficulty of the exams because it wasn't usually like the practice exams or the psets so it felt like we were going in blind sometimes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: nice, funny professor; TAs are good at explaining material; professor did study sessions before tests; peer tutors were helpful 
+Weaknesses: there are a few weaknesses to this course. For one, the tests often were often more complicated than the material we covered in lecture. In lecture, we only covered the basic reactions, while the tests sometimes had mechanisms that we had never heard of in lecture. The TAs sometimes covered this extra material in the discussion section, but I would have appreciated practicing coming up with new mechanisms in lecture, which often was chalked up to having "chemical intuition." Second, I thought there was somewhat of a disconnect between what the professor was saying in lecture and what the TAs were doing in section, which could sometimes be seen in the grading or writing of assignments, especially the final exam, which was described very differently and ended up being quite confusing. Third, in the grading sometimes I had questions about what I could have done better, but I sometimes did not receive a clear response from the TA in charge of that question, or even a response at all. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class was very disorganized and unnecessarily stressful. Professor Spiegel, the TAs, and the peer tutors often explained concepts in a contradictory manner. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Better Organization <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A more clear curriculum would be appreciated. I felt that especially toward the last part of the course, most of lecture was just bringing up random reactions and not really exploring the in-depth rationale behind the proposed mechanisms. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very informative and I learned a lot. However, at certain moments, it felt as if we were just going through a list of reactions and engagement dipped at these moments. It is also certainly a lot to learn, but not unmanageable by any means. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Orgo 2 was the most intellectually course I took in my first year but I absolutely loved it. The lectures were easy to follow but the exams were much harder and more complex than any of the seemingly facile problems we discussed in class. As a result, there was a lot of self-learning from textbook, the internet and study groups that was necessary to do well. However, this form of active learning was very rewarding personally  that might not be the case for everyone. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I enjoyed the interactivity of the class and the applications of what we were learning that were discussed during class <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Overall, organic chemistry is a difficult course in general. Lecture was really more of a way for Prof Spiegel to let us know what we needed to learn and teach ourselves after class. However, given the sheer volume of reactions we need to learn over the semester, this really might be the only way to teach, even if it wouldve been nice to have time to digest material during class rather than scribbling down things to learn later. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Grading felt harsh at times and there was a disconnect between the Professor and the TAs when it came to the administrative portions of the class (grading etc, test topics etc.) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: peer tutor hours were helpful and the material was interesting if you understood it. 
+Weaknesses: the professors and TAs were not super responsive when reaching out for additional help or resources. The professor had a tendency to ramble during lecture and often was unaware what would be covered on the exams. Remedying the reactions covered in the book with what was in section and lecture was often difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - The problem sets were good, and the TFs and TAs were very helpful. Prof. Spiegel was engaging during lecture despite the Zoom format. 
+Weaknesses - Sometimes the slides would be difficult to find after lecture. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course covered a lot of material quickly and effectively but did not do much to make sure that different material was connected and everyone was on the same page. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: For what organic chemistry seems to be about, Spiegel does a decent job of teaching it. He has a practical understanding of how reactions work and knows their real-life applications, which were helpful and interesting to know (I found them useful but some people thought of these as random tangents). Problem sets were both fair in difficulty and length; so were exams. In general, the class does not feel too overwhelming. Also, a lot of help is available through peer tutors, section, review sessions, etc. 
+Weaknesses: While I thought Spiegel did a decent job, he was very disorganized and seemed to put little effort in lectures. I think he pretty much always taught lectures from his bed, and many times it seemed like he woke up right before class. Often he would go over mechanisms for reactions without explaining fully the driving forces behind it, specific details, etc. Also, we were never taught some material (such as protecting groups), but at some point we were just expected to know it. But overall, the weaknesses are not overwhelming, I learned a lot about orgo, and the class is pretty reasonable. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Helpful professor and TAs but more test level practice questions would have been helpful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of this course mainly lies in the clear expectations of what we are expected to know through practice exams and the discussion sections for the most of the course. However, the course had many weaknesses. I think the lectures were too general as in the specific ways to utilize the concepts were not discussed enough because when the exams and psets came, I felt not prepared enough to use the knowledge we learned in the lectures to answer the questions. More examples would've been helpful. The lectures are mainly made up of reactions and mechanisms that were simply given to us in a way that made memorizing them the main way to study. I ended up thinking that memorizing all the reactions we learned in class was a foundational step in order to do the higher level thinking that would enable me to answer the exam questions. Thus, I would have preferred an underlying mechanism or concept behind all the information given in class mentioned in the lecture to help remembering the material in a useful way. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course provides a good introduction to organic chemistry. However, the lectures were a little unrelated to the actual exams often, and the relevance of the lectures to the tested content could be improved. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is awesome, you learn so much. The only thing that can be improved is not to backload so much. There were so many reactions that were thrown at us that we could not possibly in a short stretch. Hurry over alkenes and Diels-Alder which we already learned most of and then take time on examples of the named reactions later, especially seeing additions/condensations in synthesis problems. David Spiegel is awesome <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: material is well taught with applications in the medical and biological sciences; helpful anecdotes are provided such that there is clear use of the material in real world applications. Professor Spiegel taught the material very clearly and effectively. 
+
+Weaknesses: there needed to be a more equitable grading system, such that smaller or trivial errors took off 1/4-1/2 the points of the question. Exam rubrics should be based on knowledge of the material rather than the ability to copy down structures exactly correctly between steps. There needs to be set proctoring from the first exam onwards, in breakout rooms, as other classes have done in during this past semester, and every student should be required to sign an honor pledge on each individual exam. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One big strength was the fact that the course really encouraged asking questions. One weakness was there wasn't alot of cohesiveness between the TA's. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: the discussion sections were very helpful for clarifying concepts; Weaknesses: exam questions were often very hard and the grading was not particularly forgiving if a mistake was made <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Discussion section was extremely useful. However, problem sets should have been graded prior to exams (with time to spare); having no sense of whether you were doing problems correctly made it extremely difficult to prepare for exams. Answer keys should also have been released for problem sets and exams; it's hard to learn when you're told what you did wrong but still don't grasp how to do it right. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was very in-depth, but problem sets did not correlate well with the exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The lectures were not conducive to explaining course material on PSETS or exams. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

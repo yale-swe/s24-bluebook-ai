@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>94</strong> </p></li>
+<li><p>RESPONSES: <strong>77 </strong> </p></li>
+<li><p>DECLINED: <strong>3</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>6 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2021-Spring</strong>
+     
+    
+         
+        CPSC 323 01 
+        SystemsProgramng&amp;ComputerOrgzn 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 21986   <strong>Term:</strong> 202101</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Office hours could often get clogged, and the appointment system was an alright solution but the appointment times were too short to get meaningful help and often ended up rolling over into the following session. Some of this will be solved with in-person office hours, where multiple people can have the same question answered at once, but maybe offering longer appointments could additionally ease the burden on regular office hours <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The material is really interesting and vital for CS majors to understand at a low level. All the TFs and ULAs are very helpful at office hours, and you can always get help if you need it. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> na <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: incredible professor, well-crafted content. Weaknesses: some problem sets felt like they did not align very well to what we were learning in class. This was not a big deal, since the p-set specs were often quite comprehensive, but it would still be nice to have more alignment in this regard. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> If its not online <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class was overall well thought out and designed nearly perfectly. It also spanned content that Yale offers in more in depth courses, which really made this course a great jumping off point to try things like the OS class. I also loved the teaching staff, all of which were extremely encouraging and helpful. Its really hard for me to come up with any critique at all because this class was most definitely the best class Ive ever taken at Yale. One thing maybe would be having one running course notes document, similar to what aspens has for 202. Its helpful for studying when its all laid out concisely in one place. Another thing would be emphasizing growth centric grading where possible. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The psets are OK and I think the average time spent on each of the 5 is something like 20 hours. There is a lot of office hours support too and the teaching staff are very responsive. 
+
+A weakness is I think the course is really ambitious in the breadth and depth of material it is trying to cover, which makes it a hard course. Also, even though we had lectures, it felt like I taught myself 80% of what I learned in this course by doing the psets. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Prof Abhishek is an amazing instructor. He lectures well and explains concepts clearly, is responsive and encouraging towards student questions, and answers emails very responsively and in a detailed manner. His assignments are closely tied to lecture content and elevate students' understanding and learning of the material. He cares for students and repeatedly reaches out to see if anyone needs help and to encourage us. He makes accommodations for students amidst a challenging semester. The problem sets are generally clear and fair, and they weren't as time-consuming as others make it out to be. Exams were challenging though but the curve is fair. Good help is given at office hours by the teaching staff - Richard, Karthik, Linc were all very good at responding to questions. Karthik was very active on Ed and that's much appreciated by all students.
+
+Weaknesses: Not many, but one issue is the some TFs were very unprepared during office hours. For example, Ketaki could not answer any of my questions during her OH sessions that I attended, was often lost as to what our questions are, often made wrong assumptions about the project specification which clearly shows she didn't read or understand the projects, was not active on Ed at all, and was often rude or unapproachable to students during office hours. Her suggestions were often very generic and unhelpful, for example suggesting "use the debugger" without providing any guidance or further elaboration. This caused significant anxiety and frustration amongst students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: content is very interesting and applicable; problem sets are well-designed.
+Weaknesses: exam questions were not always clear; sometimes it feels like we're jumping around from lecture to lecture, and sometimes the problem sets are more helpful than the lectures for learning. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Honestly, even with the intense workload in mind, I don't really see any weaknesses. The heavy workloads is there for a reason, and it really does transform you into such a better programmer. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength of this course is definitely in the teaching staff. Abhishek is a great professor, and he genuinely cares about his students learning the concepts. The TAs also do a good job of walking through the problem sets and providing helpful pointers of how to tackle the assignments. They were also all really responsive on Ed, which is almost necessary for a work-intensive lecture course like this. The material is also good to know in general. I feel like I actually gained a deeper understanding of how computers actually work, and how software interacts with hardware on a low level, which I didn't really know much about before taking this class. I also actually enjoyed the problem sets--even though they were long, I felt like I became better at programming through them. Lectures in the course were also strong. Abhishek is always very clear in his discussion, and it really shows how knowledgeable he is about the topics. Overall, even though most people taking the course have to take it for the major, I still probably would even if it wasn't required, because I think it's such a fundamental course for CS. No real weaknesses--just be prepared for hard exams and long problem sets. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The only problem with the course is how difficult it is. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Abhishek is a wonderful professor. The material is extremely interesting, at least if you like to know how computers actually work. I really liked how we were actually exposed to a lot of complexities that may have been hidden from us before. We actually gain an insight into how things work without so much watering down. The psets were really cool as each explored a different aspect of systems programming. The final project which was entirety without any TA/ULA help was a really good chance to actually work through problems on my own even though some of the bug fixing was extremely painful on my own. 
+
+Weaknesses: Tests were kinda hard. Obviously its a ton of work. I watched every lecture like 3-4x and spent so so much time on the psets and sometimes my grades still weren't as perfect as I wanted them. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Abhishek is an incredible professor. He explains topics very clearly, and even when we asked him questions on-the-spot he often gave us very clear and succinct answers. His teaching method of using a mix of slides and an iPad to annotate was great. The teaching staff was also great, and for the most part they were really helpful during office hours. All classes/walkthroughs being recorded was another huge strength. Some of these concepts were pretty tough for me to understand, so being able to watch them be explained multiple times were a big help. Abhishek's overall attitude towards teaching us also just made things great; he really cares about his students and balanced leading a class with a high workload with making sure we had adequate support. Overall, as much work as this class was, I'm glad I took it; it definitely made me a much stronger programmer and computer scientist in general.
+
+Weaknesses: Office hour queues could get pretty long. Abhishek was open to our feedback about this, however, and did change it to a half-open, half-appointment system, which worked out pretty well for the latter half of the semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - Abhishek is very passionate about the material and explains concepts very clearly. Weaknesses - the course can get bogged down on minor details (e.g. ELF files), and the loss of time causes us to skip important topics such as synchronization. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I definitely learned a lot from this course. The projects were at a reasonably challenging level but the time spent was mostly worthwhile, with the exception of grueling debugging sessions. The lectures were chock-full of information and Abhishek did an excellent job tying various concepts together, as well as emphasizing their general significance. However, the exams were quite difficult (but graded on a curve) and some problems required knowledge that was only tangentially covered in class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was well organized. Wished there was more time for corrections on later projects. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class is a lot of work. More work than I think any 1 credit class should be. That aside, the class is extremely well put together. A lot of information about basic computer organization was put into the course so it was always very fast paced. One thing that could be improved is having a little more clarity on the specs. While the specs were long, sometimes there were ambiguities that made the projects even harder than they already were. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course was incredibly well organized, with plenty of opportunities for students to learn and improve. There were also tons of office hours that made it helpful to get help at almost any given time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The Professor is amazingly charismatic and a terrific lecturer. Goes out of his way to accommodate students with expected and unexpected difficulties and to give everyone a chance to earn a good grade. Problem sets actually illustrate the course material and force you to think about what really happens when your code executes.
+
+There is still a bit of a divide between what you learn in the course and the final, but it has improved over the course of this semester. You would learn how systems programs for Unix on x86-64 work, but you really needed to internalize the overall principles and be prepared to analyze how a system with an arbitrary architecture would work. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Prof. Abhishek is the greatest strength of this course. He is an excellent lecturer, a kind person, and a great advisor. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Definitely Professor Bhattacharjee. He's an incredible professor.
+Weaknesses: I wish the quizzes and projects should be due on alternate weeks. Although the quizzes were not particularly challenging by themselves, they added to the stress already caused by the projects. I also didn't like the regrade policy in which we could redo a project for 33% of the lost points. The course was time consuming as it is, and with another project due (as well as assignments in our other courses), the potential time that would be spent on fixing a project was stressful. Once a project is turned in, that should be it. I liked how Prof Bhattacharjee added a policy that the lowest project grade can be replaced. This can give students a chance to make up for a low grade, rather than having to juggle redoing a project with other responsibilities. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> There was a lot of content to get through, which made it a little bit stressful to study for the exams. A weakness was probably the lack of review for the first midterm. However, Abhishek pivoted to doing more review for the second one, which was super helpful to facilitate learning. The course is really well organized and a great overview of computer systems. The final project, though, was a little buggy and disorganized and there wasn't many office hours for it, which made the end of the year pretty stressful. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course was very difficult, but was strengthened by a robust support system. The teaching staff were caring and supportive <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Abhishek. He is a phenomenally caring instructor and really truly wants everyone to succeed. Him and the TA's give you every opportunity to bump your grade back up and succeed.
+Weaknesses: lectures sometimes covered a lot of material too quickly, when flipping through slides at mach 10. Abhishek addressed this fairly effectively by going through material more than once if necessary. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths - great lectures and engaging to learn about content 
+Weaknesses - workload is very high and overwhelming. Exams are extremely difficult and psets take up most of your time <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Abhishek is an amazing professor, he explains things very well and is both open and good at responding to questions. I very much enjoyed the topics as well as the psets (more on that later), I think the complexity of computer systems is fascinating and Abhishek does a good job of opening the door to these higher level topics. Lectures were full of information, and I enjoyed them. You are able to get 1/3 of the points that you lost on a pset back and that is wonderful. I would like to add that I did enjoy the class for the most part, and the weaknesses I will go into are more about the structure and assignments of the class. Weaknesses: First the exam format. The exams are super long, I was unable to finish both of them and was left reeling after each one, because I had no way of knowing how it went and had to pray that people did worse than I did. They are super stressful and I do no believe they're a good way to test my knowledge on the topics because of the stress and pressure that comes with the exam and it's tight time constraint. Abhishek mentions how the length helps us get more points because missing a questions costs less overall, but I personally do not agree with the time constraint imposed as it stresses me out too much to do well as I don't know what questions to try or skip. The Psets are hard. But not only are they hard to get through and an enormous time commitment, I felt like I couldn't;t work with others, and there is only so many times I feel like I can reach out to TFs or ULAs for help and guidance. Some of the specs also felt vague and obscure as they tried to not give you the answer but still explain what had to be done, and it could be confusing at time what could and could not be done. I didn't like how there was no feedback on your assignment. I know it would be hard to implement as we have hundreds of lines of code from hundreds of students but it seems hard to improve if you are unable to know where you went wrong. I also don't know if there is partial credit on the hundreds of lines of code we submit as it was mentioned at times but also feels hard to accomplish while updating grades in a timely manner. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course is very difficult. However, the course staff work hard to make the material approachable and to provide safety nets. Abhishek is a great lecturer and really in touch with students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course definitely makes you a stronger systems and general programmer. Abhishek explained the different concepts very clearly during lectures and the projects made sure that you had a good understanding of these concepts when coding them. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course is very well taught and the projects are interesting to take up. The ULAs are helpful and Prof. Abhishek is amazing as well. The workload is a lot though, but we received extensions and breathers in between. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strenghts: abhishek lectures. enjoyed the office hours about cs and society. 
+
+Weaknesses: unecessarily large amounts of work, unecessarily difficult final. The inability to reliably generate logs for the final is a travesty. If we're debugging 30 lines of text at a time, the final just becomes a pain. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Abhishek is brilliant and is excellent at facilitating a proper learning environment. Weakness: The system for resubmitting psets is almost impossible to manage because the private tests arent that clear. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Abhishek's lectures were very engaging, and one of the strongest parts of the course. The office hour sessions were also very helpful whenever I went, and I felt that I could always get my questions answered in a good way. However, I would say that the biggest strength of the course was Abhishek's willingness to respond to student feedback and implement changes in the way the course worked. For instance, at first it could be hard to see somebody in office hours because the queues were so long. In response, the teaching staff seemingly instantly developed an appointments system for the next problem set. I think this willingness to improve and respond to feedback was incredibly important.
+
+I would say that the problem sets felt unbalanced, at least to me. I think they were supposed to take roughly equal amounts of time, but some probably took me twice as long as others. I imagine this differs between students, but it was sometimes difficult to not be able to predict how much time I'd need to spend on a problem set. There was also some mixed messaging on the last problem set, where at first they said there would be no office hours but then changed this to limited office hours. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: The biggest strength of this course by far is the instructor. Prof. Abhishek does an excellent job explaining concepts in lecture and is always willing to answer students' questions. Another strength of the course is that it provides a fairly good conceptual link between hardware and software; this is particularly helpful for understanding concepts such as correctness and performance. 
+
+Weaknesses: While I understand the intent behind offering opportunities for corrections, I found it difficult in practice to find the time to do them while balancing the new assignment and work for other courses. I am not sure whether this was the experience of many other students, but if it is a common problem, perhaps a different way of doing corrections or demonstrating one's improved understanding may be beneficial. Furthermore, I would have preferred a little more feedback on coding style (maybe this could even be an evaluated component of the PSETS)? <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Was taught well and plenty of support when you needed it. Would have been useful if more of the information was on the powerpoint slides or if the annotated powerpoint slides were uploaded to canvas for reference. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I guess one of the weaknesses would be that it is very tough, but that could also be one of its strengths. Though it is very challenging, you learn a ton. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professor was great and the projects were challenging but fun. Preparation materials for exams could be improved a bit. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> To be completely honest, none. I do however think that I would have done better if there were in-person office hours so I could work through problems with other students in my class. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths:
+    - Professor Bhattacharjee understands how students learn. He organized the class such that the content was difficult yet manageable. He is a unique professor who has both subject matter expertise AND the gift of teaching. If Operating Systems wasn't required for the CS major, I would not have taken this class. Now that I have gone through the course, I realize how large of a mistake that would have been. Professor Bhattacharjee taught with an emphasis on clarity without sacrificing rigor. 
+    - Teaching staff were knowledgeable and (for the most part) great at communicating that knowledge. Aidan was especially skilled at asking the right questions to lead you to the solution as opposed to giving hints that took the fun away from the learning experience.
+    
+How it could be improved:
+    - The teaching staff were stretched thin. Hiring more staff in future semesters, especially when the course is held in-person, would be wise. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The class is very rigorous and covers a lot of material. It's a good segue into any other computer science course. The class is very demanding though. One suggestion is to provide solutions to past psets or strategies to solve them. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Way to much homework <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This is a really great course taught by an amazing and understanding instructor. It's constantly evolving for the better. I personally really enjoyed the content; though it was definitely extremely difficult to grasp, we had plenty of practice with it through examples in class, quizzes, and projects. I thought the projects were super difficult and time-consuming, but generally pretty interesting and fun (if you're not doing it within 48 hrs). Abhishek is also looking to make this new reading discussion group for social/historical context of CS concepts, which I think is a much-needed and wonderful addition to the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> An immense amount of material is presented and must be rapidly synthesized. I think perhaps removing a project (problem set) or the final project, which I felt although did touch upon an important concept that we went over, is a good idea. Otherwise, there is just too much stuff to be done in one semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Abhishek was probably the highlight of this course! He made very difficult material feel approachable and possible in how he presented it and how he made sure to follow up on it. 
+
+Weaknesses: Zoom is probably the main weakness of this course, as it made it difficult to interact with other students which I think is an important part of the PSets for classes like this. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The course is difficult but well planned with the lectures and problem sets complementing each other. I felt Problem Set 2 with malloc came a little earlier than we were ready for it. Problem Set 5 touched back on similar concepts and made so much more sense. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This course had a particularly strong virtual lecture format in comparison to other lectures I attended this semester. Professor Bhattacharjee was engaging, paused for questions and prompted student involvement. Virtual office hours were also particularly effective. Private zoom sessions were offered both as an on-demand, queue option as well as an appointment based option. Success in this class is contingent on getting support from the teaching team, and these two options, as well as the software built by the department for this purpose, were really great at getting this support. In other classes office hours were held as just one big zoom session, which made it hard to get individual attention or to work without being distracted by other interactions going on. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><span class="currentStep">2</span><a class="step" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">3</a><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=2&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]--><!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]--><!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]--><!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]--><!--[if (gt IE 9)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="/oce-viewer/static/css/ocecq.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/errors.css" rel="stylesheet" type="text/css"/>
+<link href="/oce-viewer/static/css/navigation.css" rel="stylesheet" type="text/css"/>
+<script src="/oce-viewer/static/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.google.com/jsapi" type="text/javascript"></script>
+<script src="/oce-viewer/static/js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="/oce-viewer/js/main.js" type="text/javascript"></script>
+<title>OCE Viewer</title>
+<meta content="main" name="layout"/>
+<style media="screen" type="text/css">
+    #status, .question{
+        background-color: #eee;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        width: 12em;
+        min-height: 10em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+        width: 14%;
+
+    }
+
+    .focus {
+        -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        -o-transition: all 1s ease;
+        -ms-transition: all 1s ease;
+        transition: all 1s ease;
+    }
+    .focus:hover {
+        /* border: 1px solid #000; */
+        /* border-radius: 10%; */
+        /* background-color: gray; */
+        /*width:250px; */
+        }
+
+    #cList {
+        float: right;
+        width: 74%;
+        background-color: white;
+        border: .2em solid #fff;
+        margin: 1em 1em 1em;
+        padding: 1em;
+        min-height: 13em;
+        float: left;
+        -moz-box-shadow: 0px 0px 1.25em #ccc;
+        -webkit-box-shadow: 0px 0px 1.25em #ccc;
+        box-shadow: 0px 0px 1.25em #ccc;
+        -moz-border-radius: 0.6em;
+        -webkit-border-radius: 0.6em;
+        border-radius: 0.6em;
+        float: left;
+
+    }
+
+    .ie6 #status {
+        display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
+    }
+
+    #status ul {
+        font-size: 0.9em;
+        list-style-type: none;
+        margin-bottom: 0.6em;
+        padding: 0;
+    }
+
+    #status li {
+        line-height: 1.3;
+    }
+
+    #status h1 {
+        text-transform: uppercase;
+        font-size: 1.1em;
+        margin: 0 0 0.3em;
+    }
+
+    #page-body {
+        margin: 0.15em 0.2em 1.25em 0.2em;
+    }
+
+    h2 {
+        margin-top: 1em;
+        margin-bottom: 0.3em;
+        font-size: 1em;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: 0.25em 0;
+    }
+
+    #controller-list ul {
+        list-style-position: inside;
+    }
+
+    #controller-list li {
+        line-height: 1.3;
+        list-style-position: inside;
+        margin: 0.25em 0;
+    }
+
+    @media screen and (max-width: 480px) {
+        #status {
+            display: none;
+
+        }
+        /*
+
+      #page-body {
+          margin: 0 1em 1em;
+      }
+        */
+        #page-body h1 {
+            margin-top: 0;
+        }
+    }
+
+        /*
+        * The pagination controls
+        */
+
+    .paginateButtons {
+        margin: 3px 10px 13px 10px;
+    }
+    .right {
+        float: right;
+    }
+
+    .paginateButtons a {
+        padding: 2px 4px 2px 4px;
+        background-color: #A4A4A4;
+        border: 1px solid #EEEEEE;
+        text-decoration: none;
+        font-size: 10pt;
+        font-variant: small-caps;
+        color: #EEEEEE;
+
+
+    }
+
+    .paginateButtons a:hover {
+        text-decoration: underline;
+        background-color: #888888;
+        border: 1px solid #AA4444;
+        color: #FFFFFF;
+    }
+    </style>
+</head>
+<body background="/oce-viewer/static/images/background.gif" style="background-repeat: no-repeat; background-size: cover;">
+<div id="page">
+<div class="clearfix" id="header">
+<div id="header-topper">
+<div id="header-topper-inner">
+<h2 class="yaleHeader"><a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_header.gif"/></a></h2>
+<div id="searchTools">
+<ul id="yaleHeaderLinks">
+<li><a href="http://events.yale.edu/opa/ChooseDate.jsp">Calendar</a></li>
+<li class="last"><a href="http://www.yale.edu/search/index_a_z.html">A-Z Index</a></li>
+</ul>
+<form action="https://google.yale.edu/search" id="yaleHeaderSearch" method="get" name="web">
+<input alt="Search Yale University" class="sfield" name="q" onfocus="this.value=''; style.color='#000000'; style.background='#ffffdd'" size="25" type="text" value="Search Yale University"/>
+<input alt="Go" class="gobutton" src="/oce-viewer/static/images/search_go_button.gif" type="image" value="Go"/>
+<input name="site" type="hidden" value="Yale_University"/>
+<input name="entqr" type="hidden" value="0"/>
+<input name="ud" type="hidden" value="1"/>
+<input name="sort" type="hidden" value="date:D:L:d1"/>
+<input name="output" type="hidden" value="xml_no_dtd"/>
+<input name="oe" type="hidden" value="UTF-8"/>
+<input name="ie" type="hidden" value="UTF-8"/>
+<input name="client" type="hidden" value="bluesite_frontend"/>
+<input name="proxystylesheet" type="hidden" value="bluesite_frontend"/>
+<input name="proxyreload" type="hidden" value="1"/>
+</form>
+<div id="myContainer">
+<a href="javascript:;" onclick="togLyr('my-menu','1');">
+<img alt="Y-Menu" border="0" id="my-button" src="/oce-viewer/static/images/y_menu_arrow.gif" style="float: left; "/></a>
+<div id="my-wrapper">
+<div id="my-menu" onmouseout="togLyr('my-menu','0');" onmouseover="togLyr('my-menu','1');">
+<ul>
+<li><a href="http://www.yale.edu/">Yale home</a></li>
+<li><a href="http://www.yale.edu/about/index.html">About Yale</a></li>
+<li><a href="http://www.yale.edu/academics/index.html">Academic programs</a></li>
+<li><a href="http://www.yale.edu/admissions/index.html">Admissions</a></li>
+<li><a href="http://www.yale.edu/medicine/index.html">Health &amp; medicine</a></li>
+<li><a href="http://www.yale.edu/work/index.html">Working at Yale</a></li>
+<li><a href="http://www.yale.edu/newhaven/index.html">Yale &amp; New Haven</a></li>
+<li><a href="http://world.yale.edu">Yale &amp; the World</a></li>
+<li><a href="http://www.yale.edu/tomorrow/index.html">Yale Tomorrow</a></li>
+<li><a href="http://www.yale.edu/opa">News</a></li>
+</ul>
+<ul class="lower">
+<li><a href="http://www.yale.edu/gateways/prosp_students.html">Prospective students</a></li>
+<li><a href="http://www.yale.edu/gateways/students.html">Students</a></li>
+<li><a href="http://www.yale.edu/gateways/parents.html">Parents</a></li>
+<li><a href="http://www.yale.edu/gateways/faculty.html">Faculty</a></li>
+<li><a href="http://www.yale.edu/gateways/staff.html">Staff</a></li>
+<li><a href="http://www.yale.edu/gateways/postdoc.html">Postdocs</a></li>
+<li><a href="http://www.yale.edu/gateways/alumni.html">Alumni</a></li>
+<li><a href="http://www.yale.edu/gateways/foundations.html">Foundations &amp; corporations</a></li>
+<li><a href="http://www.yale.edu/gateways/patients.html">Patients</a></li>
+<li><a href="http://www.yale.edu/gateways/visitors.html">Visitors</a></li>
+</ul>
+</div> <!-- /my-menu -->
+</div> <!-- /my-wrapper -->
+</div> <!-- /myContainer -->
+</div> <!-- closes searchTools -->
+<div class="clearfix"></div>
+</div> <!-- /#header-topper-inner -->
+</div> <!-- /#header-topper -->
+<div id="header-title">
+<!--<h1 id="site-name"><a href="/" title="Home" rel="home"><span>Yale Divinity School</span></a></h1>-->
+<div id="school-name" style="float: left;">
+<a href="http://yale.edu" rel="home">
+<img alt="Online Course Evaluation" border="1" src="/oce-viewer/static/images/online.png"/>
+</a></div>
+</div> <!-- /header-title -->
+<div class="page">
+<div class="page-body" id="page-body" role="main">
+<div class="invertedshiftdown">
+<ul>
+<!--<li><a href="/oce-viewer/logout/index" title="New" >logout</a></li>-->
+<span id="tabs">
+<li class=""><a href="/oce-viewer/instructorComments/index" title="Home">instructor comments</a></li>
+<li class="current"><a href="/oce-viewer/studentComments/index" title="studentComments">student comments</a></li>
+<li class=""><a href="/oce-viewer/studentSummary/index" title="Home">eval summary</a></li>
+<li class=""><a href="/oce-viewer/studentViewer/index?keywords=&amp;courseNumber=&amp;subject=&amp;in=&amp;termCode=&amp;college=YC&amp;sort=" title="studentViewer">course list</a></li>
+</span>
+</ul>
+<br style="clear: right;"/>
+</div>
+<div style="width: 100%; overflow:auto;  border: solid 0px;">
+<div id="status" role="complementary">
+<h1>Evaluation Summary:</h1>
+<ul>
+<li><p>ENROLLED: <strong>142</strong> </p></li>
+<li><p>RESPONSES: <strong>113 </strong> </p></li>
+<li><p>DECLINED: <strong>9</strong> </p> </li>
+<li><p>NO RESPONSE: <strong>13 </strong> </p></li>
+<li><p>  </p></li>
+</ul>
+</div>
+<div id="cList" role="complementary">
+<strong>2020-Fall</strong>
+     
+    
+         
+        MB&amp;B 500 01/MCDB 500 01/MCDB 300 01/MB&amp;B 200 01 
+        Biochemistry 
+
+        
+
+
+            <!--p style="font-family: Comic Sans MS; font-size: 17px;"><strong>Q:</strong></p-->
+<p><strong>Q:</strong></p>
+<p>What are the strengths and weaknesses of this course and how could it be improved?<br/>
+<br/><i>(Your anonymous response to this question may be viewed by Yale College students, faculty, and advisers to aid in course selection and evaluating teaching.)</i></p>
+<!--p style="font-family: Comic Sans MS; font-size: 17px;"></p-->
+<p style="float: right; color: #a52a2a;"><strong>ID:</strong> YC403   <strong>CRN:</strong> 12395/12369/11843/11844   <strong>Term:</strong> 202003</p>
+<div id="controller-list" role="navigation" style="border: solid 0px;">
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+<div id="questionContainer">
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: very efficient (low workload, lots of learning), interesting and informative lectures, amazing sections and review sessions, clear format, textbook optional but helpful as desired
+weaknesses: unclear content on exams
+Could be improved by professor being more transparent about exam content and grading <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This class's grade is solely determined by the scores of four tests. That is both a strength and a weakness. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Recorded lectures were helpful for students in different time zones, organization of the content in two sections can make the second segue into the heart of biochem (glycolysis, TCA, oxidative phosphorylation, ATP synthesis + biosynthesis of lipids, sugars, amino acids) hard to adjust to. But in the end the content all comes together, and I appreciated that the focus was never on rote memorization but rather application of concepts. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The timing of grading combined with the grading policy caused some unneeded stress for many students. The "optional" fifth exam truly was not optional, because of the fact that the class is curved. 
+Also, the TAs did not know what the exams would have, which was not very useful, and discussion sections were essentially a sped-up rereading of lecture slides so they became a waste of time to attend. The Piazza page was next to useless as well, as students would voice their concerns or even just biochemistry-related questions and sometimes it took a whole week to get any response from TAs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> For the first half of the course, I felt that the breadth of information covered was a strength, but a weakness was that sometimes that breadth came at the expense of the depth I felt certain concepts needed. In particular, I wish we had spent more time covering specific examples, which I think would have helped to contextualize some of the broader concepts covered; seeing worked examples of math-based problems would have been especially helpful (though I know this can be more difficult in a virtual course). For the second half, I felt that the opposite was true. We spent a great deal of time covering mechanisms in significant detail, though we were often tested on information that I think required other information. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Overall it was good! Very dense course <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: very interesting content! definitely furthered my interest in biology. 
+Weakness: the course is fast-paced to the point where it seems like the instructors do not care much about how we are learning. Additionally, grading in the class seems somewhat arbitrary and inconsistent. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Profs and TAs were not very responsive to concerns and questions of students
+We didn't know the format of the final exam until like a day before, despite asking a bunch <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The professors didn't do a great job at explaining everything in class. They'd skim over stuff that was tested heavily on the exam and then go into detail about things we never needed to know on the exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths: 
+weaknesses: extremely inflexible and unaccommodating which is unreasonable for a pandemic and makes less sense for the actual administration of the class as well, lectures were inconsistent and confusing and it was unusually difficult to thread out central themes to help guide our thinking (this is more so about the second half taught by Breaker than Nachtergaele) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A signficant weakness of the course was the way in which the lectures cover so much information to extreme details. Also, the exams while being adapted for the virtual setting were often too long to be finished in the 1 hour window given. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> This kind of class is very hard over zoom. They couldn't really do much more, it just would've been helpful to be in person, obviously. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths  Prof. Nachtergaele is a god among so-so STEM professors and should be granted tenure accordingly. She's the absolute best  her section of the course was extremely enjoyable (great slides, engaging lecturing, well-organized, I could almost always keep up during live lectures it was so perfectly paced, she gave us a pep talk about the myth of scientific genius and the role of women in science, etc.). I liked the non-cumulative exam format of assessment, but Prof. Breaker should know that a choice between a non-cumulative during election week and a cumulative exam during finals week (when you know. We have other finals/papers/projects to do) isn't a choice at all. Weaknesses  Prof. Breaker's section of the course was much less well-organized. His slides are so overwhelming you have no idea what's important, he goes on mini-tangents that usually make sense after watching the recorded lecture (because believe you me, it was almost impossible to attend live lecture and not get lost. the longest I lasted was 25 minutes) for the second time but just make you feel totally lost in the moment. Generally Prof. Breaker isn't good at contextualizing whatever he's talking about as a combination of the poorly designed slides/tangents, and since this is my first real biochemistry course, I was very often unsure if a process/concept he'd discuss was a part of the overarching process he'd been discussing before or the start of a new process. Another glaring weakness: as the YDN reported (but downplayed), it became very clear that the teaching staff (except for Prof. Nachtergaele who I absolutely don't fault because this wasn't her part of the course and is a new faculty member) had no intention of being understanding about this being a semester during a pandemic and presidential election. Clearly suffering under the delusion that good scientists are ones that are totally disconnected from the world around them, we were expected to just. Study biochemistry. During an enormously consequential election WEEK. Because politics are so unrelated to science that two members of my lab had to shuffle around to different labs because of the Trump administration's immigration policies. Haha. So unrelated. Don't get me started on the sheer condescension showed towards us in the mistakenly uploaded video of (approx. half of) the TF's ragging on us silly little undergrads. I get it, y'all are too smart and above it all to feel sympathy for us. Whoo hoo. Anyway. Again, I reiterate, an "optional" CUMULATIVE final to make up an exam isn't an OPTION; it's a THREAT. Who in their right mind wants to take a cumulative final for a course that is clearly too detail-heavy to allow for cumulative exams during the rest of the semester? Also, thank goodness I did well on the last exam because if I didn't? We got our grades back for the exam 2 days before the cumulative final that would have replaced a potentially bad score, so you'd have to totally rely on the vibes(?) you got from the last exam if you were worried about it being bad. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A major weakness of this course was the teaching staff. I never felt like their main goal was to facilitate learning. I and many others taking this course felt extremely stressed at times. We felt like we were pushed too much and asked to do the virtually impossible when it came to our exam schedules. We were not given good feedback about our learning before the next exam. And when we asked to receive this or have the exam postponed, our legitimate concerns were ignored. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The book was so helpful <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The content is pretty interesting and the instruction was clear for the most part. Sometimes test questions felt a bit unclear or indirect, but this wasn't a huge issue. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think having a few homework assignments throughout the semester would help students make sure they were on-track and understanding concepts. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> At times, the lectures felt a bit rushed as we neared the end of class time. However, I definitely understand how this is likely a result of the virtual format where timing of lecture teaching is drastically different. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The weakness is the amount of support given to students. I didn't feel like there was someone I could turn to when I needed help. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> professors didnt seem to care about us that much...didnt answer emails or give us any feedback on grades <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The profs and TFs were wonderful. The material sometimes got a little too specific to feel relevant. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I appreciated that there was no homework. However, that means there's very little practice to check your understanding of the material. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Final exam was optional, giving students the option to replace an exam grade. It was great that this option could only help you and not hurt you. Professor Nachtergaele is very organized and a great lecturer; her slides very much followed what she was talking about. Exam questions from both Professor Nachtergaele and Professor Breaker were very fair and focused on the greater picture instead of recalling small details. Weaknesses: Grading was not the most transparent due to changes that were made in light of COVID. Based on the fact that the final was not optional, it was unclear how the curve would work for the course and where people would fall. It is my understanding that these changes will be reversed for next semester. Professor Breaker tends to not be the most organized lecturer and he often goes off on tangents. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought the material was interesting, and it was taught well. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The weakness of this class was the fact that it only had four grades  the exams. It would be nice if there were other assignments to help boost the class grade such as homework assignments and quizzes. 
+
+Another weakness was the fact that tests were through canvas, so we never got our tests back with corrections to see what was done wrong. It was challenging getting used to the format of taking tests online in only 1 hour. 
+
+However, making the tests open-note allowed me to not be as stressed about memorizing the material, allowing me to focus more on actually understanding the concepts and themes. I honestly don't know how I was able to take closed-note tests before the pandemic. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It was heavily focused on 5 exams. It could be improved by adding problem sets or practice problems. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: recorded lectures to rewatch, Weaknesses: grading sucks <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Good feedback from instructors and TAs. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths include that TAs are really helpful during review session and discussion sections. Weaknesses are that at times compromise is hard to achieve with the professors and that makes the fact that your grade is determined by only four exams, even harder. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths- lots of opportunities to meet with the professors and teaching assistants
+The weaknesses- the exam format was hard to adjust to <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> strengths - Office hours are super helpful, including peer tutoring (shoutout to Anna!), open-note exams (even though they were still hard)...and the students in the course who always asked questions during lecture (:
+weaknesses - piazza response is slow (and that brews tension!! for both students and teaching team!!); theres a BIG difference in investment between the TAs, like some give out psets and practice problems or prepare elaborate slides that prepare their section way better than other sections which I find unfair (for example, if the TA exposed you to one type of question or focus as you prepared for the exam, you might do better when that type of question shows up on the exam); there must be a better way to transition from Nachtergaele to Breaker or basically into pathways in general - perhaps priming us with practice exam questions so we know what we should be getting out of the enzyme mechanisms. Glycolysis and the citric acid cycle lectures were particularly PAINFUL because it felt like Breaker went nonstop and we were all so overwhelmed when he explained mechanism after mechanism. Perhaps it would be more bearable if he could insert more breaks or applications or something more engaging so it is not too dry. Thankfully the lectures are recorded so the student can go through these at their own pace and give themselves much needed breaks (even though this requires a lot of motivation as well) <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> One strength is the TAs and their dedication to helping us learn the material. A weakness was possibly the speed of the course, as well as the lack of assignments to help with grades outside of the 4 exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strengths of the course were the very knowledgeable Professors and TAs who made themselves readily available to answer students questions. Also, the course was pretty well organized making the content easy to follow and review when studying. The weakness of this course was not enough/poor planning in terms exam scheduling (there was a conflict that surrounded taking an exam the week of the election as well as taking the final two exams a week apart); also the timing of the first exam was too long, but was resolved by being able to drop an exam. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Exams are fair, but I wish they would have given us more than an hour as we were always under a time crunch. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: good details and emphasis on "why" something is happening 
+Weakness: not enough info on the bigger picture of "what" is going on <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> A strength of this course were the lecture slides. They were very detailed and in depth. Also Professor Nachtergaele and Connor (a TA) were great. 
+A weakness of this course was the actual lecture. A majority of the time we spent learning mechanisms which we didn't actually need to know which made the lectures very overwhelming and convoluted. I felt like I learned very little from the actual lecture and spent a majority of my time teaching myself the material by studying the lecture slides on my own. Also this is mainly applicable to the second half of the semester. The first half was difficult but still manageable whereas the second was quite confusing. I don't think this is because the second half of the course "is just more challenging" because it honestly isn't. Glycolysis and the like are very straightforward processes with intuitive steps to get from point A to point B and once you know the idea behind one process you know them all. I think our, or at least my, confusion stemmed from the overwhelming way in which the material was presented. I'm not sure what the course was like in person and if it was better because chalkboards tend to slow professors down (in a good way) and maybe that didn't adapt well to virtual teaching but this was just my take on the semester.
+It could be improved by providing more support for students where the information was distilled and presented clearly- I thought Connor and Professor Nachtergaele were the best at doing this, but the rest of the teaching team continued to use very convoluted explanations. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Both Nachtergaele and Breaker were professors that cared a lot about their students and had a great understanding of the course material. For students who have taken biology and organic chemistry, it was nice to see those concepts applied in concrete ways. Weaknesses: None for the first half of the course taught by Nachtergaele. For the second half taught by Breaker, lectures were dense with reaction mechanisms and slides were busy and disorganized. The information tested on midterms did not match what was emphasized in lectures. Additionally, Breaker always mentioned how diagrams on the slide were wrong; however, it would be much more clear if the diagrams on the slides were correct in the first place. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The optional fifth exam for replacing a lower previous exam is a bit stressful as it seems almost required to compete with other students. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Too much information without clear expectations. The exams are too long for the short amount of time given to take them. The first half with Prof. Nachtergaele was great though; she should be in charge of the course. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Professor Nachtergaele was an amazing, engaging lecturer that really took time to answer live questions. Professor Breaker's lectures were extremely dry and mostly went into biological mechanisms in excruciating detail. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I thought overall this course was taught very well. The first half especially, taught by Prof. Nachtergaele was really engaging. Towards the end of the semester, it was definitely harder to stay focused but not because of Prof. Breaker, I think merely because of the  duration of this semester. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think the weaknesses came from online format but that is something that obviously could not have been changed <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Strengths: Professor Sigrid Nachtergaele. Kind, super smart, great at explaining complex concepts, genuinely invested in her students' success, very willing to offer help outside of class hours. A fantastic professor and even better person. She should be given tenure immediately for singlehandedly carrying this class and Yale MCDB more generally.
+
+Weaknesses: Honestly, Breaker's half of the class. I'm sure he was a great guy, but his slides were busy, his lectures were poorly organized and much too fast, and he would often go on tangents that made it difficult to stay engaged and follow what he was saying. Granted, this was partially because metabolism is just really complicated, but he could have done a lot more to make the material accessible. Also, the class Piazza was barely active; the most activity it saw was when Breaker refused to move the exam we had on the Friday of election week, which was a whole mess in itself. Not a super useful resource. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Weaknesses: The TAs are not very helpful and have limited knowledge of biochem, during the first discussion section my TA said they hadn't taken a biochem class in over five years so they didn't know how helpful they'd be. Furthermore, the grading of the exams was extremely arbitrary and sometimes too picky; the questions are very general and the desired response is sometimes to specific and not hinted at in the actual question. Also, it's extremely difficult to tell what form lecture will be covered on the exam. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> It could be difficult to know what was going to be tested (not many accurate practice tests because of the new online format). The professors and TAs did a really good job of providing extensive availability to help us revisit topics and review for exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> All the material was quite engaging, and both professors clearly cared about the material and tried to connect it to a bigger picture. I thought that having online practice exams for the latter half of the class would have been beneficial. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The only grades are 4 exams worth 25% each. Since the class was virtual, many people took the exams together/used google and there was a very high average on each exam. I felt I was putting a lot of effort in and was performing at the mean or below on each exam, mostly from running out of time, and it was really frustrating to consistently underperform but have no other grades to show my understanding of the material than the exams. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The main strength of this course was Professor Nachtergaele, and the overall weakness of this course was Professor Breaker and the TA's. I was very disappointed in this course as a whole. Sure, there were some good moments as well as exams that weren't bad, but there were also many opportunities for the TA's and Professor Breaker to make the content more enjoyable to learn and also easier to digest/be tested, and they consistently chose to make the class more difficult. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I think a strength of this course was the abundance of resources. From the professor to teaching fellows to peer tutors to the textbook, there were many avenues for help and to ask questions about the material. A weakness of this course is the sheer volume of information we needed to know. While, per the online nature of this class this semester, all of the assessments were open book, it was almost impossible to know what information to focus on for a given unit of the class. There was so much information, you could not know what was necessary and what wasn't, and I can't imagine having to memorize all of the information for a closed-book exam. The slides, especially in the second half of the course, were so dense with information that it was extremely difficult to parse through all of the information to study, especially when the exam is only 60 minutes. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The testing arrangements were hard to show what you knew because there was such little time. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the pace of the course is really hard to keep up with. it is also incredibly difficult to know in what detail you must know things <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I loved the course but the exams were obviously extremely difficult due to lack of time. But overall it is a well taught course! <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> I feel that Prof. Beaker could have been more communicative about exams. Often questions would go unanswered on piazza when they were about exams but course material would be answered. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> Practice tests more reflective of what will be on the exam <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> The strength is the instructors' ability to explain information. I was able to understand the concepts as they went along. 
+The weakness was leaving the memorization completely up to the students and not providing a more accurate expectation of exam content as even though multiple practice tests were given, they still did not always give me an idea of what I needed to have available for quick recall and what was less important and for enrichment. <br/></div>
+</div>
+</div>
+<div class="question" id="Q0" style="width: 94.2%;">
+<div id="answer" style="float: left; min-height: 10em; width: 100%; background-color: #f5f5f5; border: solid 0px;  border-color: #000000">
+<b></b>
+<div id="text" style="width: 655px; height: 100%;"> the professors taught this material well but the class was a bit overwhelming. It was pretty hard to know what would be on exams, since sometimes in class we would focus on a lot of detail but on exams we would be expected to know the material more broadly, or vice versa. There is a lot of material covered in the class and I wish professors and TAs had been more attentive about responding to students questions on concerns. Because the class was online, it was harder to ask individual questions while on zoom so if our emails or piazza posts were ignored, then we had no form of communication. It can even be difficult to receive answers during office hours because if many people show up then it is hard to ask a lot of individual questions. This was a really hard semester taking the pandemic and differing time zones into account and I don't think this was really taken into account when our questions were left unanswered. I learned a lot but this was a difficult class during a difficult semester. <br/></div>
+</div>
+</div>
+</div>
+<div class="right">
+<div class="paginateButtons">
+<a class="prevLink" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">Back</a><a class="step" href="/oce-viewer/studentComments/index?offset=0&amp;max=1">1</a><a class="step" href="/oce-viewer/studentComments/index?offset=1&amp;max=1">2</a><span class="currentStep">3</span><a class="step" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">4</a><a class="step" href="/oce-viewer/studentComments/index?offset=4&amp;max=1">5</a><a class="nextLink" href="/oce-viewer/studentComments/index?offset=3&amp;max=1">Forward</a>
+</div>
+</div>
+</div>
+</div>
+<div class="clearfix" id="footer">
+<div id="footer-inner">
+<div id="footer-logo">
+<a href="http://www.yale.edu/" title="Yale University"><img src="/oce-viewer/static/images/logo_footer.gif"/></a>
+</div> <!-- /#footer-logo -->
+<div id="footer-message">
+<p>Copyright © 2013 Yale University. All rights reserved.
+                        <span class="footer-links">
+<a href="http://www.yale.edu/privacy" title="Yale Privacy policy">Privacy policy</a> |
+                            <a href="/cas" title="Login via Central Authentication Service">Login</a></span><br/>
+                        Content may not have been approved by or reflect the views of Yale University.
+                    </p>
+</div> <!-- /#footer-message --><div id="footer-social">
+</div> <!-- /#footer-social -->
+</div> <!-- /#footer-inner -->
+</div> <!-- /#footer -->
+</div>
+</div>
+</body>
+</html>

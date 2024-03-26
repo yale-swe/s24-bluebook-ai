@@ -1,0 +1,160 @@
+{
+ "crn_code": "11290",
+ "season": "201903",
+ "legacy_coursetable_course_id": 52471,
+ "enrollment": {
+  "enrolled": 9,
+  "responses": null,
+  "declined": null,
+  "no response": null
+ },
+ "ratings": [
+  {
+   "question_id": "YC402",
+   "question_text": "Your level of engagement with the course was:",
+   "options": [
+    "very low",
+    "low",
+    "medium",
+    "high",
+    "very high"
+   ],
+   "data": [
+    0,
+    0,
+    0,
+    2,
+    5
+   ]
+  },
+  {
+   "question_id": "YC404",
+   "question_text": "What is your overall assessment of this course?",
+   "options": [
+    "poor",
+    "fair",
+    "good",
+    "very good",
+    "excellent"
+   ],
+   "data": [
+    0,
+    0,
+    0,
+    1,
+    6
+   ]
+  },
+  {
+   "question_id": "YC405",
+   "question_text": "The course was well organized to facilitate student learning.",
+   "options": [
+    "strongly disagree",
+    "disagree",
+    "neutral",
+    "agree",
+    "strongly agree"
+   ],
+   "data": [
+    0,
+    0,
+    0,
+    2,
+    4
+   ]
+  },
+  {
+   "question_id": "YC406",
+   "question_text": "I received clear feedback that improved my learning.",
+   "options": [
+    "strongly disagree",
+    "disagree",
+    "neutral",
+    "agree",
+    "strongly agree"
+   ],
+   "data": [
+    0,
+    0,
+    0,
+    3,
+    2
+   ]
+  },
+  {
+   "question_id": "YC407",
+   "question_text": "Relative to other courses you have taken at Yale, the level of intellectual challenge of this course was:",
+   "options": [
+    "much less",
+    "less",
+    "same",
+    "greater",
+    "much greater"
+   ],
+   "data": [
+    0,
+    0,
+    1,
+    4,
+    0
+   ]
+  },
+  {
+   "question_id": "YC408",
+   "question_text": "Relative to other courses you have taken at Yale, the workload of this course was:",
+   "options": [
+    "much less",
+    "less",
+    "same",
+    "greater",
+    "much greater"
+   ],
+   "data": [
+    0,
+    1,
+    4,
+    1,
+    0
+   ]
+  }
+ ],
+ "narratives": [
+  {
+   "question_id": "YC401",
+   "question_text": "What knowledge, skills, and insights did you develop by taking this course?",
+   "comments": [
+    "both theoretical and its relation to applications",
+    "We covered a lot of higher dimensional probability as well as applications.",
+    "Concentration inequalities, probability theory, probabilistic method, central limit theorem, randomness, singular value decompositions, Johnson-Lindenstrauss lemma, packing and covering, spectral clustering\/community, general mathematical sense.",
+    "Developing abstract mathematical intuition for some widely used data-science techniques and topics, such as concentration inequalities, PCA, SDP.",
+    "Probabilistic method, concentration inequalities, CLTs, Gaussians all over the place, nets and packings, a whole variety of good stuff. Followed along Vershynin's \"High-dimensional Probability,\" really good book."
+   ]
+  },
+  {
+   "question_id": "YC403",
+   "question_text": "What are the strengths and weaknesses of this course and how could it be improved?",
+   "comments": [
+    "Stefan is the strength",
+    "The material was really interesting and made want to learn more on the topic. The psets were fun and challenging and complemented the material very well.",
+    "The course provided simple and intuitive explanations of ideas from Vershynin's book."
+   ]
+  },
+  {
+   "question_id": "YC409",
+   "question_text": "Would you recommend this course to another student? Please explain.",
+   "comments": [
+    "Any analysis-related course taught by Stefan is recommended",
+    "I'm putting my answer to all of the questions here because this is the one that is placed first on CourseTable (saving you a few clicks, folks). I'm not sure if this class will be taught again, and if so whether it will be taught by Stefan. It's important to note that the class as I took it was a Stefan class, which always means more for one's experience than the subject matter of the class itself. Like every class by Stefan, you'll love this class if you like being surprised every day by the material and if you like thinking about how cool and transcendent and interconnected math is, rather than just doing problems. (I happen to be someone who likes both of these things, so I thought it was great.) Conversely, you'll hate this class if you like highly organized classes or professors who fill in all the details of their proofsStefan very rarely does this, which I happen to like, but some people don't for some reason. In terms of the content of the class, very little time is spent on applications, especially on P-sets. Don't be fooled by the Applied Math crosslistingor the ridiculous fact that this class counts as a science credit, which nobody understands. There are occasional references to applications, but they are all very handwavey or idealized if you have to actually compute something. The class proceeds roughly as follows. First you learn the basics of probability theory (expectation, variance, Markov, Chebyshev). Note that this unit is pretty fast and, as always, full of tangents, so even if you already know this stuff you won't be bored. Then you get into concentration inequalities (Chernoff, Hoeffding), a unit in which the moral of the story is basically \"sums of random variables are very tightly concentrated around their mean.\" This insight is absolutely foundational to everything in data science, so even if you don't take this class and are just browsing when you come across this comment, I think it's worthwhile for you to learn it. Other major topics for the rest of the semester include singular value decompositions, Johnson-Lindenstrauss, packing and covering, and community detection. You probably don't know what all of these are, because otherwise there would be no point in you taking the class. You can probably intuit what \"packing and covering\" and \"community detection\" are, so I won't go over those. Singular value decompositions are basically a way to take a matrix and find another matrix that is *pretty* similar to the first matrix and a lot easier to store, meaning that it's useful for things like image compression. Johnson-Lindenstrauss, meanwhile, is a technique for taking points in very high dimensions and sending them to a much lower dimension, while roughly preserving the distances between the points. This is useful if you have a lot of data and want to be able to visualize it in, say, two dimensions but have everything stay roughly as close to each other if they were before. I don't think I would've liked this class if I cared too much about applications, since I'm not sure I'd actually be better at doing any of this stuff if I had to \"in the industry.\" I guess I'd have the advantage of knowing qualitatively what the things in question were. However, I'm much more of a pure math guy and, to me, the real joy of this class came from the beautiful union of a wide variety of mathematical subunions that it represents. To solve problems in this class, you use probability theory and linear algebra (of course), but also multivariable calculusyou'll actually have to do a few integrals!lots of real and a tiny bit of complex analysis, graph theory, a smattering of number theory, and even fractal geometry in the part on Minkowski dimension. Basically, lots of really cool shit (not sure if I'm allowed to use that word in my course evals, hopefully it doesn't mean that this entire review is censored). In terms of workload, one P-set per week, two midterms and a final. Not sure how easy grading is yet.",
+    "Absolutely! It is really cool to see some of the math behind a lot of the data science buzz words, and to see just how mathematical this whole field is. The psets were also very enjoyable and the class had a great dynamic as whole.",
+    "Yeah. It covers really interesting content.",
+    "Yes, students who have a math background and want to understand some data science ideas from a theoretical point of view will enjoy the class.",
+    "Phenomenal course. Highly recommend if offered again. Stefan is a great lecturer, and the topics are really interesting. We had a class of like less than 10 people, so the atmosphere was really chill, and Stefan was a pretty lenient grader. Homeworks aren't too hard, but definitely provide a good amount of challenge and are usually pretty fun. Exams are fair."
+   ]
+  }
+ ],
+ "extras": {
+  "subject": "MATH",
+  "number": "421",
+  "section": 1
+ }
+}
