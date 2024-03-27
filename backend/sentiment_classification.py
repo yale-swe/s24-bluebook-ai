@@ -22,7 +22,8 @@ Processing
 Sentiment Analysis Details
 - Model used: https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest?text=Covid+cases+are+increasing+fast%21
 - TODO: 
-    - Refactor so that EACH review has the sentiment analysis applied to it, then count up # of positive, negative, and neutral results, compute proportions of each and use the max proportion one as the label
+    - Refactor so that EACH review has the sentiment analysis applied to it, then count up # of positive, negative, and neutral results, 
+      compute proportions of each and use the max proportion one as the label
     - Store the following in updated json objects:
         - List[str]: sentiment labels for each review
         - List[float]: sentiment scores for each review
