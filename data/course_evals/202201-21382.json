@@ -147,70 +147,76 @@
     "sentiment_info": {
         "YC401": {
             "sentiment_labels": [
-                "neutral"
+                "POSITIVE"
             ],
             "sentiment_scores": [
-                0.720625102519989
+                0.9987554550170898
             ],
             "sentiment_counts": {
-                "neutral": 1
+                "POSITIVE": 1,
+                "NEGATIVE": 0
             },
             "sentiment_distribution": {
-                "neutral": 1.0
+                "POSITIVE": 1.0,
+                "NEGATIVE": 0.0
             },
             "sentiment_overall": [
-                "neutral",
-                1
+                "POSITIVE",
+                1.0
             ]
         },
         "YC403": {
             "sentiment_labels": [
-                "neutral"
+                "NEGATIVE"
             ],
             "sentiment_scores": [
-                0.6375791430473328
+                0.988527774810791
             ],
             "sentiment_counts": {
-                "neutral": 1
+                "NEGATIVE": 1,
+                "POSITIVE": 0
             },
             "sentiment_distribution": {
-                "neutral": 1.0
+                "NEGATIVE": 1.0,
+                "POSITIVE": 0.0
             },
             "sentiment_overall": [
-                "neutral",
-                1
+                "NEGATIVE",
+                1.0
             ]
         },
         "YC409": {
             "sentiment_labels": [
-                "positive",
-                "positive"
+                "POSITIVE",
+                "POSITIVE"
             ],
             "sentiment_scores": [
-                0.9058422446250916,
-                0.9002081751823425
+                0.9989222288131714,
+                0.998678982257843
             ],
             "sentiment_counts": {
-                "positive": 2
+                "POSITIVE": 2,
+                "NEGATIVE": 0
             },
             "sentiment_distribution": {
-                "positive": 1.0
+                "POSITIVE": 1.0,
+                "NEGATIVE": 0.0
             },
             "sentiment_overall": [
-                "positive",
-                2
+                "POSITIVE",
+                1.0
             ]
         },
-        "final_label": "positive",
-        "final_count": 2,
-        "final_proportion": 0.5,
+        "final_label": "POSITIVE",
+        "final_count": 3,
+        "final_proportion": 0.75,
         "final_counts": {
-            "neutral": 2,
-            "positive": 2
+            "POSITIVE": 3,
+            "NEGATIVE": 1
         },
         "final_distribution": {
-            "neutral": 0.5,
-            "positive": 0.5
+            "POSITIVE": 0.75,
+            "NEGATIVE": 0.25
         }
     }
 }

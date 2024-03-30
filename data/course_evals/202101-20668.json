@@ -192,84 +192,88 @@
     "sentiment_info": {
         "YC401": {
             "sentiment_labels": [
-                "neutral",
-                "neutral",
-                "neutral",
-                "neutral"
+                "POSITIVE",
+                "POSITIVE",
+                "NEGATIVE",
+                "POSITIVE"
             ],
             "sentiment_scores": [
-                0.8399369120597839,
-                0.8746488690376282,
-                0.8627249002456665,
-                0.8326945900917053
+                0.9982174038887024,
+                0.6303327083587646,
+                0.8922552466392517,
+                0.9986506104469299
             ],
             "sentiment_counts": {
-                "neutral": 4
+                "POSITIVE": 3,
+                "NEGATIVE": 1
             },
             "sentiment_distribution": {
-                "neutral": 1.0
+                "POSITIVE": 0.75,
+                "NEGATIVE": 0.25
             },
             "sentiment_overall": [
-                "neutral",
-                4
+                "POSITIVE",
+                0.75
             ]
         },
         "YC403": {
             "sentiment_labels": [
-                "neutral",
-                "neutral",
-                "neutral"
+                "NEGATIVE",
+                "POSITIVE",
+                "POSITIVE"
             ],
             "sentiment_scores": [
-                0.8676519393920898,
-                0.8075217604637146,
-                0.7645139694213867
+                0.9875378012657166,
+                0.9977378845214844,
+                0.9988614320755005
             ],
             "sentiment_counts": {
-                "neutral": 3
+                "NEGATIVE": 1,
+                "POSITIVE": 2
             },
             "sentiment_distribution": {
-                "neutral": 1.0
+                "NEGATIVE": 0.3333333333333333,
+                "POSITIVE": 0.6666666666666666
             },
             "sentiment_overall": [
-                "neutral",
-                3
+                "POSITIVE",
+                0.6666666666666666
             ]
         },
         "YC409": {
             "sentiment_labels": [
-                "neutral",
-                "positive",
-                "neutral"
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE"
             ],
             "sentiment_scores": [
-                0.8920460343360901,
-                0.673579752445221,
-                0.6238238215446472
+                0.9979762434959412,
+                0.9989172220230103,
+                0.9989062547683716
             ],
             "sentiment_counts": {
-                "neutral": 2,
-                "positive": 1
+                "POSITIVE": 3,
+                "NEGATIVE": 0
             },
             "sentiment_distribution": {
-                "neutral": 0.6666666666666666,
-                "positive": 0.3333333333333333
+                "POSITIVE": 1.0,
+                "NEGATIVE": 0.0
             },
             "sentiment_overall": [
-                "neutral",
-                2
+                "POSITIVE",
+                1.0
             ]
         },
-        "final_label": "neutral",
-        "final_count": 9,
-        "final_proportion": 0.9,
+        "final_label": "POSITIVE",
+        "final_count": 8,
+        "final_proportion": 0.8,
         "final_counts": {
-            "neutral": 9,
-            "positive": 1
+            "POSITIVE": 8,
+            "NEGATIVE": 2
         },
         "final_distribution": {
-            "neutral": 0.9,
-            "positive": 0.1
+            "POSITIVE": 0.8,
+            "NEGATIVE": 0.2
         }
     }
 }
