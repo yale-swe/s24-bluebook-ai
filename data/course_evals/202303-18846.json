@@ -125,9 +125,9 @@
                 "Networked systems, system design principles.",
                 "Network control plane, distributed network control algorithms, internet protocols, value of reading source code.",
                 "All kinds of different topics about networks. It's hard to summarize since we covered so many different topics. I think I learned the most about HTTP protocol and nginx server design.",
-                "HTTP, TCP\/IP, large-scale systems such as Hadoop, Spark, MapReduce, etc.",
-                "The Internet as layered architecture; application layer (HTTP\/1.x), transport layer (TCP, UDP, TLS, congestion control), mention of network layer (IP) and hardware; network protocol design paradigms and considerations; HTTP server design; distributed data analytics. Practice with reading code and protocol specs (HTTP, nginx, FTS). **For this semester's particular iteration of the course** we also gained real experience working on a team in a production environment by collaborating with CERN on their FTS and Rucio systems.",
-                "I would split up what we learned into two categories: a deep dive into CERNs bespoke network systems through our individual projects, and an overview of the different network layers that Prof. Yang covered in lecture. \r\n\r\nThe CERN project (which were real tickets for their File Transfer Service and their data orchestration platform Rucio) was a great experience that came with the expected challenges of working with production code, which involved debugging Docker containers, getting certs, and reading through a lot of code. Since it was pretty hard to test features that would realistically cover the conditions of a worldwide network before deploying into production, this project forced me to think more deeply about the consequences of design choices I was making instead of just relying on testing. \r\n\r\nIn lecture, we read through source code + architecture of real systems, like NGINX and Kubernetes, which I found really helpful for understanding how to implement some of the higher level concepts we discussed in class (ex. NGINXs finite state machine for processing HTTP headers). We also went in depth into HTTP protocol design and discussed how it handled reliability + authentication (SSL\/TLS). The only pset in this course was to build a HTTP server from scratch, which was a lot of fun and tied together many of the concepts we covered in the first half of the course. My favorite topic we learned about was congestion control protocols (AIMD, CUBIC, TCP Reno, BBR) which try to optimize resource allocation while still ensuring fairness and avoiding collapse.",
+                "HTTP, TCP/IP, large-scale systems such as Hadoop, Spark, MapReduce, etc.",
+                "The Internet as layered architecture; application layer (HTTP/1.x), transport layer (TCP, UDP, TLS, congestion control), mention of network layer (IP) and hardware; network protocol design paradigms and considerations; HTTP server design; distributed data analytics. Practice with reading code and protocol specs (HTTP, nginx, FTS). **For this semester's particular iteration of the course** we also gained real experience working on a team in a production environment by collaborating with CERN on their FTS and Rucio systems.",
+                "I would split up what we learned into two categories: a deep dive into CERNs bespoke network systems through our individual projects, and an overview of the different network layers that Prof. Yang covered in lecture. \r\n\r\nThe CERN project (which were real tickets for their File Transfer Service and their data orchestration platform Rucio) was a great experience that came with the expected challenges of working with production code, which involved debugging Docker containers, getting certs, and reading through a lot of code. Since it was pretty hard to test features that would realistically cover the conditions of a worldwide network before deploying into production, this project forced me to think more deeply about the consequences of design choices I was making instead of just relying on testing. \r\n\r\nIn lecture, we read through source code + architecture of real systems, like NGINX and Kubernetes, which I found really helpful for understanding how to implement some of the higher level concepts we discussed in class (ex. NGINXs finite state machine for processing HTTP headers). We also went in depth into HTTP protocol design and discussed how it handled reliability + authentication (SSL/TLS). The only pset in this course was to build a HTTP server from scratch, which was a lot of fun and tied together many of the concepts we covered in the first half of the course. My favorite topic we learned about was congestion control protocols (AIMD, CUBIC, TCP Reno, BBR) which try to optimize resource allocation while still ensuring fairness and avoiding collapse.",
                 "basics of the html protocol, networking, load balancing, designing large networked systems",
                 "knowledge of networked systems design and trade offs, along with reading production code"
             ]
@@ -140,7 +140,7 @@
                 "Strength: material is cutting edge\r\nWeakness: maybe computer networks should be a pre-requisite. Diving into this course with only 323 and OS backgrounds means my friends and I only understand about 30% of the lecture. It's easy to feel very dumb and helpless in this course.",
                 "Strength: Prof. Yang is very knowledgeable and willing to help students outside of class.\r\n\r\nWeakness: this year, the class is structured a bit differently since Prof. Yang wants us to work with CERN. But this leads to the course (lectures + psets) being quite disorganized. Prof. Yang also gave us a real-life related project to work on, but it is not well-scoped, and I felt that the expectations for the project kept on changing throughout the semester. He was not happy about our project by the end of the semester, but I honestly think we couldn't have done much better since we were given the vaguest instructions. \r\n\r\nI really think the class would be better if it had been taught in the way it was taught two years ago. Also, he needs a TA to design and grade homework psets.",
                 "Strengths: interesting content, weaknesses: disorganized, inexorably high expectations from the professor.",
-                "Strengths: impressive breadth and depth of material, experience working on real production systems, building confidence by writing a large project from the ground up with a minimal spec (HTTP server pset), chance to learn from and connect to top experts in the field (including CERN guest lectures and team members), very kind instructor who gives helpful guidance and advice and wants his students to succeed. Weaknesses: very disorganized, unclear pset and schedule deadlines, lectures bounced from topic to topic depending what was most helpful to cover for projects\/the pset, understaffed (there was no TA and instructor sometimes unresponsive due to unanticipated larger class size and time-intensive nature of projects). Due to the collaboration with CERN, this semester offered incredible opportunities to work on a production team, but also posed many unique challenges in terms of course planning that Professor Yang did his best to meet - so I don't think it should necessarily be considered representative of the class as a whole.",
+                "Strengths: impressive breadth and depth of material, experience working on real production systems, building confidence by writing a large project from the ground up with a minimal spec (HTTP server pset), chance to learn from and connect to top experts in the field (including CERN guest lectures and team members), very kind instructor who gives helpful guidance and advice and wants his students to succeed. Weaknesses: very disorganized, unclear pset and schedule deadlines, lectures bounced from topic to topic depending what was most helpful to cover for projects/the pset, understaffed (there was no TA and instructor sometimes unresponsive due to unanticipated larger class size and time-intensive nature of projects). Due to the collaboration with CERN, this semester offered incredible opportunities to work on a production team, but also posed many unique challenges in terms of course planning that Professor Yang did his best to meet - so I don't think it should necessarily be considered representative of the class as a whole.",
                 "Prof. Yang is so excellentthere were some weeks where my team and I were camped out in his office every other day (if not everyday) trying to come up with a solution. This class was pretty unique since Prof. Yang is doing a collaboration with CERN, and we got to work on their projects and eventually deploy them. Of course, this came with a few expected challenges with setting up the dev + test environment (with the help of Jensen, a wonderful grad student), scrambling for certificates, and testing on prod, but it was overall great! I really enjoyed becoming familiar with a sizable codebase, designing a fix for a ticket, and doing code reviews with Prof. Yang and CERN engineers.",
                 "the lectures were interesting but the course was disorganized at times"
             ]
@@ -160,6 +160,123 @@
         }
     ],
     "extras": {
-        "title": "CPSC 434 01\/CPSC 534 01 - Topics in Networked Systems"
+        "title": "CPSC 434 01/CPSC 534 01 - Topics in Networked Systems"
+    },
+    "sentiment_info": {
+        "YC401": {
+            "sentiment_labels": [
+                "neutral",
+                "neutral",
+                "positive",
+                "neutral",
+                "neutral",
+                "neutral",
+                "neutral",
+                "neutral"
+            ],
+            "sentiment_scores": [
+                0.6227169632911682,
+                0.6889743208885193,
+                0.700876772403717,
+                0.6098432540893555,
+                0.6013538837432861,
+                0.5355924367904663,
+                0.6435317993164062,
+                0.6345340013504028
+            ],
+            "sentiment_counts": {
+                "neutral": 7,
+                "positive": 1
+            },
+            "sentiment_distribution": {
+                "neutral": 0.875,
+                "positive": 0.125
+            },
+            "sentiment_overall": [
+                "neutral",
+                7
+            ]
+        },
+        "YC403": {
+            "sentiment_labels": [
+                "neutral",
+                "negative",
+                "neutral",
+                "neutral",
+                "positive",
+                "positive",
+                "neutral"
+            ],
+            "sentiment_scores": [
+                0.6717736124992371,
+                0.5327418446540833,
+                0.7144519686698914,
+                0.6207960844039917,
+                0.5284715294837952,
+                0.8050839900970459,
+                0.5862086415290833
+            ],
+            "sentiment_counts": {
+                "neutral": 4,
+                "negative": 1,
+                "positive": 2
+            },
+            "sentiment_distribution": {
+                "neutral": 0.5714285714285714,
+                "negative": 0.14285714285714285,
+                "positive": 0.2857142857142857
+            },
+            "sentiment_overall": [
+                "neutral",
+                4
+            ]
+        },
+        "YC409": {
+            "sentiment_labels": [
+                "negative",
+                "negative",
+                "neutral",
+                "neutral",
+                "negative",
+                "neutral",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.6012932658195496,
+                0.763725221157074,
+                0.8184430003166199,
+                0.6686727404594421,
+                0.6942747831344604,
+                0.5470675230026245,
+                0.958414614200592
+            ],
+            "sentiment_counts": {
+                "negative": 3,
+                "neutral": 3,
+                "positive": 1
+            },
+            "sentiment_distribution": {
+                "negative": 0.42857142857142855,
+                "neutral": 0.42857142857142855,
+                "positive": 0.14285714285714285
+            },
+            "sentiment_overall": [
+                "negative",
+                3
+            ]
+        },
+        "final_label": "neutral",
+        "final_count": 14,
+        "final_proportion": 0.6363636363636364,
+        "final_counts": {
+            "neutral": 14,
+            "positive": 4,
+            "negative": 4
+        },
+        "final_distribution": {
+            "neutral": 0.6363636363636364,
+            "positive": 0.18181818181818182,
+            "negative": 0.18181818181818182
+        }
     }
 }

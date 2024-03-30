@@ -124,11 +124,11 @@
             "comments": [
                 "Knowledge of compilers, both theory and implementation details",
                 "Compilers, lexing, parsing",
-                "I learned how programming languages are transformed into runnable machine code. We went in detail through each stage of the process, starting from the backend (assembly code generation), moving on to the frontend (lexing, parsing, typechecking, intermediate representations\/LLVM ir), and finally optimizations. It was really cool to learn in a hands-on way how programs can be optimized to make them run efficiently.",
+                "I learned how programming languages are transformed into runnable machine code. We went in detail through each stage of the process, starting from the backend (assembly code generation), moving on to the frontend (lexing, parsing, typechecking, intermediate representations/LLVM ir), and finally optimizations. It was really cool to learn in a hands-on way how programs can be optimized to make them run efficiently.",
                 "ocaml, lexing, parsing, typechecking, compiler optimizations.",
                 "I learned the pipeline of a compiler from lexing, parsing, middle end, backend and a lot of general concepts that were interesting",
                 "Full stack compiler implementation and principles",
-                "I learned about how compilers are designed and built. In particular, we covered topics such as X86, lexers\/parsers, type-checking, optimizations, register allocation, LLVM, etc. The problem sets generally provide an opportunity for you to directly apply these techniques in OCaml, however, we didn't do much problem-solving manually until the final exam.",
+                "I learned about how compilers are designed and built. In particular, we covered topics such as X86, lexers/parsers, type-checking, optimizations, register allocation, LLVM, etc. The problem sets generally provide an opportunity for you to directly apply these techniques in OCaml, however, we didn't do much problem-solving manually until the final exam.",
                 "How compilers work, from top to bottom",
                 "All around compiler design, each pset builds one part of the compiler so by the end you have built pretty much the whole thing. Everything is done in Ocaml, which is a pretty interesting language to learn and will help you program better overall. It's a little bit of a learning curve, especially if you are like me and have never used Ocaml or any other functional language before, but the early psets ease you into it so it's not a huge deal.",
                 "I gained an undersatnidng of the basic organization and structure of a compiler and compiler optimizations. I learned how to implement each part, the considerations that go into their design, and why compilers are such a beast. I also got a lot better with OCaml."
@@ -146,7 +146,7 @@
                 "I enjoyed the course, very hard psets",
                 "The strengths of this class definitely lie in the problem sets, which have been developed and used for many years at various universities. Also, the grading scheme is heavily focused on the homework and allows students to focus on programming. However, lectures could still be more organized since they were often difficult to follow (not engaging enough or Jay would make mistakes sometimes). That being said, Jay is a really nice and accommodating lecturer overall!",
                 "Strengths: jay lim! \r\nStrenghts: clear specs, solid support, very well put together class",
-                "I think the psets are a very strong aspect, even though it seems like the same 6 psets have been used by every cs department for the last 10 years. Each one is pretty challenging and runs for two weeks like 323, and the difficulty \/ time is on par or harder than 323. However you get to work in pairs which I think makes a huge difference. There will be weeks where you are extra busy, and its nice to have a partner who can cover you, and vice versa when you are not as busy.  \r\n\r\nThe lecture structure is also pretty similar to 323 which I liked, where each lecture is a much more high level theory of the topic on the next weeks pset, but this does mean you will be learning ocaml mostly on your own if that scares you. \r\n\r\nTHE GRADING IS ALSO SUPER CHILL. Unlike other classes, a majority of the test cases are made completely public, and even the private ones can be run before you submit. This means that while each pset is hard, you always know your score before you submit. There is almost no world in which you can make it through the class and not get an A, as long as you and you partner budget enough time for each pset.",
+                "I think the psets are a very strong aspect, even though it seems like the same 6 psets have been used by every cs department for the last 10 years. Each one is pretty challenging and runs for two weeks like 323, and the difficulty / time is on par or harder than 323. However you get to work in pairs which I think makes a huge difference. There will be weeks where you are extra busy, and its nice to have a partner who can cover you, and vice versa when you are not as busy.  \r\n\r\nThe lecture structure is also pretty similar to 323 which I liked, where each lecture is a much more high level theory of the topic on the next weeks pset, but this does mean you will be learning ocaml mostly on your own if that scares you. \r\n\r\nTHE GRADING IS ALSO SUPER CHILL. Unlike other classes, a majority of the test cases are made completely public, and even the private ones can be run before you submit. This means that while each pset is hard, you always know your score before you submit. There is almost no world in which you can make it through the class and not get an A, as long as you and you partner budget enough time for each pset.",
                 "The psets are all really well organized. It is pretty clear what you need to do, though the specs could contain some more info, and they really teach you a lot about each part. Lectures were fine. Jay is a great lecturer and really good with questions, explanations, and examples. The slides were just quite poor sometimes and that really tripped him up because he woudl be going off the slides, then get confused, and spend sometime reorienting himself and figuring out what he was saying. It would just be better if Jay updated the slides to match what he wants to teach and how he wants to teach it."
             ]
         },
@@ -157,18 +157,147 @@
                 "This was a tricky course. The psets took quite a long time, and the lectures were hard to digest. That being said, learning about compilers is very important so if you really want to learn about them and are willing to endure dry and complicated lectures, and long psets, go for it. The psets will give you a solid understanding of the different stages of compilers, and you'll also get a good understanding of x86 assembly, LLVM IR, and OCaml (what the PSETs are written in).",
                 "Yes, I definitely recommend if you have any interest in compilers and want to implement your own",
                 "Jay makes this class very manageable. I personally found it much more bearable than Operating Systems. There are 6 psets, 5 of which can be done with a partner, and you get to learn OCaml, which is a pretty cool functional language. Jay sometimes rushes through slides, and the fact that there are no assessments until the \"final exam\" (which ended up being a weeklong take-home pset) makes it a little hard to know what to focus on. Take it if you have any interest in compilers.",
-                "Yes. I'm biased because I'm into compilers\/programming languages, but I think every CS major should take this course.",
+                "Yes. I'm biased because I'm into compilers/programming languages, but I think every CS major should take this course.",
                 "Yes, I think students will gain both a breadth and depth of understanding in compilers.",
                 "If youre interested in how programming language source code is compiled into machine code",
-                "Compilers is one of my favorite CS classes. The content is super important for contextualizing how programming languages work (we learned about Assembly, LLVM which is an intermediary language from which we translation a higher level language like C -> LLVM -> Assembly, Lexing\/Parsing, Typechecking, Optimizations, and other Misc topics) and also developing programming abilities in reading a large starter code base and writing a lot of lines of code. Writing in Ocaml is also a fun intellectual challenge as you will have to write your code in a different way to fit the functional programming model. The class is also very transparent since there is an autograder that will tell you what your score is (with public and private test cases) so the grading is transparent. Definitely do this class with a partner! Besides the first pset (which is trivial), you can do the other 5 psets with a partner. They took me and my partner between 30-50 hours combined (every 2 weeks) among the 2 of us. There was also a take home final assignment that was challenging and long and took a lot of days in my reading period but it was graded leniently.",
+                "Compilers is one of my favorite CS classes. The content is super important for contextualizing how programming languages work (we learned about Assembly, LLVM which is an intermediary language from which we translation a higher level language like C -> LLVM -> Assembly, Lexing/Parsing, Typechecking, Optimizations, and other Misc topics) and also developing programming abilities in reading a large starter code base and writing a lot of lines of code. Writing in Ocaml is also a fun intellectual challenge as you will have to write your code in a different way to fit the functional programming model. The class is also very transparent since there is an autograder that will tell you what your score is (with public and private test cases) so the grading is transparent. Definitely do this class with a partner! Besides the first pset (which is trivial), you can do the other 5 psets with a partner. They took me and my partner between 30-50 hours combined (every 2 weeks) among the 2 of us. There was also a take home final assignment that was challenging and long and took a lot of days in my reading period but it was graded leniently.",
                 "Yeah! Learning about compilers is very interesting and the programming assignments teach you a lot about building a basic compiler.",
                 "I think it's worth taking, though the process of actually building a compiler isn't actually that interesting.",
-                "Yes. Would definitely recommend. I liked the compilers part of 323, so I thought I would try it and I would for sure recommend it. The topics are all super interesting and you learn so much more about how programming languages work in addition to just getting a lot of practice with Ocaml and programming in general. \r\n\r\nCourse material is interesting, Psets are hard enough to be engaging, but no so hard that they crush you. 10\/10 if you liked the compilers part of 323.",
+                "Yes. Would definitely recommend. I liked the compilers part of 323, so I thought I would try it and I would for sure recommend it. The topics are all super interesting and you learn so much more about how programming languages work in addition to just getting a lot of practice with Ocaml and programming in general. \r\n\r\nCourse material is interesting, Psets are hard enough to be engaging, but no so hard that they crush you. 10/10 if you liked the compilers part of 323.",
                 "This is a great systems elective. It is challenging, but not as hard as 323 or OS, partially due to how wonderful OCaml is. You learn a ton of useful stuff and become a better programmer by being forced into the unfamiliar world of funcitonal programming. The material is interesting and Jay is wonderful. The psets are also all very fun and not that awful, especially with a partner. OCaml is also just really fun to program in."
             ]
         }
     ],
     "extras": {
-        "title": "CPSC 421 01\/CPSC 521 01 - Compilers and Interpreters"
+        "title": "CPSC 421 01/CPSC 521 01 - Compilers and Interpreters"
+    },
+    "sentiment_info": {
+        "YC401": {
+            "sentiment_labels": [
+                "neutral",
+                "positive",
+                "positive",
+                "neutral",
+                "positive",
+                "neutral",
+                "neutral",
+                "neutral",
+                "positive",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.6113221049308777,
+                0.526038408279419,
+                0.833935558795929,
+                0.4969214200973511,
+                0.8794787526130676,
+                0.6047576665878296,
+                0.5153403282165527,
+                0.6857085227966309,
+                0.8404892683029175,
+                0.8257995247840881
+            ],
+            "sentiment_counts": {
+                "neutral": 5,
+                "positive": 5
+            },
+            "sentiment_distribution": {
+                "neutral": 0.5,
+                "positive": 0.5
+            },
+            "sentiment_overall": [
+                "neutral",
+                5
+            ]
+        },
+        "YC403": {
+            "sentiment_labels": [
+                "positive",
+                "positive",
+                "positive",
+                "positive",
+                "neutral",
+                "positive",
+                "neutral",
+                "neutral",
+                "neutral",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.6903886198997498,
+                0.8383193016052246,
+                0.7884131669998169,
+                0.7530158758163452,
+                0.5784938931465149,
+                0.716881275177002,
+                0.5213465094566345,
+                0.53546142578125,
+                0.542504072189331,
+                0.5045523643493652
+            ],
+            "sentiment_counts": {
+                "positive": 6,
+                "neutral": 4
+            },
+            "sentiment_distribution": {
+                "positive": 0.6,
+                "neutral": 0.4
+            },
+            "sentiment_overall": [
+                "positive",
+                6
+            ]
+        },
+        "YC409": {
+            "sentiment_labels": [
+                "neutral",
+                "positive",
+                "positive",
+                "neutral",
+                "positive",
+                "neutral",
+                "positive",
+                "positive",
+                "neutral",
+                "positive",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.48820778727531433,
+                0.6026923060417175,
+                0.876255452632904,
+                0.6682388186454773,
+                0.582217276096344,
+                0.8741282224655151,
+                0.8888142108917236,
+                0.913121223449707,
+                0.6038380861282349,
+                0.9596561789512634,
+                0.9474717378616333
+            ],
+            "sentiment_counts": {
+                "neutral": 4,
+                "positive": 7
+            },
+            "sentiment_distribution": {
+                "neutral": 0.36363636363636365,
+                "positive": 0.6363636363636364
+            },
+            "sentiment_overall": [
+                "positive",
+                7
+            ]
+        },
+        "final_label": "positive",
+        "final_count": 18,
+        "final_proportion": 0.5806451612903226,
+        "final_counts": {
+            "neutral": 13,
+            "positive": 18
+        },
+        "final_distribution": {
+            "neutral": 0.41935483870967744,
+            "positive": 0.5806451612903226
+        }
     }
 }

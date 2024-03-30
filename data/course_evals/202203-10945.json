@@ -122,7 +122,7 @@
             "question_id": "YC401",
             "question_text": "What knowledge, skills, and insights did you develop by taking this course?",
             "comments": [
-                "I learned different techniques for parallelization. In essence, we learned about parallelization as a theoretical concept and how to implement different types of parallelization in practice. We learned three C APIs for parallelism: (1) OpenMP, (2) Message-Passing Interface \/ MPI, and (3) CUDA.",
+                "I learned different techniques for parallelization. In essence, we learned about parallelization as a theoretical concept and how to implement different types of parallelization in practice. We learned three C APIs for parallelism: (1) OpenMP, (2) Message-Passing Interface / MPI, and (3) CUDA.",
                 "Great practical introduction to parallel programming. Less theory -- it covers basic concepts like Amdahl, Gustafson, etc., but there's a heavy focus on implementation and getting to play around with the specific frameworks yourself. Also cool to actually get to use Yale's high-performance computers!",
                 "I learned general parallel computing principals and gained experience implementing parallel algorithms. I learned how to use OpenMP, MPI, and CUDA as the frameworks for creating parallel algorithms in C.",
                 "Parallel programming, using OpenMP, MPI, and CUDA.",
@@ -141,7 +141,7 @@
             "question_id": "YC403",
             "question_text": "What are the strengths and weaknesses of this course and how could it be improved?",
             "comments": [
-                "Professor Sherman is just not engaging. Parallelism may not be as groundbreaking and pioneering a field of Computer Science as it once was, but it is certainly quite an interesting field. I think the density of information could be reduced, and more structure could be provided around the problem sets. Honestly, I had almost no idea what was happening for most of the semester, whether I was watching the lecture recordings or attending in person, so maybe the coherence \/ structure of the course as a whole should be redone.",
+                "Professor Sherman is just not engaging. Parallelism may not be as groundbreaking and pioneering a field of Computer Science as it once was, but it is certainly quite an interesting field. I think the density of information could be reduced, and more structure could be provided around the problem sets. Honestly, I had almost no idea what was happening for most of the semester, whether I was watching the lecture recordings or attending in person, so maybe the coherence / structure of the course as a whole should be redone.",
                 "Professor Sherman is the real strength of this course. Although the lectures are not necessarily the most thrilling (and have overall very low attendance), he explains concepts very clearly. His slides are well constructed, and he managed class logistics very well. He is also such a kind and welcoming person. I'd encourage anyone who takes this course to try and engage with Professor Sherman. If you build up a relationship with him, I'm sure you will find the course far more rewarding and you will be more inspired to give your best effort.\r\n\r\nIn terms of weaknesses, the assignments (especially from MPI onwards) can take a painful amount of debugging. I also think that if you don't have significant interest in high performance computing, this course may not be for you. If you get excited about the prospect of solving PDEs or the N-body problem with parallel algorithms, then definitely take it.",
                 "The lectures were quite detailed and were easy to follow and understand. The assignments were also informative and helped me really understand the frameworks that we learned about.",
                 "The lecture materials are a little boring sometimes.",
@@ -160,7 +160,7 @@
             "question_text": "Would you recommend this course to another student? Please explain.",
             "comments": [
                 "Coming to this class after 323, I thought I would be in a fine place. However, I was lost in the class for most of the semester because it felt like every class would go over something we had already gone over in a different class meeting and say something slightly different. By the end of most classes, I was more confused than the beginning. While it is not a particularly HARD class, it is TEDIOUS. Calculating and averaging results for a single assignment sometimes took more than 6 hours. Also, I spent more than 60 hours on a single assignment for this class, which is 3x the time I spent on the longest assignment in 323. Unless the course is structurally changed or has a different professor, I would not recommend.",
-                "I'd recommend this elective if you have an explicit interest in high performance\/scientific computing. Many of the assignments come down to dozens of hours spent debugging code that deals with matrices. You should prepare yourself for the struggle that is debugging parallel programs. Each assignment also requires a long written report in addition to the code (in fact, I'm not sure the graders ever looked at the code at all). The reports can take a painfully long time to write and a significant amount of copying and pasting data from output files into tables. If you take this course, you have to be willing to put in the work.",
+                "I'd recommend this elective if you have an explicit interest in high performance/scientific computing. Many of the assignments come down to dozens of hours spent debugging code that deals with matrices. You should prepare yourself for the struggle that is debugging parallel programs. Each assignment also requires a long written report in addition to the code (in fact, I'm not sure the graders ever looked at the code at all). The reports can take a painfully long time to write and a significant amount of copying and pasting data from output files into tables. If you take this course, you have to be willing to put in the work.",
                 "Yes, this was quite a cool class. When solving any hard computational problem, parallelization is required to have adequate performance. It was nice actually implementing multithreading and inter-process communication. It was at a good level where we used OpenMP and MPI that does the nitty gritty actually hardware communication for us, and we were just able to think about how to design the algorithm to implement the performance gain. It was also quite cool learning CUDA for Nvidia GPUs. Graphics cards speed up the computation so much, and learning how to program them to achieve the speedups was quite rewarding. This course helped me to think more about how we can increase the efficiency of the programs we write.",
                 "I would recommend this class to any CS student and also any major who uses computing to solve problems and wants it done faster and more efficiently. Parallel programming is just so useful for all sorts of applications and is important for understanding how computers work. Prof Sherman is so clear is his teaching and super generous in extending deadlines, curving tests, and even removing a problem set. We learn how to do parallel programming in C in 3 different styles: threads using shared memory (Open MP), threads doing message passing (Open MPI), and GPU. The PSETs were fun to do although it must be noted that debugging in parallel is absolutely painstaking as it is near impossible to figure out from the errors and you pretty much just have to read through your code and hope to see the error. There were 4 PSETs. First two took maybe ~10 hours, third one took 20+, third one was maybe 15 hours, but you get 2-3 weeks for each so it is doable. The PSETs in this class are graded based on your lab report and analysis as opposed to test scripts. The exams are long but fair, and curves will be applied to account for the fact that it is hard to finish. Final project is done in groups of 2 (or solo if grad)  and is very open-ended.",
                 "Yes, if you are a CS major. Material is practical and also improves coding ability.",
@@ -175,6 +175,153 @@
         }
     ],
     "extras": {
-        "title": "CPSC 424 01\/CPSC 524 01 - ParallelProgrammingTechniques"
+        "title": "CPSC 424 01/CPSC 524 01 - ParallelProgrammingTechniques"
+    },
+    "sentiment_info": {
+        "YC401": {
+            "sentiment_labels": [
+                "neutral",
+                "positive",
+                "positive",
+                "neutral",
+                "neutral",
+                "neutral",
+                "positive",
+                "neutral",
+                "neutral",
+                "neutral",
+                "positive",
+                "positive",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.6188988089561462,
+                0.9372584819793701,
+                0.5060402750968933,
+                0.6040976047515869,
+                0.6613463163375854,
+                0.6168774366378784,
+                0.7502104043960571,
+                0.6908826231956482,
+                0.6233618855476379,
+                0.5474694967269897,
+                0.6054836511611938,
+                0.9116365909576416,
+                0.617042601108551
+            ],
+            "sentiment_counts": {
+                "neutral": 7,
+                "positive": 6
+            },
+            "sentiment_distribution": {
+                "neutral": 0.5384615384615384,
+                "positive": 0.46153846153846156
+            },
+            "sentiment_overall": [
+                "neutral",
+                7
+            ]
+        },
+        "YC403": {
+            "sentiment_labels": [
+                "negative",
+                "positive",
+                "positive",
+                "negative",
+                "positive",
+                "positive",
+                "neutral",
+                "neutral",
+                "positive",
+                "neutral",
+                "negative",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.5976853370666504,
+                0.7702968120574951,
+                0.7174663543701172,
+                0.6543812155723572,
+                0.9169179201126099,
+                0.7098644375801086,
+                0.7295289039611816,
+                0.5147157907485962,
+                0.8571973443031311,
+                0.6973007321357727,
+                0.4915613830089569,
+                0.7827587127685547
+            ],
+            "sentiment_counts": {
+                "negative": 3,
+                "positive": 6,
+                "neutral": 3
+            },
+            "sentiment_distribution": {
+                "negative": 0.25,
+                "positive": 0.5,
+                "neutral": 0.25
+            },
+            "sentiment_overall": [
+                "positive",
+                6
+            ]
+        },
+        "YC409": {
+            "sentiment_labels": [
+                "negative",
+                "neutral",
+                "positive",
+                "positive",
+                "positive",
+                "positive",
+                "positive",
+                "positive",
+                "positive",
+                "positive",
+                "positive",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.5861872434616089,
+                0.5822916030883789,
+                0.9497548341751099,
+                0.7688187956809998,
+                0.777833104133606,
+                0.8913039565086365,
+                0.8773911595344543,
+                0.5841535925865173,
+                0.9290385842323303,
+                0.9408852458000183,
+                0.7159430384635925,
+                0.8671094179153442
+            ],
+            "sentiment_counts": {
+                "negative": 1,
+                "neutral": 1,
+                "positive": 10
+            },
+            "sentiment_distribution": {
+                "negative": 0.08333333333333333,
+                "neutral": 0.08333333333333333,
+                "positive": 0.8333333333333334
+            },
+            "sentiment_overall": [
+                "positive",
+                10
+            ]
+        },
+        "final_label": "positive",
+        "final_count": 22,
+        "final_proportion": 0.5945945945945946,
+        "final_counts": {
+            "neutral": 11,
+            "positive": 22,
+            "negative": 4
+        },
+        "final_distribution": {
+            "neutral": 0.2972972972972973,
+            "positive": 0.5945945945945946,
+            "negative": 0.10810810810810811
+        }
     }
 }

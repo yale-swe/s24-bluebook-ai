@@ -10,47 +10,51 @@ This file runs sentiment classification on CourseTable data as follows:
 
 Args
 - data_path: Path to the desired folder containing .json files for courses
-- [OBSOLETE] sentiment_input_fields: List containing desired fields in each course's json object to consider for sentiment analysis
+- sentiment_input_fields: List containing IDs of the desired review questions in each course's json object to consider for overall sentiment score computation
 
 Processing
 - Consider each .json file in 'data_path'
 - For each item (representing a single course) in the .json: 
-    - Retrieve the relevant information specified by 'sentiment_input_fields'
-    - Format as string
+    - Retrieve the relevant review information 
+    - Format information as string
     - Pass to sentiment analysis model
     - Store result as a new field(s) in the json object
+    - Perform further processing as specified below, in Sentiment Analysis Details
 
 Sentiment Analysis Details
-- Model used: https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest?text=Covid+cases+are+increasing+fast%21
-- For each review question, apply sentiment analysis to EACH student-written response to the question for a given course
-- Count up the # of positive, negative, and neutral labels
-- Compute proportions of each label and use the max proportion one as the true lbel
+- Model used: https://huggingface.co/siebert/sentiment-roberta-large-english 
+- For a given course, apply sentiment analysis to EACH student-written response to the review questions in consideration
+- Count up the # of positive & negative labaels
+- Compute proportions of each label and use the max proportion one as the true label
+    - If the positive and negative ratings are close in count (proportion differs by <0.1, set the label to neutral with score 0.5)
 - Update the current course's json object with the following:
     - For each review question:
         - List[str]: sentiment labels for each review
         - List[float]: sentiment scores for each review
-        - Dict[float]: proportions of pos/neg/neutral reviews
+        - Dict[int]: raw counts of pos/neg reviews
+        - Dict[float]: proportions of pos/neg reviews
+        - List[str/float]: overall label for the question & float
     - Overall:
-        - str: final sentiment label for the course's reviews (averaged across all reviews)
-        - float: final sentiment label's proportion score (again across all reviews)
+        - str: final sentiment label, computed using fields specified in sentiment_input_fields
+        - int: raw count for final sentiment label
+        - float: final sentiment label's proportion score
+        - Dict[int]: final raw counts of pos/neg reviews, across fields specified in sentiment_input_fields
+        - Dict[float]: final proportions of pos/neg reviews, across fields specified in sentiment_input_fields
 
 Result
-- Updated .json files with new sentiment field for each course's json object
+- Updated .json files with new sentiment field for each course's json object, written in-place to the original files
 """
 
 # Load sentiment model for use throughout rest of code
-sentiment_analysis = pipeline("sentiment-analysis",model="cardiffnlp/twitter-roberta-base-sentiment-latest", max_length=512, truncation=True)
+sentiment_analysis = pipeline("sentiment-analysis",model="siebert/sentiment-roberta-large-english", max_length=512, truncation=True)
 
 # Get appropriate most common sentiment label
 def get_most_common(
         stats_dict: Counter,
     ):
-    if stats_dict['positive'] == stats_dict['neutral'] == 0.5:
-        return 'positive', 0.5
-    if stats_dict['negative'] == stats_dict['neutral'] == 0.5:
-        return 'negative', 0.5
-    if stats_dict['negative'] == stats_dict['positive'] == 0.5:
-        return 'neutral', 0.0
+    # if scores are within 0.1 of each other, set label to neutral
+    if abs(stats_dict['POSITIVE'] - stats_dict['NEGATIVE']) < 0.1: 
+        return 'neutral', 0.5
     return stats_dict.most_common(1)[0]
 
 # Function to perform sentiment analysis
@@ -74,18 +78,25 @@ def process(
 
     # perform sentiment classification per response
     for comment in question['comments']:
-        sentiment_label, sentiment_score = analyze(question['question_text']+"\n"+comment)
+        sentiment_label, sentiment_score = analyze(comment)
         labels.append(sentiment_label)
         scores.append(sentiment_score)
     
     # compute counts per sentiment class & normalize to get distribution
     counts = Counter(labels)
     distr = Counter(labels)
+    if 'NEGATIVE' not in counts.keys():
+        counts['NEGATIVE'] = 0
+        distr['NEGATIVE'] = 0
+    if 'POSITIVE' not in counts.keys():
+        counts['POSITIVE'] = 0
+        distr['POSITIVE'] = 0
+
     num_labels = len(labels)
     for sentiment in distr.keys():
         distr[sentiment] /= num_labels
-    
-    overall_label = get_most_common(counts) # label with max count
+        
+    overall_label = get_most_common(distr) # label with max count
 
     return labels, scores, counts, distr, overall_label
 
@@ -123,7 +134,7 @@ def main(args):
                 for question in narratives:
 
                     # What knowledge, skills, and insights did you develop by taking this course?
-                    if 'YC401' in question['question_id']:
+                    if 'YC401' in args.sentiment_input_fields and 'YC401' in question['question_id']:
                         labels, scores, counts, distr, overall_label = process(question)
                         course['sentiment_info']['YC401'] = {
                             'sentiment_labels': labels, 
@@ -135,7 +146,7 @@ def main(args):
                         final_counts += counts
 
                     # What are the strengths and weaknesses of this course and how could it be improved?
-                    elif 'YC403' in question['question_id']:
+                    elif 'YC403' in args.sentiment_input_fields and 'YC403' in question['question_id']:
                         labels, scores, counts, distr, overall_label = process(question)
                         course['sentiment_info']['YC403'] = {
                             'sentiment_labels': labels, 
@@ -147,7 +158,7 @@ def main(args):
                         final_counts += counts
 
                     # Would you recommend this course to another student? Please explain.
-                    elif 'YC409' in question['question_id']:
+                    elif 'YC409' in args.sentiment_input_fields and 'YC409' in question['question_id']:
                         labels, scores, counts, distr, overall_label = process(question)
                         course['sentiment_info']['YC409'] = {
                             'sentiment_labels': labels, 
@@ -187,21 +198,24 @@ def main(args):
 
             else:
                 course['sentiment_info'] = {}
-                course['sentiment_info']['YC401'] = {
-                            'sentiment_labels': [], 
-                            'sentiment_scores': [],
-                            'sentiment_counts': Counter(), 
-                            'sentiment_distribution': Counter(), 
-                            'sentiment_overall': '',
-                        }
-                course['sentiment_info']['YC403'] = {
-                            'sentiment_labels': [], 
-                            'sentiment_scores': [],
-                            'sentiment_counts': Counter(), 
-                            'sentiment_distribution': Counter(), 
-                            'sentiment_overall': '',
-                        }
-                course['sentiment_info']['YC409'] = {
+                if 'YC401' in args.sentiment_input_fields: 
+                    course['sentiment_info']['YC401'] = {
+                                'sentiment_labels': [], 
+                                'sentiment_scores': [],
+                                'sentiment_counts': Counter(), 
+                                'sentiment_distribution': Counter(), 
+                                'sentiment_overall': '',
+                            }
+                if 'YC403' in args.sentiment_input_fields: 
+                    course['sentiment_info']['YC403'] = {
+                                'sentiment_labels': [], 
+                                'sentiment_scores': [],
+                                'sentiment_counts': Counter(), 
+                                'sentiment_distribution': Counter(), 
+                                'sentiment_overall': '',
+                            }
+                if 'YC409' in args.sentiment_input_fields: 
+                    course['sentiment_info']['YC409'] = {
                             'sentiment_labels': [], 
                             'sentiment_scores': [],
                             'sentiment_counts': Counter(), 
@@ -227,7 +241,7 @@ def main(args):
 
 # Call the main function to process all JSON files
 # Example call: python sentiment_classification.py --sentiment_input_fields title code --data_path data/test_courses
-# Example call #2: python backend/sentiment_classification.py --data_path=./data/course_evals
+# Example call #2: python backend/sentiment_classification.py --data_path=./data/course_evals --sentiment_input_fields YC409 YC403 YC401
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -236,18 +250,18 @@ if __name__ == "__main__":
     parser.add_argument("--data_path", 
                         type=str, 
                         default="data/test_courses",
-                        help="Folder where the .json files for the course data are located") 
+                        help="Folder where the .json files for the course data are located.") 
 
     parser.add_argument("--start_file_idx", 
                         type=int, 
                         default=0,
                         help="Specify which index of file to start sentiment analysis on. For when the run is paused and desired to be resumed later.") 
 
-    # parser.add_argument("--sentiment_input_fields", 
-    #                     nargs="*",  # 0 or more values expected => creates a list
-    #                     type=str,
-    #                     default = ['narratives'] # other options: title, code
-    #                     help="Specify what field(s)/attribute(s) of each course to use to run sentiment classification") 
+    parser.add_argument("--sentiment_input_fields", 
+                        nargs="*",  # 0 or more values expected => creates a list
+                        type=str,
+                        default = ['YC409'], # other options: YC401, YC403
+                        help="Specify what field(s)/attribute(s) of each course to use to compute the overall final sentiment score/label.") 
 
     args = parser.parse_args()
 

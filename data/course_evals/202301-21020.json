@@ -122,7 +122,7 @@
             "question_id": "YC401",
             "question_text": "What knowledge, skills, and insights did you develop by taking this course?",
             "comments": [
-                "Reading papers and presenting\/talking about them. Also using an ML library on a dataset, and then writing a report on what you did.",
+                "Reading papers and presenting/talking about them. Also using an ML library on a dataset, and then writing a report on what you did.",
                 "Writing reports",
                 "machine learning applications in a variety of industries",
                 "General awareness of ML methods.",
@@ -138,7 +138,7 @@
             "question_id": "YC403",
             "question_text": "What are the strengths and weaknesses of this course and how could it be improved?",
             "comments": [
-                "I enjoyed this class, but I think you get what you put into it. The guest lectures and student presentations can be interesting, but require you to be there\/pay attention to actually learn anything. I'm not really sure how you could improve the class without losing the research part of it though.",
+                "I enjoyed this class, but I think you get what you put into it. The guest lectures and student presentations can be interesting, but require you to be there/pay attention to actually learn anything. I'm not really sure how you could improve the class without losing the research part of it though.",
                 "Very disorganized. You hardly learn anything from student presentations. But for a course that is so disorganized it is also unreasonably strict on grading and late day policies. The teaching staff is unresponsive and makes unreasonable requirements.",
                 "very interesting guest speakers",
                 "Very un-engaging, boring, and most of the class was student presentations which seemed like a waste of a class.",
@@ -161,7 +161,7 @@
                 "yes the guest lecturers are great",
                 "No, this was the worst class I've taken at Yale. Not structured at all.",
                 "If you - like myself - have a computer science background and are trying to explore scientific ways of applying it, I think this course would be a great fit. If you study a different area, I don't think this course works well as a first exposure to ML; a good bit of preliminary knowledge is needed to get much out of even the student presentations.",
-                "yes and no: if you do not care about your grade or CR\/D\/F, then yes, but if you do, then take another course",
+                "yes and no: if you do not care about your grade or CR/D/F, then yes, but if you do, then take another course",
                 "Yes, it would be a good seminar course in Applied ML",
                 "Take it if you want a low workload CS elective and are remotely interested in ML.",
                 "If you are interested in a CS gut, this is a good class to take. There is one coding project that is done independently, as well as papers and presentations. However my engagement with this class was really low. The class format wasn't conducive to learning but I was able to research more on ML topics that I was personally interested in.",
@@ -174,6 +174,151 @@
         }
     ],
     "extras": {
-        "title": "CPSC 482 01\/CPSC 582 01 - Current Topics in Applied ML"
+        "title": "CPSC 482 01/CPSC 582 01 - Current Topics in Applied ML"
+    },
+    "sentiment_info": {
+        "YC401": {
+            "sentiment_labels": [
+                "neutral",
+                "neutral",
+                "positive",
+                "neutral",
+                "neutral",
+                "neutral",
+                "neutral",
+                "positive",
+                "neutral",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.7393792867660522,
+                0.5423275232315063,
+                0.5074365139007568,
+                0.7131468057632446,
+                0.6403369903564453,
+                0.6216568946838379,
+                0.6265622973442078,
+                0.5912148356437683,
+                0.7128546833992004,
+                0.8150618672370911
+            ],
+            "sentiment_counts": {
+                "neutral": 7,
+                "positive": 3
+            },
+            "sentiment_distribution": {
+                "neutral": 0.7,
+                "positive": 0.3
+            },
+            "sentiment_overall": [
+                "neutral",
+                7
+            ]
+        },
+        "YC403": {
+            "sentiment_labels": [
+                "neutral",
+                "negative",
+                "positive",
+                "negative",
+                "positive",
+                "neutral",
+                "positive",
+                "positive",
+                "neutral",
+                "neutral",
+                "neutral",
+                "positive"
+            ],
+            "sentiment_scores": [
+                0.4730636179447174,
+                0.8612378239631653,
+                0.6880834102630615,
+                0.8984196186065674,
+                0.928810715675354,
+                0.6804846525192261,
+                0.6157591938972473,
+                0.8533464670181274,
+                0.6885534524917603,
+                0.4840242564678192,
+                0.4667779803276062,
+                0.6623111367225647
+            ],
+            "sentiment_counts": {
+                "neutral": 5,
+                "negative": 2,
+                "positive": 5
+            },
+            "sentiment_distribution": {
+                "neutral": 0.4166666666666667,
+                "negative": 0.16666666666666666,
+                "positive": 0.4166666666666667
+            },
+            "sentiment_overall": [
+                "neutral",
+                5
+            ]
+        },
+        "YC409": {
+            "sentiment_labels": [
+                "neutral",
+                "negative",
+                "positive",
+                "negative",
+                "positive",
+                "neutral",
+                "positive",
+                "neutral",
+                "neutral",
+                "neutral",
+                "neutral",
+                "positive",
+                "positive",
+                "neutral"
+            ],
+            "sentiment_scores": [
+                0.7130582332611084,
+                0.7797221541404724,
+                0.90778648853302,
+                0.9191526174545288,
+                0.5860471725463867,
+                0.621447741985321,
+                0.7755785584449768,
+                0.7696563005447388,
+                0.5145951509475708,
+                0.8230147957801819,
+                0.7498336434364319,
+                0.8326473236083984,
+                0.8922098875045776,
+                0.7622280716896057
+            ],
+            "sentiment_counts": {
+                "neutral": 7,
+                "negative": 2,
+                "positive": 5
+            },
+            "sentiment_distribution": {
+                "neutral": 0.5,
+                "negative": 0.14285714285714285,
+                "positive": 0.35714285714285715
+            },
+            "sentiment_overall": [
+                "neutral",
+                7
+            ]
+        },
+        "final_label": "neutral",
+        "final_count": 19,
+        "final_proportion": 0.5277777777777778,
+        "final_counts": {
+            "neutral": 19,
+            "positive": 13,
+            "negative": 4
+        },
+        "final_distribution": {
+            "neutral": 0.5277777777777778,
+            "positive": 0.3611111111111111,
+            "negative": 0.1111111111111111
+        }
     }
 }
