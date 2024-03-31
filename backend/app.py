@@ -8,7 +8,7 @@ from pymongo.mongo_client import MongoClient
 
 COURSE_QUERY_LIMIT = 5
 SAFETY_CHECK_ENABLED = False
-DATABASE_RELEVANCY_CHECK_ENABLED = False
+DATABASE_RELEVANCY_CHECK_ENABLED = True
 
 load_dotenv()
 
@@ -41,6 +41,8 @@ def chat():
             del message['id']
         if message['role'] == 'ai':
             message['role'] = 'assistant'
+
+    print(user_messages)
 
     if SAFETY_CHECK_ENABLED:
         # for safety check, not to be included in final response
@@ -76,7 +78,7 @@ def chat():
         user_messages_database_relevancy_check = user_messages.copy()
         user_messages_database_relevancy_check.append({
             'role': 'user',
-            'content': 'Will you be able to better answer my questions with information about specific courses related to the user query at Yale University? You should answer "yes" if you need information about courses at Yale that you don\'t have, otherwise you should answer "no".'
+            'content': 'Will you be able to better answer my question with access to specific courses at Yale University? If you answer "yes", you will be provided with courses that are semantically similar to my question. Answer "yes" or "no".'
         })
 
         user_messages_database_relevancy_check = chat_completion_request(messages=user_messages_database_relevancy_check)
@@ -128,7 +130,7 @@ def chat():
     recommendation_prompt = f'Here are some courses that might be relevant to the user request:\n\n'
     for course in recommended_courses:
         recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
-    recommendation_prompt += 'Provide a response to the user. Incorporate specific course information if it is relevant to the user request.'
+    recommendation_prompt += 'Provide a response to the user. Incorporate specific course information if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list.'
 
     user_messages.append({
         'role': 'system',
