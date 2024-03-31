@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 from lib import chat_completion_request, create_embedding
@@ -24,12 +25,22 @@ except Exception as e:
 
 # flask
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/api/chat', methods=['POST'])
 def chat():
 
-    data = request.get_json()    
+    data = request.get_json()
     user_messages = data['message']
+
+    # remove id before sending to OpenAI
+    for message in user_messages:
+        if 'id' in message:
+            del message['id']
+        if message['role'] == 'ai':
+            message['role'] = 'assistant'
+
+    print(user_messages)
 
     # for safety check, not to be included in final response
     user_messages_safety_check = user_messages.copy()
@@ -47,20 +58,23 @@ def chat():
             'response': response,
             'courses': []
         }
+        print('failed safety check')
         return jsonify(json_response)
+    else:
+        print('passed safety check')
     
     # adding system message if user message does not include a system message header
     if user_messages[0]['role'] != 'system':
         user_messages.insert(0, {
             'role': 'system',
-            'content': 'You are a helpful assistant for Yale University students to ask questions about courses and academics.'
+            'content': 'Your name is Eli. You are a helpful assistant for Yale University students to ask questions about courses and academics.'
         })
     
     # checking if database query is necessary
     user_messages_database_relevancy_check = user_messages.copy()
     user_messages_database_relevancy_check.append({
         'role': 'user',
-        'content': 'Will you be able to better answer my questions with specific information about courses related to the user query at Yale University? Answer "yes" or "no".'
+        'content': 'Will you be able to better answer my questions with information about specific courses related to the user query at Yale University? You should answer "yes" if you need information about courses at Yale that you don\'t have, otherwise you should answer "no".'
     })
 
     user_messages_database_relevancy_check = chat_completion_request(messages=user_messages_database_relevancy_check)
@@ -73,7 +87,10 @@ def chat():
             'response': response,
             'courses': []
         }
+        print('no need to query database for course information')
         return jsonify(json_response)
+    else:
+        print('need to query database for course information')
 
     # create embedding for user message to query against vector index
     query_vector = create_embedding(user_messages[-1]['content'])
