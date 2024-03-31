@@ -12,6 +12,7 @@
   background-color: #63a6d0; /* background color for the chat container */
   box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* might remove*/
   overflow: hidden; /* ensures the content is within border radius */
+  position: relative;
 }
 
 .messages {
@@ -95,4 +96,87 @@
   .chat-container {
     width: 90%;
   }
+}
+
+.logoContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 50px; 
+}
+
+.chatbotName {
+  margin-left: 10px;
+  font-size: 20px; 
+  font-weight: bold; 
+}
+/* Dark and light mode specific styles */
+.dark {
+  background-color: #333; 
+  color: #fff; 
+}
+
+.light {
+  background-color: #fff; 
+  color: #000; 
+}
+
+.darkModeToggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10; 
+  cursor: pointer;
+  background-color: #f0f0f0; 
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+}
+
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #f0f0f0; /* Adjust based on your theme */
+}
+
+.navItem {
+  position: relative;
+  margin: 0 15px;
+  cursor: pointer;
+}
+
+.dropdownContent {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdownContent a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.navItem:hover .dropdownContent {
+  display: block;
+}
+
+.infoSection {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background for visibility */
+  border: 1px solid #ccc; /* Light border for some visual separation */
 }
