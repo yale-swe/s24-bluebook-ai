@@ -2,6 +2,11 @@ from tenacity import retry, wait_random_exponential, stop_after_attempt
 import os
 from openai import OpenAI
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 # Open the JSON file
 with open('course_subjects.json', 'r') as file:
@@ -18,7 +23,7 @@ tools = [
             "type": "object",
             "properties": {
                 "subject_code": {
-        ~            "type": "string",
+                    "type": "string",
                     "enum": [str(key) for key in subjects.keys()],
                     "description": "A code for the subject of instruction",
                 },
@@ -47,8 +52,7 @@ tools = [
     }
 ]
 
-# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-client = OpenAI(api_key="<OPENAI_API_KEY>")
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
 def create_embedding(text, model='text-embedding-3-small'):
@@ -64,7 +68,7 @@ def create_embedding(text, model='text-embedding-3-small'):
         return e
 
 @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
-def chat_completion_request(messages, tools=None, tool_choice=None, model='gpt-3.5-turbo'):
+def chat_completion_request(messages, tools=None, tool_choice=None, model='gpt-4'):
     try:
         response = client.chat.completions.create(
             model=model,
