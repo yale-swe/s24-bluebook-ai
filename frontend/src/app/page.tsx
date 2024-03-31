@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import styles from '/Users/tselmegulammandakh/Downloads/cpsc439/s24-bluebook-ai/frontend/src/app/page.module.css'; // change to ur own directory
+import styles from './page.module.css'; // change to ur own directory
 
 export default function Chat() {
   const [isTyping, setIsTyping] = useState(false);
@@ -18,17 +18,19 @@ export default function Chat() {
   
     // add the user's message to the chat.
     const newUserMessage = { id: `user-${Date.now()}`, content: input, role: 'user' };
-    setMessages(messages => [...messages, newUserMessage]);
 
+    setMessages(messages => [...messages, newUserMessage]);
     setIsTyping(true);
-  
-    const response = await fetch('http://127.0.0.1:8000/chat', {
+
+    const response = await fetch('http://127.0.0.1:8000/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       // body: JSON.stringify({ message: [{ content: input, role: 'user' }] }),
-      body: JSON.stringify({ message: input }),
+      body: JSON.stringify({
+        message: [...messages, newUserMessage],
+      }),
     });
     
     setIsTyping(false); 
@@ -42,6 +44,7 @@ export default function Chat() {
     }
   
     setInput('');
+
   };
   
   const simulateTypingEffect = (message: string, role: string, messageId: string) => {
