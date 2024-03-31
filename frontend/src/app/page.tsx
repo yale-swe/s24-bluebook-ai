@@ -9,13 +9,15 @@ export default function Chat() {
   const [messages, setMessages] = useState([{ id: 'welcome-msg', content: 'How may I help you?', role: 'ai' }]);
   const [chatVisible, setChatVisible] = useState(false);
 
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
   const handleInputChange = (e: { target: { value: React.SetStateAction<string>; }; }) => {
     setInput(e.target.value);
   };
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-  
+    setInput('');
     // add the user's message to the chat.
     const newUserMessage = { id: `user-${Date.now()}`, content: input, role: 'user' };
     setMessages(messages => [...messages, newUserMessage]);
@@ -41,7 +43,7 @@ export default function Chat() {
       console.error('Failed to send message');
     }
   
-    setInput('');
+    
   };
   
   const simulateTypingEffect = (message: string, role: string, messageId: string) => {
@@ -76,6 +78,10 @@ export default function Chat() {
     console.log("Toggling chat visibility. Current state:", chatVisible);
     setChatVisible(!chatVisible);
   };
+
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
+  };
   
 
   return (
@@ -89,9 +95,10 @@ export default function Chat() {
     </button>
 
     {chatVisible && (
-      <div className={`${styles.chatContainer} ${chatVisible ? styles.chatVisible : ''}`}>
+      <div className={`${styles.chatContainer} ${chatVisible ? styles.chatVisible : ''} ${isFullScreen ? styles.fullScreen : ''}`}>
           <div className={styles.chatHeader}>
             BluebookAI Assistant
+            <button onClick={toggleFullScreen} className={styles.expandButton}>Expand</button>
           </div>
         <div className={styles.messages}>
           {messages.map((m) => (

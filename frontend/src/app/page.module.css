@@ -13,6 +13,29 @@
   overflow: hidden;
 } */
 
+/* Full Screen adjustments */
+.fullScreen {
+  position: fixed; /* Use fixed positioning */
+  top: 0;
+  left: 0;
+  right: 0; /* Ensure it stretches to the right edge */
+  bottom: 0; /* Ensure it stretches to the bottom edge */
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  z-index: 1000; /* High z-index to ensure it's above other content */
+  background-color: white; /* Optional: Background color, adjust as needed */
+}
+
+/* Adjust the .expandButton as needed */
+.expandButton {
+  position: absolute;
+  right: 10px; /* Position towards the right of the chat header */
+  top: 10px; /* Adjust based on your header height */
+  cursor: pointer;
+  /* Add more styling here according to your design */
+}
+
+
 .floatingChatButton {
   position: fixed;
   bottom: 20px;
