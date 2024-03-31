@@ -36,7 +36,7 @@ export default function Chat() {
     if (response.ok) {
       const data = await response.json();
       // simulateTypingEffect(data.message[0].content, 'ai', `ai-${Date.now()}`);
-      simulateTypingEffect(data.message, 'ai', `ai-${Date.now()}`);
+      simulateTypingEffect(data.response, 'ai', `ai-${Date.now()}`);
     } else {
       console.error('Failed to send message');
     }
@@ -73,6 +73,7 @@ export default function Chat() {
   };
 
   const toggleChatVisibility = () => {
+    console.log("Toggling chat visibility. Current state:", chatVisible);
     setChatVisible(!chatVisible);
   };
   
