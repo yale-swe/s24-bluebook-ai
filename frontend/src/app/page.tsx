@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import styles from "./page.module.css"; // change to ur own directory
+import { format } from "path";
 
 export default function Chat() {
   const [isTyping, setIsTyping] = useState(false);
@@ -37,6 +38,8 @@ export default function Chat() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
+    setInput("");
+
     // add the user's message to the chat.
     const newUserMessage = {
       id: `user-${Date.now()}`,
@@ -67,8 +70,6 @@ export default function Chat() {
     } else {
       console.error("Failed to send message");
     }
-
-    setInput("");
   };
 
   const simulateTypingEffect = (
@@ -164,6 +165,20 @@ export default function Chat() {
     }
   };
 
+  const formatMessage = (content: string) => {
+    const boldRegex = /\*\*(.*?)\*\*/g;
+    return content.split(boldRegex).map((part, index) => {
+      // Every even index is not bold, odd indices are the bold text between **.
+      if (index % 2 === 0) {
+        // Normal text
+        return part;
+      } else {
+        // Bold text
+        return <strong key={index}>{part}</strong>;
+      }
+    });
+  };
+
   return (
     <>
       <button
@@ -189,11 +204,11 @@ export default function Chat() {
                   m.role === "user" ? styles.user : styles.ai
                 }`}
               >
-                {m.content}
+                {formatMessage(m.content)}
               </div>
             ))}
             {isTyping && (
-              <div className={styles.typingIndicator}>
+              <div className={styles["typing-indicator"]}>
                 <span></span>
                 <span></span>
                 <span></span>
