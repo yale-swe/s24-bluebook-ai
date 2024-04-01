@@ -1,10 +1,14 @@
-from flask import Flask, request, jsonify
+from urllib.parse import urljoin
+from flask import Flask, request, jsonify, session, redirect, url_for
 from flask_cors import CORS
+from flask_cas import CAS, login_required
 import os
 from dotenv import load_dotenv
 from lib import chat_completion_request, create_embedding
 import json
 from pymongo.mongo_client import MongoClient
+import requests
+import xml.etree.ElementTree as ET
 
 COURSE_QUERY_LIMIT = 5
 
@@ -25,8 +29,59 @@ except Exception as e:
 
 # flask
 app = Flask(__name__)
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', '3d6f45a5fc12445dbac2f59c3b6c7cb1')
 CORS(app)
+CAS(app)
 
+app.config['CAS_SERVER'] = 'https://secure.its.yale.edu/cas'
+
+@app.route('/login', methods=['GET'])
+def login():
+    return redirect(url_for('cas.login'))
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    session.clear()
+    return redirect(url_for('cas.logout'))
+
+@app.route('/route_after_login', methods=['GET'])
+@login_required
+def route_after_login():
+    # Handle what happens after successful login
+    return 'Logged in as ' + session['CAS_USERNAME']
+
+@app.route('/validate_ticket', methods=['POST'])
+def validate_cas_ticket():
+    data = request.get_json()
+    ticket = data.get("ticket")
+    service_url = data.get("service_url")
+    print(f"Received ticket: {ticket}, service URL: {service_url}")  # Log details
+
+    if not ticket or not service_url:
+        return jsonify({"error": "Ticket or service URL not provided"}), 400
+
+    cas_validate_url = 'https://secure.its.yale.edu/cas/serviceValidate'
+    params = {'ticket': ticket, 'service': service_url}
+    response = requests.get(cas_validate_url, params=params)
+
+    if response.status_code == 200:
+        # Parse the XML response
+        root = ET.fromstring(response.content)
+
+        # Namespace in the XML response
+        ns = {'cas': 'http://www.yale.edu/tp/cas'}
+        
+        # Check for authentication success
+        if root.find('.//cas:authenticationSuccess', ns) is not None:
+            user = root.find('.//cas:user', ns).text
+            # Optionally handle proxyGrantingTicket if you need it
+            return jsonify({"isAuthenticated": True, "user": user})
+        else:
+            return jsonify({"isAuthenticated": False}), 401
+    else:
+        print("response status is not 200")
+        return jsonify({"isAuthenticated": False}), 401
+    
 @app.route('/api/chat', methods=['POST'])
 def chat():
 
