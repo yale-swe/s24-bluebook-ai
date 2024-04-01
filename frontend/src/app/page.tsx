@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import styles from './page.module.css'; // change to ur own directory
+import styles from './page.module.css';
 import { format } from 'path';
 
 export default function Chat() {
@@ -117,7 +117,7 @@ export default function Chat() {
             </div>
           ))}
           {isTyping && (
-          <div className={styles.typingIndicator}>
+          <div className={styles['typing-indicator']}>
             <span></span>
             <span></span>
             <span></span>
