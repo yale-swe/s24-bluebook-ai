@@ -11,6 +11,8 @@ import requests
 import xml.etree.ElementTree as ET
 
 COURSE_QUERY_LIMIT = 5
+SAFETY_CHECK_ENABLED = False
+DATABASE_RELEVANCY_CHECK_ENABLED = True
 
 load_dotenv()
 
@@ -97,26 +99,27 @@ def chat():
 
     print(user_messages)
 
-    # for safety check, not to be included in final response
-    user_messages_safety_check = user_messages.copy()
-    user_messages_safety_check.append({
-        'role': 'user',
-        'content': 'Am I asking for help with courses or academics? Answer "yes" or "no".'
-    })
+    if SAFETY_CHECK_ENABLED:
+        # for safety check, not to be included in final response
+        user_messages_safety_check = user_messages.copy()
+        user_messages_safety_check.append({
+            'role': 'user',
+            'content': 'Am I asking for help with courses or academics? Answer "yes" or "no".'
+        })
 
-    response_safety_check = chat_completion_request(messages=user_messages_safety_check)
-    response_safety_check = response_safety_check.choices[0].message.content
-    
-    if 'no' in response_safety_check.lower():
-        response = 'I am sorry, but I can only assist with questions related to courses or academics at this time.'
-        json_response = {
-            'response': response,
-            'courses': []
-        }
-        print('failed safety check')
-        return jsonify(json_response)
-    else:
-        print('passed safety check')
+        response_safety_check = chat_completion_request(messages=user_messages_safety_check)
+        response_safety_check = response_safety_check.choices[0].message.content
+        
+        if 'no' in response_safety_check.lower():
+            response = 'I am sorry, but I can only assist with questions related to courses or academics at this time.'
+            json_response = {
+                'response': response,
+                'courses': []
+            }
+            print('failed safety check')
+            return jsonify(json_response)
+        else:
+            print('passed safety check')
     
     # adding system message if user message does not include a system message header
     if user_messages[0]['role'] != 'system':
@@ -125,27 +128,28 @@ def chat():
             'content': 'Your name is Eli. You are a helpful assistant for Yale University students to ask questions about courses and academics.'
         })
     
-    # checking if database query is necessary
-    user_messages_database_relevancy_check = user_messages.copy()
-    user_messages_database_relevancy_check.append({
-        'role': 'user',
-        'content': 'Will you be able to better answer my questions with information about specific courses related to the user query at Yale University? You should answer "yes" if you need information about courses at Yale that you don\'t have, otherwise you should answer "no".'
-    })
+    if DATABASE_RELEVANCY_CHECK_ENABLED:
+        # checking if database query is necessary
+        user_messages_database_relevancy_check = user_messages.copy()
+        user_messages_database_relevancy_check.append({
+            'role': 'user',
+            'content': 'Will you be able to better answer my question with access to specific courses at Yale University? If you answer "yes", you will be provided with courses that are semantically similar to my question. Answer "yes" or "no".'
+        })
 
-    user_messages_database_relevancy_check = chat_completion_request(messages=user_messages_database_relevancy_check)
-    response_user_messages_database_relevancy_check = user_messages_database_relevancy_check.choices[0].message.content
+        user_messages_database_relevancy_check = chat_completion_request(messages=user_messages_database_relevancy_check)
+        response_user_messages_database_relevancy_check = user_messages_database_relevancy_check.choices[0].message.content
 
-    if 'no' in response_user_messages_database_relevancy_check.lower():
-        response = chat_completion_request(messages=user_messages)
-        response = response.choices[0].message.content
-        json_response = {
-            'response': response,
-            'courses': []
-        }
-        print('no need to query database for course information')
-        return jsonify(json_response)
-    else:
-        print('need to query database for course information')
+        if 'no' in response_user_messages_database_relevancy_check.lower():
+            response = chat_completion_request(messages=user_messages)
+            response = response.choices[0].message.content
+            json_response = {
+                'response': response,
+                'courses': []
+            }
+            print('no need to query database for course information')
+            return jsonify(json_response)
+        else:
+            print('need to query database for course information')
 
     # create embedding for user message to query against vector index
     query_vector = create_embedding(user_messages[-1]['content'])
@@ -181,7 +185,7 @@ def chat():
     recommendation_prompt = f'Here are some courses that might be relevant to the user request:\n\n'
     for course in recommended_courses:
         recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
-    recommendation_prompt += 'Provide a response to the user. Incorporate specific course information if it is relevant to the user request.'
+    recommendation_prompt += 'Provide a response to the user. Incorporate specific course information if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list.'
 
     user_messages.append({
         'role': 'system',
