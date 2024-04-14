@@ -9,27 +9,17 @@ import pytest
 def client():
     app.config["TESTING"] = True
     app.config["DATABASE_URI"] = "mongodb://test:test@localhost/test_db"
-
     # Setup other necessary configuration like secret keys or disable CSRF if needed
 
     with app.test_client() as client:
         yield client
 
 
-@patch("app.requests.get")  # Mocking requests.get used in the CAS validation
-@patch("app.chat_completion_request")  # Mocking the OpenAI call
-@patch("app.create_embedding")  # Mocking the embedding creation
-@patch("app.MongoClient")  # Mock the MongoDB client
-def test_chat_endpoint(
-    mock_mongo_client,
-    mock_create_embedding,
-    mock_chat_completion_request,
-    mock_get,
-    client,
-):
-    # Setup MongoDB mock
-    mock_db = mock_mongo_client.return_value.__getitem__.return_value
-    mock_collection = mock_db.__getitem__.return_value
+@patch("app.MongoClient")  # Mock the entire MongoClient to avoid any real DB calls
+def test_chat_endpoint(mock_mongo_client, client):
+    # Mock database and collection
+    mock_db = mock_mongo_client.return_value
+    mock_collection = mock_db.test_db.parsed_courses
     mock_collection.aggregate.return_value = [
         {
             "course_code": "CS101",
@@ -39,28 +29,34 @@ def test_chat_endpoint(
         }
     ]
 
-    # Setup embedding mock
-    mock_create_embedding.return_value = []
-    for i in range(1, 1537):
-        mock_create_embedding.return_value.append(float("0." + str(i)))
+    # Setup the mock for the chat completion request to simulate OpenAI response
+    with patch("app.chat_completion_request") as mock_chat_completion_request:
+        mock_chat_completion_request.return_value.choices = [
+            MagicMock(message=MagicMock(content="Here's your response"))
+        ]
 
-    # Setup OpenAI chat mock
-    mock_chat_completion_request.return_value.choices = [
-        MagicMock(message=MagicMock(content="Here's your response"))
-    ]
+        # Setup the mock for the create embedding
+        with patch("app.create_embedding") as mock_create_embedding:
+            mock_create_embedding.return_value = [
+                0.1
+            ] * 1536  # Assume 1536-dimensional embedding
 
-    # Simulate a post request to the chat endpoint
-    response = client.post(
-        "/api/chat",
-        json={"message": [{"role": "user", "content": "Tell me about CS courses"}]},
-    )
+            # Simulate a POST request to the chat endpoint
+            response = client.post(
+                "/api/chat",
+                json={
+                    "message": [{"role": "user", "content": "Tell me about CS courses"}]
+                },
+            )
 
-    # Check if the response is correct
-    assert response.status_code == 200
-    response_data = json.loads(response.data.decode("utf-8"))
-    assert "courses" in response_data
-    assert response_data["response"] == "Here's your response"
-    assert len(response_data["courses"]) == 5
+            # Check if the response is correct
+            assert response.status_code == 200
+            response_data = json.loads(response.data.decode("utf-8"))
+            assert "courses" in response_data
+            assert response_data["response"] == "Here's your response"
+            assert (
+                len(response_data["courses"]) == 5
+            )  # Make sure this matches the expected number of courses
 
 
 class TestCASAuthentication(TestCase):
