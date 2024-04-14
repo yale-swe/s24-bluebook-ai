@@ -9,6 +9,7 @@ import json
 from pymongo.mongo_client import MongoClient
 import requests
 import xml.etree.ElementTree as ET
+import datetime
 
 COURSE_QUERY_LIMIT = 5
 SAFETY_CHECK_ENABLED = False
@@ -31,7 +32,6 @@ def load_config(app, test_config=None):
         # Load configuration from environment variables
         app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 
-
 # Separate function to initialize database
 def init_database(app):
     if "MONGO_URI" in app.config:
@@ -39,7 +39,6 @@ def init_database(app):
         db = client["course_db"]
         app.config["collection"] = db["parsed_courses"]
         # else, set to None or Mock in case of testing
-
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -101,7 +100,14 @@ def create_app(test_config=None):
     @app.route("/api/chat", methods=["POST"])
     def chat():
         data = request.get_json()
-        user_messages = data["message"]
+        user_messages = data.get("message", None)
+
+        filter_season_codes = data.get("season_codes", None) # assume it is an array of season code
+        filter_subject = data.get("subject", None)
+        filter_areas = data.get("areas", None)
+
+        if not user_messages:
+            return jsonify({"error": "No message provided"})
 
         # remove id before sending to OpenAI
         for message in user_messages:
@@ -172,43 +178,71 @@ def create_app(test_config=None):
                 print("need to query database for course information")
 
         # create embedding for user message to query against vector index
-        query_vector = create_embedding(user_messages[-1]["content"])
+        vector_search_prompt_generation = user_messages.copy()
+        vector_search_prompt_generation.append(
+            {
+                "role": "user",
+                "content": "Generate a natural language string to query against the Yale courses vector database that will be helpful to you to generate a response.",
+            }
+        )
+        response = chat_completion_request(messages=vector_search_prompt_generation)
+        response = response.choices[0].message.content
+        print(response)
+
+        query_vector = create_embedding(response)
 
         collection = app.config["collection"]
 
-        database_response = collection.aggregate(
-            [
-                {
-                    "$vectorSearch": {
-                        "index": "parsed_courses_title_description_index",
-                        "path": "embedding",
-                        # 'filter': {
-                        #     'rating': {
-                        #         args['operator']: args['rating']
-                        #     }
-                        # },
-                        "queryVector": query_vector,
-                        "numCandidates": 30,
-                        "limit": COURSE_QUERY_LIMIT,
-                    }
+        aggregate_pipeline = {
+            "$vectorSearch": {
+                "index": "parsed_courses_title_description_index",
+                "path": "embedding",
+                "queryVector": query_vector,
+                "numCandidates": 30,
+                "limit": COURSE_QUERY_LIMIT,
+            }
+        }
+        
+        if filter_season_codes:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {
+                    "$in": filter_season_codes
                 }
-            ]
-        )
+            }
+        
+        if filter_subject:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "subject": {
+                    "$eq": filter_subject
+                }
+            }
 
+        if filter_areas:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "areas": {
+                    "$in": filter_areas
+                }
+            }
+
+        database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
 
         recommended_courses = [
             {
+                "season_code": course["season_code"],
                 "course_code": course["course_code"],
                 "title": course["title"],
                 "description": course["description"],
                 "areas": course["areas"],
+                "sentiment_label": course["sentiment_info"]["final_label"],
+                "sentiment_score": course["sentiment_info"]["final_proportion"],
+                 
             }
             for course in database_response
         ]
 
         recommendation_prompt = (
-            f"Here are some courses that might be relevant to the user request:\n\n"
+            "Here are some courses that might be relevant to the user request:\n\n"
         )
         for course in recommended_courses:
             recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
