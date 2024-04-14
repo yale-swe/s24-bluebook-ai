@@ -2,14 +2,15 @@ name: Python application test
 
 on:
   push:
-    branches: [main]
+    branches:
+      - "*"
   pull_request:
-    branches: [main]
+    branches:
+      - "*"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     services:
       mongodb:
         image: mongo
@@ -30,7 +31,7 @@ jobs:
       - name: Run Tests
         env:
           MONGO_URI: mongodb://localhost:27017/test_db
-          FLASK_SECRET_KEY: \xf0?a\x9a\\\xff\xd4;\x0c\xcbHi
+          FLASK_SECRET_KEY: your_secret_key_here
         run: |
           cd backend
           pytest
