@@ -27,6 +27,19 @@ def load_config(app, test_config=None):
     if test_config:
         # Load test configuration
         app.config.update(test_config)
+        if "COURSE_QUERY_LIMIT" in app.config:
+            global COURSE_QUERY_LIMIT
+            COURSE_QUERY_LIMIT = app.config["COURSE_QUERY_LIMIT"]
+        if "SAFETY_CHECK_ENABLED" in app.config:
+            global SAFETY_CHECK_ENABLED
+            SAFETY_CHECK_ENABLED = app.config["SAFETY_CHECK_ENABLED"]
+        if "DATABASE_RELEVANCY_CHECK_ENABLED" in app.config:
+            global DATABASE_RELEVANCY_CHECK_ENABLED
+            DATABASE_RELEVANCY_CHECK_ENABLED = app.config[
+                "DATABASE_RELEVANCY_CHECK_ENABLED"
+            ]
+        if "FLASK_SECRET_KEY" in app.config:
+            app.secret_key = app.config["FLASK_SECRET_KEY"]
     else:
         # Load configuration from environment variables
         app.config["MONGO_URI"] = os.getenv("MONGO_URI")
