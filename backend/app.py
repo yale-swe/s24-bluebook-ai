@@ -97,6 +97,26 @@ def create_app(test_config=None):
             print("response status is not 200")
             return jsonify({"isAuthenticated": False}), 401
 
+    @app.route("/api/slug", methods=["POST"])
+    def get_chat_history_slug():
+        data = request.get_json()
+        user_messages = data.get("message", None)
+        user_messages_ = user_messages.copy()
+        user_messages_.append(
+            {
+                "role": "user",
+                "content": "Write a descriptive title (3-4 words) for the topic of our conversation with no puncutation. Do not include 'discussion' or 'chat' in the title.",
+            }
+        )
+
+        response = chat_completion_request(messages=user_messages_)
+        try:
+            response = response.choices[0].message.content
+            return jsonify({"slug": response})
+        except:
+            return jsonify({"slug": "Untitled"})
+
+
     @app.route("/api/chat", methods=["POST"])
     def chat():
         data = request.get_json()
