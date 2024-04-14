@@ -38,9 +38,7 @@ def init_database(app):
         client = MongoClient(app.config["MONGO_URI"])
         db = client["course_db"]
         app.config["collection"] = db["parsed_courses"]
-    else:
-        # Set to None or Mock in case of testing
-        app.config["collection"] = None
+        # else, set to None or Mock in case of testing
 
 
 def create_app(test_config=None):
@@ -226,6 +224,7 @@ def create_app(test_config=None):
         return jsonify(json_response)
 
     return app
+
 
 if __name__ == "__main__":
     app = create_app()
