@@ -9,11 +9,14 @@ def client():
     mock_collection.aggregate.return_value = iter(
         [
             {
-                "course_code": "CS101",
-                "title": "Intro to Computer Science",
-                "description": "An introductory course.",
-                "areas": ["Computer Science"],
-            }
+                "areas": ["Hu"],
+                "course_code": "CPSC 150",
+                "description": "Introduction to the basic ideas of computer science (computability, algorithm, virtual machine, symbol processing system), and of several ongoing relationships between computer science and other fields, particularly philosophy of mind.",
+                "season_code": "202303",
+                "sentiment_label": "NEGATIVE",
+                "sentiment_score": 0.9444444444444444,
+                "title": "Computer Science and the Modern Intellectual Agenda",
+            },
         ]
     )
 
@@ -44,7 +47,7 @@ def test_chat_endpoint(client, mock_chat_completion):
     assert response.status_code == 200
     data = response.get_json()
     assert "Mock response based on user message" in data["response"]
-    mock_chat_completion.assert_called_once()
+    assert mock_chat_completion.call_count == 2
 
 
 def test_chat_endpoint_handles_api_error(client, mock_chat_completion):

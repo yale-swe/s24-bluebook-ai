@@ -178,7 +178,18 @@ def create_app(test_config=None):
                 print("need to query database for course information")
 
         # create embedding for user message to query against vector index
-        query_vector = create_embedding(user_messages[-1]["content"])
+        vector_search_prompt_generation = user_messages.copy()
+        vector_search_prompt_generation.append(
+            {
+                "role": "user",
+                "content": "Generate a natural language string to query against the Yale courses vector database that will be helpful to you to generate a response.",
+            }
+        )
+        response = chat_completion_request(messages=vector_search_prompt_generation)
+        response = response.choices[0].message.content
+        print(response)
+
+        query_vector = create_embedding(response)
 
         collection = app.config["collection"]
 
@@ -231,7 +242,7 @@ def create_app(test_config=None):
         ]
 
         recommendation_prompt = (
-            f"Here are some courses that might be relevant to the user request:\n\n"
+            "Here are some courses that might be relevant to the user request:\n\n"
         )
         for course in recommended_courses:
             recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
