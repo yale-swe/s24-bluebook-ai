@@ -32,4 +32,5 @@ jobs:
           MONGO_URI: mongodb://localhost:27017/test_db
           FLASK_SECRET_KEY: \xf0?a\x9a\\\xff\xd4;\x0c\xcbHi
         run: |
+          cd backend
           pytest
