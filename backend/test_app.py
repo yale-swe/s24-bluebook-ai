@@ -44,7 +44,7 @@ def test_chat_endpoint(client, mock_chat_completion):
     assert response.status_code == 200
     data = response.get_json()
     assert "Mock response based on user message" in data["response"]
-    mock_chat_completion.assert_called_once()
+    assert mock_chat_completion.call_count == 2
 
 
 def test_chat_endpoint_handles_api_error(client, mock_chat_completion):
