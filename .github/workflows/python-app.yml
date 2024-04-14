@@ -32,7 +32,8 @@ jobs:
       - name: Run Tests
         env:
           MONGO_URI: mongodb://localhost:27017/test_db
-          FLASK_SECRET_KEY: your_secret_key_here
+          FLASK_SECRET_KEY: fake_secret_key
+          OPENAI_API_KEY: fake_secret_key
         run: |
           cd backend
           pytest
