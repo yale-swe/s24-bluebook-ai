@@ -9,6 +9,7 @@ import json
 from pymongo.mongo_client import MongoClient
 import requests
 import xml.etree.ElementTree as ET
+import datetime
 
 COURSE_QUERY_LIMIT = 5
 SAFETY_CHECK_ENABLED = False
@@ -44,7 +45,6 @@ def load_config(app, test_config=None):
         # Load configuration from environment variables
         app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 
-
 # Separate function to initialize database
 def init_database(app):
     if "MONGO_URI" in app.config:
@@ -52,7 +52,6 @@ def init_database(app):
         db = client["course_db"]
         app.config["collection"] = db["parsed_courses"]
         # else, set to None or Mock in case of testing
-
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -111,10 +110,37 @@ def create_app(test_config=None):
             print("response status is not 200")
             return jsonify({"isAuthenticated": False}), 401
 
+    @app.route("/api/slug", methods=["POST"])
+    def get_chat_history_slug():
+        data = request.get_json()
+        user_messages = data.get("message", None)
+        user_messages_ = user_messages.copy()
+        user_messages_.append(
+            {
+                "role": "user",
+                "content": "Write a descriptive title (3-4 words) for the topic of our conversation with no puncutation. Do not include 'discussion' or 'chat' in the title.",
+            }
+        )
+
+        response = chat_completion_request(messages=user_messages_)
+        try:
+            response = response.choices[0].message.content
+            return jsonify({"slug": response})
+        except:
+            return jsonify({"slug": "Untitled"})
+
+
     @app.route("/api/chat", methods=["POST"])
     def chat():
         data = request.get_json()
-        user_messages = data["message"]
+        user_messages = data.get("message", None)
+
+        filter_season_codes = data.get("season_codes", None) # assume it is an array of season code
+        filter_subject = data.get("subject", None)
+        filter_areas = data.get("areas", None)
+
+        if not user_messages:
+            return jsonify({"error": "No message provided"})
 
         # remove id before sending to OpenAI
         for message in user_messages:
@@ -200,33 +226,50 @@ def create_app(test_config=None):
 
         collection = app.config["collection"]
 
-        database_response = collection.aggregate(
-            [
-                {
-                    "$vectorSearch": {
-                        "index": "parsed_courses_title_description_index",
-                        "path": "embedding",
-                        # 'filter': {
-                        #     'rating': {
-                        #         args['operator']: args['rating']
-                        #     }
-                        # },
-                        "queryVector": query_vector,
-                        "numCandidates": 30,
-                        "limit": COURSE_QUERY_LIMIT,
-                    }
+        aggregate_pipeline = {
+            "$vectorSearch": {
+                "index": "parsed_courses_title_description_index",
+                "path": "embedding",
+                "queryVector": query_vector,
+                "numCandidates": 30,
+                "limit": COURSE_QUERY_LIMIT,
+            }
+        }
+        
+        if filter_season_codes:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {
+                    "$in": filter_season_codes
                 }
-            ]
-        )
+            }
+        
+        if filter_subject:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "subject": {
+                    "$eq": filter_subject
+                }
+            }
 
+        if filter_areas:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "areas": {
+                    "$in": filter_areas
+                }
+            }
+
+        database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
 
         recommended_courses = [
             {
+                "season_code": course["season_code"],
                 "course_code": course["course_code"],
                 "title": course["title"],
                 "description": course["description"],
                 "areas": course["areas"],
+                "sentiment_label": course["sentiment_info"]["final_label"],
+                "sentiment_score": course["sentiment_info"]["final_proportion"],
+                 
             }
             for course in database_response
         ]

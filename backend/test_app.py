@@ -147,8 +147,10 @@ def client_all_disabled():
                 "course_code": "CPSC 150",
                 "description": "Introduction to the basic ideas of computer science (computability, algorithm, virtual machine, symbol processing system), and of several ongoing relationships between computer science and other fields, particularly philosophy of mind.",
                 "season_code": "202303",
-                "sentiment_label": "NEGATIVE",
-                "sentiment_score": 0.9444444444444444,
+                "sentiment_info": {
+                    "final_label": "NEGATIVE",
+                    "final_proportion": 0.9444444444444444,
+                },
                 "title": "Computer Science and the Modern Intellectual Agenda",
             },
         ]
