@@ -24,7 +24,7 @@ jobs:
           pip install pytest flask flask_testing pymongo requests mock pytest-mock
       - name: Run Tests
         env:
-          MONGO_URI: mongodb://localhost:27017/test_db
+          MONGO_URI: "mongodb+srv://bluebookairoot:Blublu2024@bluebookcluster.0hf4pzi.mongodb.net/?retryWrites=true&w=majority&appName=BluebookCluster"
           FLASK_SECRET_KEY: fake_secret_key
           OPENAI_API_KEY: fake_secret_key
         run: |
