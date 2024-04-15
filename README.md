@@ -31,7 +31,7 @@ In this project, we aim to enhance students’ course selection experience by au
     ```bash
     cd backend
     python -m venv bluebook_env
-    source bluebook_env/bin/activate
+    source bluebook_env/bin/activate (windows: .\bluebook_env\Scripts\activate)
     pip install -r ../requirements.txt
     ```
 
