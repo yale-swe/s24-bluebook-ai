@@ -70,22 +70,6 @@ tools = [
             },
         },
         },
-        
-        "type": "function",
-        "function": {
-        "name": "CourseFilter",
-        "description": "Provide filters for a course based on conditions.", 
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "natural_langauge_string": {
-                    "type": "string",
-                    "description": "Generate a natural language string to query against the Yale courses vector database that will be helpful to you to generate a response.",
-                },      
-            },
-            "required": ["natural_language_string"]
-        },
-        }
     }
 ]
 
