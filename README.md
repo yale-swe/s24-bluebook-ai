@@ -44,10 +44,11 @@ OPENAI_API_KEY="sk-xxx"
 
 Don't push your API key to this repo!
 
-To run sentiment classification, first create a conda environment for Python 3 using the requirements.txt file:
+To run sentiment classification, first create a conda environment for Python 3 using the `backend/sentiment_classif_requirements.txt` file:
 
 ```
-conda create --name <env_name> --file requirements.txt
+cd backend
+conda create --name <env_name> --file sentiment_classif_requirements.txt
 ```
 
 Activate the conda environment by running:
