@@ -31,7 +31,7 @@ In this project, we aim to enhance students’ course selection experience by au
     cd backend
     python -m venv bluebook_env
     source bluebook_env/bin/activate
-    pip install -r requirements.txt
+    pip install -r ../requirements.txt
     ```
 
 2. You will also need to create `.env` in the the `backend` directory that contains your API key to OpenAI and the MongoDB URI. The `.env` file should look like this:
