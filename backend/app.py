@@ -18,6 +18,7 @@ DATABASE_RELEVANCY_CHECK_ENABLED = False
 
 load_dotenv()
 
+
 # Separate function to load configurations
 def load_config(app, test_config=None):
     app.secret_key = os.environ.get(
@@ -247,7 +248,7 @@ def create_app(test_config=None):
         if not name:
             return jsonify({"error": "No name provided"})
         return update_user_profile(uid, {"name": name})
-    
+
     @app.route("/api/chat/create_chat", methods=["POST"])
     def create_new_chat():
         data = request.get_json()
@@ -255,24 +256,19 @@ def create_app(test_config=None):
         init_message = data.get("message", None)
         if not uid:
             return jsonify({"error": "No uid provided"})
-        
+
         chat_id = str(uuid4())
         if init_message is not None:
-            new_chat = {
-                "chat_id": chat_id,
-                "messages": [init_message]
-            }
+            new_chat = {"chat_id": chat_id, "messages": [init_message]}
         else:
-            new_chat = {
-                "chat_id": chat_id,
-                "messages": []
-            }
+            new_chat = {"chat_id": chat_id, "messages": []}
 
         collection = app.config["profiles"]
-        result = collection.update_one({"uid": uid}, {"$push": {"chat_history": new_chat}})
+        result = collection.update_one(
+            {"uid": uid}, {"$push": {"chat_history": new_chat}}
+        )
         return jsonify({"status": "success"}), 200
-    
-    
+
     @app.route("/api/chat/append_message", methods=["POST"])
     def append_message_to_chat():
         data = request.get_json()
@@ -285,7 +281,7 @@ def create_app(test_config=None):
             return jsonify({"error": "No message provided"})
         if not chat_id:
             return jsonify({"error": "No chat_id provided"})
-                
+
         collection = app.config["profiles"]
         # find the user with the chat id
         user_profile = collection.find_one({"uid": uid})
@@ -297,7 +293,9 @@ def create_app(test_config=None):
                 chat["messages"].append(message)
                 break
 
-        result = collection.update_one({"uid": uid}, {"$set": {"chat_history": user_profile["chat_history"]}})
+        result = collection.update_one(
+            {"uid": uid}, {"$set": {"chat_history": user_profile["chat_history"]}}
+        )
         return jsonify({"status": "success"}), 200
 
     @app.route("/api/chat/delete_chat", methods=["POST"])
@@ -309,10 +307,12 @@ def create_app(test_config=None):
             return jsonify({"error": "No uid provided"})
         if not chat_id:
             return jsonify({"error": "No chat_id provided"})
-        
+
         collection = app.config["profiles"]
         # use $pull to remove the chat with the chat_id
-        result = collection.update_one({"uid": uid}, {"$pull": {"chat_history": {"chat_id": chat_id}}})
+        result = collection.update_one(
+            {"uid": uid}, {"$pull": {"chat_history": {"chat_id": chat_id}}}
+        )
         return jsonify({"status": "success"}), 200
 
     @app.route("/api/slug", methods=["POST"])
@@ -420,11 +420,12 @@ def create_app(test_config=None):
         vector_search_prompt_generation = user_messages.copy()
         vector_search_prompt_generation.append(
             {
-                "role": "user",
-                "content": "Generate a natural language string to query against the Yale courses vector database that will be helpful to you to generate a response.",
+                "role": "system",
+                "content": "What would be a good search query (in conventional english) to query against the Yale courses database that addresses the user needs?",
             }
         )
 
+        print(vector_search_prompt_generation)
         response = chat_completion_request(messages=vector_search_prompt_generation)
         response = response.choices[0].message.content
         print("")
@@ -487,9 +488,7 @@ def create_app(test_config=None):
             }
 
         # print(aggregate_pipeline)
-        print("Before aggregate")
         database_response = collection.aggregate([aggregate_pipeline])
-        print("After aggregate")
         database_response = list(database_response)
         print(database_response)
 
@@ -512,11 +511,10 @@ def create_app(test_config=None):
             )
             for course in recommended_courses:
                 recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
-            recommendation_prompt += "Provide a response to the user. Incorporate specific course information if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list."
+            recommendation_prompt += "Incorporate specific course information in your response to me if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list. Do not refer to any courses not in this list"
 
         else:
-            recommendation_prompt = "Please tell the user that you are unable to help with their request since no entry in the yale courses database matches the information provided."
-
+            recommendation_prompt = "Finish this message and include the whole message in your response, your response should contain the rest of this message verbatim: I'm sorry. I tried to search for courses that match your criteria but couldn't find any."
         user_messages.append({"role": "system", "content": recommendation_prompt})
 
         print(user_messages)
