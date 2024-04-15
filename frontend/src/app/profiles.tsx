@@ -1,8 +1,7 @@
-// profile.tsx
 "use client";
 
 import React, { useState } from "react";
-import styles from "./page.module.css"; // Ensure this file is correctly linked
+import styles from "./page.module.css"; 
 
 const ProfilePopup = () => {
     const [popupVisible, setPopupVisible] = useState(false);
