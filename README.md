@@ -53,7 +53,7 @@ conda create --name <env_name> --file sentiment_classif_requirements.txt
 
 Activate the conda environment by running:
 
-```
+```bash
 conda activate <env_name>
 ```
 
