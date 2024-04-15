@@ -1,9 +1,35 @@
 "use client";
 
 import React, { useState } from "react";
+import Select, { components, GroupBase, MultiValueRemoveProps, ActionMeta, MultiValue, StylesConfig } from 'react-select';
+import { MultiValueGenericProps } from 'react-select';
 import { useEffect } from "react";
-import styles from "./page.module.css"; // change to ur own directory
+import styles from "./page.module.css";
+import courseSubjects from "./course_subjects.json";
 import { format } from "path";
+
+type OptionType = {
+  value: string;
+  label: string;
+};
+
+const MultiValueLabel = (props: MultiValueGenericProps<OptionType, true>) => {
+  return (
+    <components.MultiValueLabel {...props}>
+      {props.data.value}
+    </components.MultiValueLabel>
+  );
+};
+
+const MultiValueRemove = (props: MultiValueRemoveProps<OptionType, true, GroupBase<OptionType>>) => {
+  return (
+    <components.MultiValueRemove {...props}>
+      {props.children}
+      <span aria-hidden="true">&times;</span>
+    </components.MultiValueRemove>
+  );
+};
+
 
 export default function Chat() {
   const [isTyping, setIsTyping] = useState(false);
@@ -13,6 +39,86 @@ export default function Chat() {
   ]);
   const [chatVisible, setChatVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const [selectedSeason, setSelectedSeason] = useState<MultiValue<OptionType>>([]);
+  const [selectedAreas, setSelectedAreas] = useState<MultiValue<OptionType>>([]);
+
+  const handleSeasonChange = (selectedOptions: MultiValue<OptionType>) => {
+    setSelectedSeason(selectedOptions);
+  };
+  
+  const handleAreaChange = (selectedOptions: MultiValue<OptionType>) => {
+    setSelectedAreas(selectedOptions);
+  };
+  
+
+  const [expanded, setExpanded] = useState(false);
+
+  const customStyles = {
+    multiValue: (base: any, state: any) => ({
+      ...base,
+      display: 'flex',
+    }),
+    multiValueLabel: (base: any, state: any) => ({
+      ...base,
+      flex: '1 1 100%',
+    }),
+    valueContainer: (provided: any, state: any) => ({
+      ...provided,
+      flexWrap: 'wrap',
+      overflow: 'hidden',
+      width: '100%',
+    }),
+    container: (provided: any) => ({
+      ...provided,
+      width: 'fit',
+      maxWidth: '100%',
+    }),
+  };  
+
+  const CustomMultiValueContainer = (props: MultiValueGenericProps<OptionType, true>) => {
+    const { children, selectProps } = props;
+    const values = selectProps.value as OptionType[];
+    const total = values.length;
+    const maxVisibleValues = 2;
+    const currentIndex = values.findIndex(value => value.value === props.data.value);
+
+    if (expanded) {
+      return <components.MultiValueContainer {...props}>{children}</components.MultiValueContainer>;
+    }
+
+    if (currentIndex < maxVisibleValues) {
+      return <components.MultiValueContainer {...props}>{children}</components.MultiValueContainer>;
+    }
+
+    if (currentIndex === maxVisibleValues) {
+      const additionalCount = total - maxVisibleValues;
+      return (
+        <components.MultiValueContainer {...props}>
+          <div onClick={() => setExpanded(true)} style={{ cursor: 'pointer' }}>
+            +{additionalCount} 
+          </div>
+        </components.MultiValueContainer>
+      );
+    }
+
+    return null;
+  };
+  
+  const subjectOptions: OptionType[] = Object.entries(courseSubjects).map(([value, label]) => ({
+    value,
+    label: `${value} - ${label}`
+  }));
+  
+  const [selectedSubjects, setSelectedSubjects] = useState<MultiValue<OptionType>>([]);
+
+  const handleSubjectChange = (
+    selectedOptions: MultiValue<OptionType>,
+    actionMeta: ActionMeta<OptionType>
+  ) => {
+    setSelectedSubjects(selectedOptions || []);
+  };
+
 
   useEffect(() => {
     // Check for CAS ticket in URL parameters
@@ -35,42 +141,43 @@ export default function Chat() {
     clearTicketFromUrl();
   }, []);
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setInput("");
-
-    // add the user's message to the chat.
+  
     const newUserMessage = {
       id: `user-${Date.now()}`,
       content: input,
       role: "user",
     };
-
+  
     setMessages((messages) => [...messages, newUserMessage]);
     setIsTyping(true);
-
+    console.log(selectedSeason, selectedAreas, selectedSubjects);
+    console.log(messages)
     const response = await fetch("http://127.0.0.1:8000/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      // body: JSON.stringify({ message: [{ content: input, role: 'user' }] }),
       body: JSON.stringify({
         message: [...messages, newUserMessage],
+        season_codes: selectedSeason.map(season => season.value),
+        subject: selectedSubjects.map(subject => subject.value),
+        areas: selectedAreas.map(area => area.value)
       }),
     });
-
+    
+    console.log(response)
     setIsTyping(false);
-
     if (response.ok) {
       const data = await response.json();
-      // simulateTypingEffect(data.message[0].content, 'ai', `ai-${Date.now()}`);
       simulateTypingEffect(data.response, "ai", `ai-${Date.now()}`);
     } else {
       console.error("Failed to send message");
     }
   };
+  
 
   const simulateTypingEffect = (
     message: string,
@@ -216,6 +323,63 @@ export default function Chat() {
             )}
           </div>
           <form onSubmit={handleSubmit} className={styles.inputForm}>
+            <div className={styles.floatingDropdowns}>
+              <Select
+                isMulti
+                value={selectedSeason}
+                onChange={handleSeasonChange}
+                options={[
+                  { value: "202401", label: "Spring 2024" },
+                  { value: "202303", label: "Fall 2023" },
+                  { value: "202302", label: "Summer 2023" },
+                  { value: "202402", label: "Summer 2024" },
+                  { value: "202403", label: "Fall 2024" }
+                ]}
+                styles={customStyles}
+                classNamePrefix="select"
+                placeholder="Season"
+                menuPlacement="top"
+                closeMenuOnSelect={false}
+                components={{ MultiValueContainer: CustomMultiValueContainer, MultiValueRemove }}
+                onMenuOpen={() => setExpanded(true)}
+                onMenuClose={() => setExpanded(false)}
+              />
+              <Select
+                isMulti
+                value={selectedAreas}
+                onChange={handleAreaChange}
+                options={[
+                  { value: "Hu", label: "Hu" },
+                  { value: "Sc", label: "Sc" },
+                  { value: "So", label: "So" },
+                  { value: "Qr", label: "Qr" },
+                  { value: "Wr", label: "Wr" }
+                ]}
+                styles={customStyles}
+                classNamePrefix="select"
+                placeholder="Areas"
+                menuPlacement="top"
+                closeMenuOnSelect={false}
+                components={{ MultiValueContainer: CustomMultiValueContainer, MultiValueRemove }}
+                onMenuOpen={() => setExpanded(true)}
+                onMenuClose={() => setExpanded(false)}
+              />
+              <Select
+                isMulti
+                value={selectedSubjects}
+                onChange={handleSubjectChange}
+                options={subjectOptions}
+                styles={customStyles}
+                classNamePrefix="select"
+                placeholder="Subjects"
+                menuPlacement="top"
+                closeMenuOnSelect={false}
+                components={{ MultiValueContainer: CustomMultiValueContainer, MultiValueRemove , MultiValueLabel}}
+                onMenuOpen={() => setExpanded(true)}
+                onMenuClose={() => setExpanded(false)}
+              />
+            </div>
+          {/* <div className="col"> */}
             <input
               type="text"
               className={styles.inputField}
@@ -226,7 +390,9 @@ export default function Chat() {
             <button type="submit" className={styles.sendButton}>
               Send
             </button>
-          </form>
+          {/* </div> */}
+        </form>
+
         </div>
       )}
     </>
