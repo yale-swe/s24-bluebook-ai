@@ -225,8 +225,6 @@ def create_app(test_config=None):
                 }
             }
         elif natural_filter_season_codes:
-            
-            
             aggregate_pipeline["$vectorSearch"]["filter"] = {
                 "season_code": {
                     "$in": [natural_filter_season_codes]
