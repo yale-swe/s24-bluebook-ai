@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_cas import CAS, login_required
 import os
 from dotenv import load_dotenv
-from lib import chat_completion_request, create_embedding
+from lib import chat_completion_request, create_embedding, tools
 import json
 from pymongo.mongo_client import MongoClient
 import requests
@@ -185,9 +185,13 @@ def create_app(test_config=None):
                 "content": "Generate a natural language string to query against the Yale courses vector database that will be helpful to you to generate a response.",
             }
         )
+        
         response = chat_completion_request(messages=vector_search_prompt_generation)
         response = response.choices[0].message.content
+        print("")
+        print("Completion Request: Vector Search Prompt")
         print(response)
+        print("")
 
         query_vector = create_embedding(response)
 
@@ -202,11 +206,32 @@ def create_app(test_config=None):
                 "limit": COURSE_QUERY_LIMIT,
             }
         }
+                
+        filtered_response = chat_completion_request(messages=user_messages, tools=tools)
+        filtered_data = json.loads(filtered_response.choices[0].message.tool_calls[0].function.arguments)
+        print("")
+        print("Completion Request: Filtered Response")
+        print(filtered_data)
+        print("")
+                
+        natural_filter_subject = filtered_data.get("subject_code", None)
+        natural_filter_season_codes = filtered_data.get("season_code", None)
+        natural_filter_areas = filtered_data.get("area", None)
+    
+
         
         if filter_season_codes:
             aggregate_pipeline["$vectorSearch"]["filter"] = {
                 "season_code": {
                     "$in": filter_season_codes
+                }
+            }
+        elif natural_filter_season_codes:
+            
+            
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {
+                    "$in": [natural_filter_season_codes]
                 }
             }
         
@@ -216,14 +241,28 @@ def create_app(test_config=None):
                     "$eq": filter_subject
                 }
             }
-
+        elif natural_filter_subject:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {
+                    "$in": [natural_filter_subject]
+                }
+            }
+            
         if filter_areas:
             aggregate_pipeline["$vectorSearch"]["filter"] = {
                 "areas": {
                     "$in": filter_areas
                 }
             }
-
+        elif natural_filter_areas:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {
+                    "$in": [natural_filter_areas]
+                }
+            }
+            
+        #print(aggregate_pipeline)
+        
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
 
@@ -241,12 +280,16 @@ def create_app(test_config=None):
             for course in database_response
         ]
 
-        recommendation_prompt = (
-            "Here are some courses that might be relevant to the user request:\n\n"
-        )
-        for course in recommended_courses:
-            recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
-        recommendation_prompt += "Provide a response to the user. Incorporate specific course information if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list."
+        if (recommended_courses):
+            recommendation_prompt = (
+                "Here are some courses that might be relevant to the user request:\n\n"
+            )
+            for course in recommended_courses:
+                recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
+            recommendation_prompt += "Provide a response to the user. Incorporate specific course information if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list."
+        
+        else:
+            recommendation_prompt = "Please tell the user that you are unable to help with their request since no entry in the yale courses database matches the information provided."
 
         user_messages.append({"role": "system", "content": recommendation_prompt})
 
@@ -254,7 +297,12 @@ def create_app(test_config=None):
         response = response.choices[0].message.content
 
         json_response = {"response": response, "courses": recommended_courses}
-
+        
+        print("")
+        print("Completion Request: Recommendation")
+        print(json_response)
+        print("")
+        
         return jsonify(json_response)
 
     return app
