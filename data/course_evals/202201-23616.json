@@ -1,0 +1,297 @@
+{
+    "crn_code": "23616",
+    "season": "202201",
+    "enrollment": {
+        "enrolled": 18,
+        "responses": 14,
+        "declined": null,
+        "no response": null
+    },
+    "ratings": [
+        {
+            "question_id": "YC402",
+            "question_text": "Your level of engagement with the course was:",
+            "options": [
+                "very low",
+                "low",
+                "medium",
+                "high",
+                "very high"
+            ],
+            "data": [
+                0,
+                0,
+                2,
+                6,
+                3
+            ]
+        },
+        {
+            "question_id": "YC404",
+            "question_text": "What is your overall assessment of this course?",
+            "options": [
+                "poor",
+                "fair",
+                "good",
+                "very good",
+                "excellent"
+            ],
+            "data": [
+                0,
+                0,
+                1,
+                8,
+                3
+            ]
+        },
+        {
+            "question_id": "YC405",
+            "question_text": "The course was well organized to facilitate student learning.",
+            "options": [
+                "strongly disagree",
+                "disagree",
+                "neutral",
+                "agree",
+                "strongly agree"
+            ],
+            "data": [
+                0,
+                0,
+                1,
+                3,
+                8
+            ]
+        },
+        {
+            "question_id": "YC406",
+            "question_text": "I received clear feedback that improved my learning.",
+            "options": [
+                "strongly disagree",
+                "disagree",
+                "neutral",
+                "agree",
+                "strongly agree"
+            ],
+            "data": [
+                0,
+                0,
+                5,
+                3,
+                4
+            ]
+        },
+        {
+            "question_id": "YC407",
+            "question_text": "Relative to other courses you have taken at Yale, the level of intellectual challenge of this course was:",
+            "options": [
+                "much less",
+                "less",
+                "same",
+                "greater",
+                "much greater"
+            ],
+            "data": [
+                0,
+                0,
+                5,
+                4,
+                3
+            ]
+        },
+        {
+            "question_id": "YC408",
+            "question_text": "Relative to other courses you have taken at Yale, the workload of this course was:",
+            "options": [
+                "much less",
+                "less",
+                "same",
+                "greater",
+                "much greater"
+            ],
+            "data": [
+                0,
+                0,
+                1,
+                7,
+                4
+            ]
+        }
+    ],
+    "narratives": [
+        {
+            "question_id": "YC401",
+            "question_text": "What knowledge, skills, and insights did you develop by taking this course?",
+            "comments": [
+                "Knowledge of the components and operation of a modern compiler.",
+                "compilers",
+                "High level understanding of the overall compiler process, reinforced several times throughout the semester. Detailed understanding of components relevant to problem sets including OCaml programming language, X86 specification, LLVM (including GEP), lexing/parsing, typechecking, optimizations, register allocation, etc. The problem sets were long and challenging and pushed me as a programmer, while the transparent and automatic grading reduced stress and allowed me to focus on the material itself.",
+                "How a program is translated from source code to various lower-level languages (abstract syntax, intermediate representation, assembly) and ultimately machine code. I learned about the theory of lexing and parsing, lambda calculus, type systems, and optimizations. We used ocaml to write our compiler, which, although functional, is a fun language to work with. This class shows you how all the theory you learn in 201 applies to the real world.",
+                "Understanding of compiler principles and implementations",
+                "Learned how compilers work from top to bottom; from the parser/lexer, to the optimizations done in the middle. Also learned OCaml.",
+                "I learned a lot about how compilers work. In addition, I expanded my knowledge on assembly language, lexing, parsing, and optimizations in general.",
+                "How a compiler structures",
+                "Learned about the basics of the compiler pipeline, lexing and parsing, intermediate representations, and some amount of optimizations.",
+                "Developed a compiler, learned functional programming, learned (briefly) about some theoretical topics in compilers and computation theory",
+                "Go through the framework under which a simple compiler works thorugh 6 projects."
+            ]
+        },
+        {
+            "question_id": "YC403",
+            "question_text": "What are the strengths and weaknesses of this course and how could it be improved?",
+            "comments": [
+                "The course is broadly interesting, and covers the intended content. The problem sets can be odd -- especially on the last, it wasn't clear exactly what was expected of us -- but were generally pretty good.",
+                "code writing",
+                "Strengths - great grading structure - 90% of the grade is problem sets, 90%+ of each problem set is public test cases, and you can see your private test case aggregate results before submitting through GitHub Actions integration. The final project was also interesting and had lots of room to pick an interesting subtopic. Overall the class never felt super stressful and deadlines were flexible based on the class progress. Pair programming was great too!\r\n\r\nWeaknesses - Sometimes the lectures became highly detached from the problem sets, although I appreciated hearing the complex discussions.",
+                "The only real weakness was the low availability of staff for office hours (only one slot per week), but even that didn't affect my debugging experience too much because the ocaml type system makes it hard to write an incorrect program.\r\n\r\nThe assignments are helpful and engaging--you build most of a compiler (without some of the easier but more boring parts that just iterate over the program) including a parser (using a parser generator), AST->IR translation, optimizations (dead code elimination, constant propagation, etc.), IR->assembly translation, and an assembly interpreter. There is also a final research paper reading assignment, from which you can learn what programming language research is about.",
+                "Strengths: problem sets were fun and instructive; Jay was also a great teacher and really cared about his students. Weaknesses: Lectures were sometimes difficult to follow.",
+                "I appreciated how the psets were presented is a very didactic fashion. Just by completing the psets, I was able to implement the topics that we had discussed in class. I also appreciated the partner format. It was the first time I had worked in a group in a computer science environment, so I loved how it was necessary to articulate my logic and approach out loud when normally I wouldn't have shared it, leading to messier code and less overall comprehension.",
+                "Did not tackle some of the most interesting parts of compilers  namely the myriad optimizations used to speed up executable code. The programming assignments provided a lot of scaffolding that reduced them to fairly simple direction-following.",
+                "Going over the starter code for assignments in class was useful. The starter code could use some extra documentation in some places (for example, in the frontend, the LLVM stream is implemented as a reversed list, and the operators/usage of this paradigm is not well explained or justified in the code)",
+                "The lectures are well taught and projects are well designed.\r\nOne place to be improved is that if the lectures can be recorded, it will be easier for students to go over it after classes. Also if there can be some recorded or discussion sessions of the projects, it will make life easier!"
+            ]
+        },
+        {
+            "question_id": "YC409",
+            "question_text": "Would you recommend this course to another student? Please explain.",
+            "comments": [
+                "Yes -- if they have interest in the topic, it's quite a good way to learn about it.",
+                "Highly recommend if you are interested in compilers, want to learn a functional language (OCaml), or want to work on interesting and challenging problem sets in a relatively chill environment.",
+                "Yes, to all CS majors who have the time. And it takes less time than 323, so as long as you're not taking other classes that are very time-consuming, you should consider this one. It is foundational for understanding how software works, and it helps put the design of various programming languages in context.",
+                "Would recommend to anyone who likes systems! Its definitely hard, but now that its pair programming, its roughly similar to OS.",
+                "I would. The psets did take a while, but it was a good coding challenge and I think it greatly improved both my logical deduction skills working with a new language and my programming skills in general.",
+                "Yes",
+                "If you already know programming language theory, most of this class will not be very interesting. There are some sections on parsing and optimizations that stand out but were not presented rigorously.",
+                "If you want to learn about compilers, do it",
+                "By taking this course, you will be able to get the idea of how a compiler work from scratch. Though hard, it will be an invaluable educational experience during your student time."
+            ]
+        }
+    ],
+    "extras": {
+        "title": "CPSC 421 01/CPSC 521 01 - Compilers and Interpreters"
+    },
+    "sentiment_info": {
+        "YC401": {
+            "sentiment_labels": [
+                "POSITIVE",
+                "NEGATIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE"
+            ],
+            "sentiment_scores": [
+                0.9982478618621826,
+                0.9649492502212524,
+                0.9988865256309509,
+                0.998822033405304,
+                0.9987217783927917,
+                0.9987232089042664,
+                0.9987756609916687,
+                0.9877011179924011,
+                0.9983501434326172,
+                0.9985314607620239,
+                0.9985163807868958
+            ],
+            "sentiment_counts": {
+                "POSITIVE": 10,
+                "NEGATIVE": 1
+            },
+            "sentiment_distribution": {
+                "POSITIVE": 0.9090909090909091,
+                "NEGATIVE": 0.09090909090909091
+            },
+            "sentiment_overall": [
+                "POSITIVE",
+                0.9090909090909091
+            ]
+        },
+        "YC403": {
+            "sentiment_labels": [
+                "POSITIVE",
+                "NEGATIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "NEGATIVE",
+                "POSITIVE",
+                "POSITIVE"
+            ],
+            "sentiment_scores": [
+                0.9988215565681458,
+                0.9869905114173889,
+                0.9988806843757629,
+                0.9988678693771362,
+                0.9987736344337463,
+                0.9989213943481445,
+                0.998045802116394,
+                0.9967214465141296,
+                0.9988510608673096
+            ],
+            "sentiment_counts": {
+                "POSITIVE": 7,
+                "NEGATIVE": 2
+            },
+            "sentiment_distribution": {
+                "POSITIVE": 0.7777777777777778,
+                "NEGATIVE": 0.2222222222222222
+            },
+            "sentiment_overall": [
+                "POSITIVE",
+                0.7777777777777778
+            ]
+        },
+        "YC409": {
+            "sentiment_labels": [
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "POSITIVE",
+                "NEGATIVE",
+                "POSITIVE",
+                "POSITIVE"
+            ],
+            "sentiment_scores": [
+                0.9986496567726135,
+                0.9988923668861389,
+                0.9989129304885864,
+                0.998742401599884,
+                0.9988958835601807,
+                0.997117280960083,
+                0.9993001222610474,
+                0.9930932521820068,
+                0.9989149570465088
+            ],
+            "sentiment_counts": {
+                "POSITIVE": 8,
+                "NEGATIVE": 1
+            },
+            "sentiment_distribution": {
+                "POSITIVE": 0.8888888888888888,
+                "NEGATIVE": 0.1111111111111111
+            },
+            "sentiment_overall": [
+                "POSITIVE",
+                0.8888888888888888
+            ]
+        },
+        "final_label": "POSITIVE",
+        "final_count": 25,
+        "final_proportion": 0.8620689655172413,
+        "final_counts": {
+            "POSITIVE": 25,
+            "NEGATIVE": 4
+        },
+        "final_distribution": {
+            "POSITIVE": 0.8620689655172413,
+            "NEGATIVE": 0.13793103448275862
+        }
+    }
+}
