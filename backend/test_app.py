@@ -103,6 +103,7 @@ def test_load_config_with_test_config(app):
 def test_init_database_with_config(app):
     assert "courses" in app.config
 
+
 @pytest.fixture
 def client():
     mock_collection = MagicMock()
@@ -170,10 +171,53 @@ def mock_chat_completion_yes_no():
     with patch("app.chat_completion_request") as mock:
         # List of responses, one for each expected call
         responses = [
-            MagicMock(choices=[MagicMock(message=MagicMock(content="yes"))]),
-            MagicMock(choices=[MagicMock(message=MagicMock(content="no"))]),
             MagicMock(
-                choices=[MagicMock(message=MagicMock(content="no need for query"))]
+                choices=[
+                    MagicMock(
+                        message=MagicMock(
+                            content="yes",
+                            tool_calls=[
+                                MagicMock(
+                                    function=MagicMock(
+                                        arguments='{\n "season_code": "202303"\n}'
+                                    )
+                                )
+                            ],
+                        )
+                    )
+                ]
+            ),
+            MagicMock(
+                choices=[
+                    MagicMock(
+                        message=MagicMock(
+                            content="no",
+                            tool_calls=[
+                                MagicMock(
+                                    function=MagicMock(
+                                        arguments='{\n "season_code": "202303"\n}'
+                                    )
+                                )
+                            ],
+                        )
+                    )
+                ]
+            ),
+            MagicMock(
+                choices=[
+                    MagicMock(
+                        message=MagicMock(
+                            content="no need for query",
+                            tool_calls=[
+                                MagicMock(
+                                    function=MagicMock(
+                                        arguments='{\n "season_code": "202303"\n}'
+                                    )
+                                )
+                            ],
+                        )
+                    )
+                ]
             ),
         ]
         mock.side_effect = responses
@@ -183,17 +227,25 @@ def mock_chat_completion_yes_no():
 @pytest.fixture
 def mock_chat_completion_no():
     with patch("app.chat_completion_request") as mock:
-        # List of responses, one for each expected call
+        # List of responses, each with the expected structure
         responses = [
-            MagicMock(choices=[MagicMock(message=MagicMock(content="no"))]),
-            MagicMock(choices=[MagicMock(message=MagicMock(content="no"))]),
             MagicMock(
                 choices=[
                     MagicMock(
-                        message=MagicMock(content="Mock response based on user message")
+                        message=MagicMock(
+                            content="no",
+                            tool_calls=[
+                                MagicMock(
+                                    function=MagicMock(
+                                        arguments='{"season_code": "202303"}'
+                                    )
+                                )
+                            ],
+                        )
                     )
                 ]
-            ),
+            )
+            for _ in range(3)
         ]
         mock.side_effect = responses
         yield mock
@@ -202,21 +254,32 @@ def mock_chat_completion_no():
 @pytest.fixture
 def mock_chat_completion_yes_yes():
     with patch("app.chat_completion_request") as mock:
-        # List of responses, one for each expected call
+        # Prepare the function mock that includes tool calls with the arguments JSON string
+        function_mock = MagicMock()
+        function_mock.arguments = '{"season_code": "202303"}'
+
+        # Mock for tool_calls that uses the prepared function mock
+        tool_call_mock = MagicMock()
+        tool_call_mock.function = function_mock
+
+        # Mock for the message that includes the list of tool calls
+        message_mock_with_tool_calls = MagicMock()
+        message_mock_with_tool_calls.content = "yes"
+        message_mock_with_tool_calls.tool_calls = [tool_call_mock]
+
+        message_mock_mock_response = MagicMock()
+        message_mock_mock_response.content = "Mock response based on user message"
+        message_mock_mock_response.tool_calls = [tool_call_mock]
+
+        # Wrap these into the respective choice structures
         responses = [
-            MagicMock(choices=[MagicMock(message=MagicMock(content="yes"))]),
-            MagicMock(choices=[MagicMock(message=MagicMock(content="yes"))]),
-            MagicMock(
-                choices=[MagicMock(message=MagicMock(content="no need for query"))]
-            ),
-            MagicMock(
-                choices=[
-                    MagicMock(
-                        message=MagicMock(content="Mock response based on user message")
-                    )
-                ]
-            ),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
         ]
+
         mock.side_effect = responses
         yield mock
 
@@ -233,7 +296,7 @@ def test_chat_endpoint(client, mock_chat_completion_yes_yes):
     assert response.status_code == 200
     data = response.get_json()
     assert "Mock response based on user message" in data["response"]
-    assert mock_chat_completion_yes_yes.call_count == 4
+    assert mock_chat_completion_yes_yes.call_count == 5
 
 
 def test_no_need_for_query(client, mock_chat_completion_yes_no):
@@ -270,7 +333,18 @@ def test_all_disable(client_all_disabled, mock_chat_completion_yes_yes):
     client = client_all_disabled
     mock_chat_completion_yes_yes.return_value = MagicMock(
         choices=[
-            MagicMock(message=MagicMock(content="Mock response based on user message"))
+            MagicMock(
+                message=MagicMock(
+                    content="no",
+                    tool_calls=[
+                        MagicMock(
+                            function=MagicMock(
+                                arguments='{\n "season_code": "202303"\n}'
+                            )
+                        )
+                    ],
+                )
+            )
         ]
     )
     request_data = {
@@ -284,7 +358,7 @@ def test_all_disable(client_all_disabled, mock_chat_completion_yes_yes):
     assert response.status_code == 200
     data = response.get_json()
     assert "Mock response based on user message" in data["response"]
-    assert mock_chat_completion_yes_yes.call_count == 4
+    assert mock_chat_completion_yes_yes.call_count == 5
 
 
 def test_api_error(client, mock_chat_completion_yes_no):
