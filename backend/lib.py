@@ -34,7 +34,7 @@ tools = [
         "parameters": {
             "type": "object",
             "properties": {
-                "subject_code": {
+                "subject": {
                     "type": "string",
                     "enum": [str(key) for key in subjects.keys()],
                     "description": "A code for the subject of instruction",
