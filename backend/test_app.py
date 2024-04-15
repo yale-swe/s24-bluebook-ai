@@ -101,8 +101,7 @@ def test_load_config_with_test_config(app):
 
 
 def test_init_database_with_config(app):
-    assert "collection" in app.config
-
+    assert "courses" in app.config
 
 @pytest.fixture
 def client():
@@ -126,7 +125,7 @@ def client():
     app = create_app(
         {
             "TESTING": True,
-            "collection": mock_collection,
+            "courses": mock_collection,
             "MONGO_URL": "TEST_URL",
             "COURSE_QUERY_LIMIT": 5,
             "SAFETY_CHECK_ENABLED": True,
@@ -159,7 +158,7 @@ def client_all_disabled():
     app = create_app(
         {
             "TESTING": True,
-            "collection": mock_collection,
+            "courses": mock_collection,
         }
     )
     with app.test_client() as client:
