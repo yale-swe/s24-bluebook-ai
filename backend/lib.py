@@ -3,15 +3,27 @@ import os
 from openai import OpenAI
 import json
 from dotenv import load_dotenv
+from pathlib import Path
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+root_dir = Path(__file__).resolve().parent.parent
+course_subjects = root_dir / "backend" / "course_subjects.json"
+
 # Open the JSON file
-with open('course_subjects.json', 'r') as file:
+with open(course_subjects, 'r') as file:
     # Load the JSON data into a Python list
     subjects = json.load(file)
+    
+#Create Season Codes
+years = ["2021", "2022", "2023", "2024"]
+codes = ["01", "02", "03"] # 01 is SPRING, 02 is SUMMER, 03 is FALL
+season_codes = []
+for i in range(len(years)):
+    for j in range(len(codes)):
+        season_codes.append(years[i] + codes[j])
 
 tools = [
     {
@@ -29,7 +41,7 @@ tools = [
                 },
                 "rating": {
                     "type": "number",
-                    "description": "The rating (a number with one significant digit) for the class (0 - 4). If a number is not provided, interpret the given opinion to fit the range. A good, or average, class should be 3.5",
+                    "description": "The rating (a number with one significant digit) for the class (0 - 4). If a number is not provided, interpret the given opinion to fit the range. Unless specified by the user, a good, or average, class should be 3.5",
                 },
                 "comparison_operator_rating": {
                     "type": "string",
@@ -44,9 +56,34 @@ tools = [
                     "type": "string",
                     "enum": ["$lt", "$gt", "$gte", "$lte"],
                     "description": "A comparison operator for the class workload",
-                },             
+                },      
+                "season_code": {
+                    "type": "string",
+                    "enum": season_codes,
+                    "description": "A semester represented as a season code (six numbers) formatted like 202401, where the first four digits are the year, and the last two corrsepond to Spring (01), Summer (02), and Fall (03). For example, 'Fall 2024' would be interpreted as 202403.",
+                }, 
+                "area": {
+                    "type": "string",
+                    "enum": ["Hu", "So", "Sc", "Qr", "Wr"],
+                    "description": "The specified area for a course: Humanities (HU), Social Science (So), Science (Sc), Quantitative Reasoning (Qr), Writing (Wr). Don't make assumptions.",
+                },       
             },
-            "required": ["comparison_operator_rating", "rating"],
+        },
+        },
+        
+        "type": "function",
+        "function": {
+        "name": "CourseFilter",
+        "description": "Provide filters for a course based on conditions.", 
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "natural_langauge_string": {
+                    "type": "string",
+                    "description": "Generate a natural language string to query against the Yale courses vector database that will be helpful to you to generate a response.",
+                },      
+            },
+            "required": ["natural_language_string"]
         },
         }
     }
@@ -79,6 +116,6 @@ def chat_completion_request(messages, tools=None, tool_choice=None, model='gpt-4
         return response
     except Exception as e:
         print("Unable to generate ChatCompletion response")
-        print(f"Exception: {e}")
+        print(f"Exception: {e}") 
         return e
     
