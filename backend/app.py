@@ -18,6 +18,7 @@ DATABASE_RELEVANCY_CHECK_ENABLED = False
 
 load_dotenv()
 
+
 # Separate function to load configurations
 def load_config(app, test_config=None):
     app.secret_key = os.environ.get(
@@ -45,6 +46,7 @@ def load_config(app, test_config=None):
         # Load configuration from environment variables
         app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 
+
 # Separate function to initialize database
 def init_database(app):
     if "MONGO_URI" in app.config:
@@ -54,6 +56,7 @@ def init_database(app):
         app.config["profiles"] = db["user_profile"]
 
         # else, set to None or Mock in case of testing
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -111,7 +114,7 @@ def create_app(test_config=None):
         else:
             print("response status is not 200")
             return jsonify({"isAuthenticated": False}), 401
-        
+
     @app.route("/api/save_chat", methods=["POST"])
     def save_chat():
         try:
@@ -121,7 +124,7 @@ def create_app(test_config=None):
             return jsonify({"status": "success", "id": str(result.inserted_id)}), 201
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
-        
+
     @app.route("/api/reload_chat", methods=["POST"])
     def reload_chat():
         try:
@@ -135,7 +138,7 @@ def create_app(test_config=None):
                 return jsonify({"status": "not found"}), 404
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
-        
+
     @app.route("/api/verify_course_code", methods=["POST"])
     def verify_course_code():
         try:
@@ -151,8 +154,12 @@ def create_app(test_config=None):
             course = course_collection.find_one({"course_code": course_code})
             if course:
                 # insert into database
-                result = user_collection.update_one({"uid": uid}, {"$addToSet": {"courses": course_code}})
-                return jsonify({"status": "success", "course": course['course_code']}), 200
+                result = user_collection.update_one(
+                    {"uid": uid}, {"$addToSet": {"courses": course_code}}
+                )
+                return jsonify(
+                    {"status": "success", "course": course["course_code"]}
+                ), 200
             else:
                 return jsonify({"status": "invalid course code"}), 404
         except Exception as e:
@@ -173,8 +180,12 @@ def create_app(test_config=None):
             course = course_collection.find_one({"course_code": course_code})
             if course:
                 # insert into database
-                result = user_collection.update_one({"uid": uid}, {"$pull": {"courses": course_code}})
-                return jsonify({"status": "success", "course": course['course_code']}), 200
+                result = user_collection.update_one(
+                    {"uid": uid}, {"$pull": {"courses": course_code}}
+                )
+                return jsonify(
+                    {"status": "success", "course": course["course_code"]}
+                ), 200
             else:
                 return jsonify({"status": "invalid course code"}), 404
         except Exception as e:
@@ -187,7 +198,7 @@ def create_app(test_config=None):
         uid = data.get("uid", None)
         if not uid:
             return jsonify({"error": "No uid provided"})
-        
+
         collection = app.config["profiles"]
 
         user_profile = {
@@ -198,7 +209,7 @@ def create_app(test_config=None):
         }
 
         result = collection.insert_one(user_profile)
-        user_profile['_id'] = str(result.inserted_id)
+        user_profile["_id"] = str(result.inserted_id)
 
         return jsonify(user_profile)
 
@@ -215,7 +226,7 @@ def create_app(test_config=None):
             return jsonify({"error": "No user profile found"}), 404
 
         # Convert ObjectId to string
-        user_profile['_id'] = str(user_profile['_id'])
+        user_profile["_id"] = str(user_profile["_id"])
 
         return jsonify(user_profile)
 
@@ -224,7 +235,7 @@ def create_app(test_config=None):
         user_profile = collection.find_one({"uid": uid})
         collection.update_one({"uid": uid}, {"$set": update})
         user_profile = collection.find_one({"uid": uid})
-        user_profile['_id'] = str(user_profile['_id'])
+        user_profile["_id"] = str(user_profile["_id"])
         return jsonify(user_profile)
 
     @app.route("/api/user/update/name", methods=["POST"])
@@ -237,7 +248,7 @@ def create_app(test_config=None):
         if not name:
             return jsonify({"error": "No name provided"})
         return update_user_profile(uid, {"name": name})
-    
+
     @app.route("/api/chat/create_chat", methods=["POST"])
     def create_new_chat():
         data = request.get_json()
@@ -245,24 +256,19 @@ def create_app(test_config=None):
         init_message = data.get("message", None)
         if not uid:
             return jsonify({"error": "No uid provided"})
-        
+
         chat_id = str(uuid4())
         if init_message is not None:
-            new_chat = {
-                "chat_id": chat_id,
-                "messages": [init_message]
-            }
+            new_chat = {"chat_id": chat_id, "messages": [init_message]}
         else:
-            new_chat = {
-                "chat_id": chat_id,
-                "messages": []
-            }
+            new_chat = {"chat_id": chat_id, "messages": []}
 
         collection = app.config["profiles"]
-        result = collection.update_one({"uid": uid}, {"$push": {"chat_history": new_chat}})
+        result = collection.update_one(
+            {"uid": uid}, {"$push": {"chat_history": new_chat}}
+        )
         return jsonify({"status": "success"}), 200
-    
-    
+
     @app.route("/api/chat/append_message", methods=["POST"])
     def append_message_to_chat():
         data = request.get_json()
@@ -275,7 +281,7 @@ def create_app(test_config=None):
             return jsonify({"error": "No message provided"})
         if not chat_id:
             return jsonify({"error": "No chat_id provided"})
-                
+
         collection = app.config["profiles"]
         # find the user with the chat id
         user_profile = collection.find_one({"uid": uid})
@@ -287,7 +293,9 @@ def create_app(test_config=None):
                 chat["messages"].append(message)
                 break
 
-        result = collection.update_one({"uid": uid}, {"$set": {"chat_history": user_profile["chat_history"]}})
+        result = collection.update_one(
+            {"uid": uid}, {"$set": {"chat_history": user_profile["chat_history"]}}
+        )
         return jsonify({"status": "success"}), 200
 
     @app.route("/api/chat/delete_chat", methods=["POST"])
@@ -299,10 +307,12 @@ def create_app(test_config=None):
             return jsonify({"error": "No uid provided"})
         if not chat_id:
             return jsonify({"error": "No chat_id provided"})
-        
+
         collection = app.config["profiles"]
         # use $pull to remove the chat with the chat_id
-        result = collection.update_one({"uid": uid}, {"$pull": {"chat_history": {"chat_id": chat_id}}})
+        result = collection.update_one(
+            {"uid": uid}, {"$pull": {"chat_history": {"chat_id": chat_id}}}
+        )
         return jsonify({"status": "success"}), 200
 
     @app.route("/api/slug", methods=["POST"])
@@ -324,13 +334,14 @@ def create_app(test_config=None):
         except:
             return jsonify({"slug": "Untitled"})
 
-
     @app.route("/api/chat", methods=["POST"])
     def chat():
         data = request.get_json()
         user_messages = data.get("message", None)
 
-        filter_season_codes = data.get("season_codes", None) # assume it is an array of season code
+        filter_season_codes = data.get(
+            "season_codes", None
+        )  # assume it is an array of season code
         filter_subjects = data.get("subject", None)
         filter_areas = data.get("areas", None)
 
@@ -410,7 +421,7 @@ def create_app(test_config=None):
         vector_search_prompt_generation.append(
             {
                 "role": "user",
-                "content": "Generate a natural language string to query against the Yale courses vector database that will be helpful to you to generate a response.",
+                "content": "Generate a natural language string based on user message to query against the Yale courses vector database that will be helpful to you to generate a response.",
             }
         )
         response = chat_completion_request(messages=vector_search_prompt_generation)
@@ -430,20 +441,20 @@ def create_app(test_config=None):
                 "limit": COURSE_QUERY_LIMIT,
             }
         }
-        
+
         if filter_season_codes or filter_subjects or filter_areas:
             aggregate_pipeline["$vectorSearch"]["filter"] = {}
             filters = []
 
             if filter_season_codes:
                 filters.append({"season_code": {"$in": filter_season_codes}})
-            
+
             if filter_subjects:
                 filters.append({"subject": {"$in": filter_subjects}})
-            
+
             if filter_areas:
                 filters.append({"areas": {"$in": filter_areas}})
-            
+
             if filters:
                 aggregate_pipeline["$vectorSearch"]["filter"]["$and"] = filters
 
@@ -459,7 +470,6 @@ def create_app(test_config=None):
                 "areas": course["areas"],
                 "sentiment_label": course["sentiment_info"]["final_label"],
                 "sentiment_score": course["sentiment_info"]["final_proportion"],
-                 
             }
             for course in database_response
         ]
@@ -475,6 +485,11 @@ def create_app(test_config=None):
 
         response = chat_completion_request(messages=user_messages)
         response = response.choices[0].message.content
+
+        print()
+        print()
+        print(user_messages)
+        print(response)
 
         json_response = {"response": response, "courses": recommended_courses}
 
