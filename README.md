@@ -46,7 +46,7 @@ Don't push your API key to this repo!
 
 To run sentiment classification, first create a conda environment for Python 3 using the `backend/sentiment_classif_requirements.txt` file:
 
-```
+```bash
 cd backend
 conda create --name <env_name> --file sentiment_classif_requirements.txt
 ```
