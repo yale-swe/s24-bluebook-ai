@@ -40,16 +40,17 @@ export default function Chat() {
   const [chatVisible, setChatVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [selectedSeason, setSelectedSeason] = useState('');
-  const [selectedAreas, setSelectedAreas] = useState('');
+  const [selectedSeason, setSelectedSeason] = useState<MultiValue<OptionType>>([]);
+  const [selectedAreas, setSelectedAreas] = useState<MultiValue<OptionType>>([]);
 
-  const handleSeasonChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedSeason(e.target.value);
-};
-
-const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedAreas(e.target.value);
-};
+  const handleSeasonChange = (selectedOptions: MultiValue<OptionType>) => {
+    setSelectedSeason(selectedOptions);
+  };
+  
+  const handleAreaChange = (selectedOptions: MultiValue<OptionType>) => {
+    setSelectedAreas(selectedOptions);
+  };
+  
 
   const [expanded, setExpanded] = useState(false);
 
@@ -153,7 +154,7 @@ const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setMessages((messages) => [...messages, newUserMessage]);
     setIsTyping(true);
     console.log(selectedSeason, selectedAreas, selectedSubjects);
-
+    console.log(messages)
     const response = await fetch("http://127.0.0.1:8000/api/chat", {
       method: "POST",
       headers: {
@@ -161,12 +162,13 @@ const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       },
       body: JSON.stringify({
         message: [...messages, newUserMessage],
-        season_codes: selectedSeason ? [selectedSeason] : [],
+        season_codes: selectedSeason.map(season => season.value),
         subject: selectedSubjects.map(subject => subject.value),
-        areas: selectedAreas ? [selectedAreas] : []
+        areas: selectedAreas.map(area => area.value)
       }),
     });
-  
+    
+    console.log(response)
     setIsTyping(false);
     if (response.ok) {
       const data = await response.json();
@@ -322,40 +324,46 @@ const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
           </div>
           <form onSubmit={handleSubmit} className={styles.inputForm}>
             <div className={styles.floatingDropdowns}>
-              <select   className={styles.dropdown}
-                        value={selectedSeason}
-                        onChange={handleSeasonChange}
-                        defaultValue="">
-                <option value="" disabled selected>
-                  Season
-                </option>
-                <option value="202401">Spring 2024</option>
-                <option value="202303">Fall 2023</option>
-                <option value="202302">Summer 2023</option>
-              </select>
-              {/* <select className={styles.dropdown} defaultValue="">
-                <option value="" disabled selected>
-                  Subject
-                </option>
-                {subjects.map(subject => (
-                  <option key={subject.code} value={subject.code}>
-                    {subject.name}
-                  </option>
-                ))}
-              </select> */}
-              <select className={styles.dropdown} 
-                      value={selectedAreas}
-                      onChange={handleAreaChange}
-                      defaultValue="">
-                <option value="" disabled selected>
-                  Areas
-                </option>
-                <option value="Hu">Hu</option>
-                <option value="Sc">Sc</option>
-                <option value="So">So</option>
-                <option value="Qr">Qr</option>
-                <option value="Wr">Wr</option>
-              </select>
+              <Select
+                isMulti
+                value={selectedSeason}
+                onChange={handleSeasonChange}
+                options={[
+                  { value: "202401", label: "Spring 2024" },
+                  { value: "202303", label: "Fall 2023" },
+                  { value: "202302", label: "Summer 2023" },
+                  { value: "202402", label: "Summer 2024" },
+                  { value: "202403", label: "Fall 2024" }
+                ]}
+                styles={customStyles}
+                classNamePrefix="select"
+                placeholder="Season"
+                menuPlacement="top"
+                closeMenuOnSelect={false}
+                components={{ MultiValueContainer: CustomMultiValueContainer, MultiValueRemove }}
+                onMenuOpen={() => setExpanded(true)}
+                onMenuClose={() => setExpanded(false)}
+              />
+              <Select
+                isMulti
+                value={selectedAreas}
+                onChange={handleAreaChange}
+                options={[
+                  { value: "Hu", label: "Hu" },
+                  { value: "Sc", label: "Sc" },
+                  { value: "So", label: "So" },
+                  { value: "Qr", label: "Qr" },
+                  { value: "Wr", label: "Wr" }
+                ]}
+                styles={customStyles}
+                classNamePrefix="select"
+                placeholder="Areas"
+                menuPlacement="top"
+                closeMenuOnSelect={false}
+                components={{ MultiValueContainer: CustomMultiValueContainer, MultiValueRemove }}
+                onMenuOpen={() => setExpanded(true)}
+                onMenuClose={() => setExpanded(false)}
+              />
               <Select
                 isMulti
                 value={selectedSubjects}
