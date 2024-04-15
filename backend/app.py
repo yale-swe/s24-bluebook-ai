@@ -116,7 +116,7 @@ def create_app(test_config=None):
             if message["role"] == "ai":
                 message["role"] = "assistant"
 
-        print(user_messages)
+        #print(user_messages)
 
         if SAFETY_CHECK_ENABLED:
             # for safety check, not to be included in final response
@@ -211,14 +211,12 @@ def create_app(test_config=None):
         filtered_data = json.loads(filtered_response.choices[0].message.tool_calls[0].function.arguments)
         print("")
         print("Completion Request: Filtered Response")
-        print(filtered_data)
+        print(filtered_data)        
         print("")
                 
         natural_filter_subject = filtered_data.get("subject_code", None)
         natural_filter_season_codes = filtered_data.get("season_code", None)
         natural_filter_areas = filtered_data.get("area", None)
-    
-
         
         if filter_season_codes:
             aggregate_pipeline["$vectorSearch"]["filter"] = {
@@ -298,10 +296,10 @@ def create_app(test_config=None):
 
         json_response = {"response": response, "courses": recommended_courses}
         
-        print("")
-        print("Completion Request: Recommendation")
-        print(json_response)
-        print("")
+        # print("")
+        # print("Completion Request: Recommendation")
+        # print(json_response)
+        # print("")
         
         return jsonify(json_response)
 
