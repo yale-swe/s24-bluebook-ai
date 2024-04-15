@@ -10,13 +10,13 @@ from pymongo.mongo_client import MongoClient
 import requests
 import xml.etree.ElementTree as ET
 import datetime
+from uuid import uuid4
 
 COURSE_QUERY_LIMIT = 5
 SAFETY_CHECK_ENABLED = False
 DATABASE_RELEVANCY_CHECK_ENABLED = False
 
 load_dotenv()
-
 
 # Separate function to load configurations
 def load_config(app, test_config=None):
@@ -236,8 +236,75 @@ def create_app(test_config=None):
             return jsonify({"error": "No uid provided"})
         if not name:
             return jsonify({"error": "No name provided"})
-        return update_user_profile(uid, {"name": data.get("name")})
+        return update_user_profile(uid, {"name": name})
     
+    @app.route("/api/chat/create_chat", methods=["POST"])
+    def create_new_chat():
+        data = request.get_json()
+        uid = data.get("uid", None)
+        init_message = data.get("message", None)
+        if not uid:
+            return jsonify({"error": "No uid provided"})
+        
+        chat_id = str(uuid4())
+        if init_message is not None:
+            new_chat = {
+                "chat_id": chat_id,
+                "messages": [init_message]
+            }
+        else:
+            new_chat = {
+                "chat_id": chat_id,
+                "messages": []
+            }
+
+        collection = app.config["profiles"]
+        result = collection.update_one({"uid": uid}, {"$push": {"chat_history": new_chat}})
+        return jsonify({"status": "success"}), 200
+    
+    
+    @app.route("/api/chat/append_message", methods=["POST"])
+    def append_message_to_chat():
+        data = request.get_json()
+        uid = data.get("uid", None)
+        chat_id = data.get("chat_id", None)
+        message = data.get("message", None)
+        if not uid:
+            return jsonify({"error": "No uid provided"})
+        if not message:
+            return jsonify({"error": "No message provided"})
+        if not chat_id:
+            return jsonify({"error": "No chat_id provided"})
+                
+        collection = app.config["profiles"]
+        # find the user with the chat id
+        user_profile = collection.find_one({"uid": uid})
+        if not user_profile:
+            return jsonify({"error": "No user profile found"}), 404
+        # update the selected chat by appending the message
+        for chat in user_profile["chat_history"]:
+            if chat["chat_id"] == chat_id:
+                chat["messages"].append(message)
+                break
+
+        result = collection.update_one({"uid": uid}, {"$set": {"chat_history": user_profile["chat_history"]}})
+        return jsonify({"status": "success"}), 200
+
+    @app.route("/api/chat/delete_chat", methods=["POST"])
+    def delete_chat():
+        data = request.get_json()
+        uid = data.get("uid", None)
+        chat_id = data.get("chat_id", None)
+        if not uid:
+            return jsonify({"error": "No uid provided"})
+        if not chat_id:
+            return jsonify({"error": "No chat_id provided"})
+        
+        collection = app.config["profiles"]
+        # use $pull to remove the chat with the chat_id
+        result = collection.update_one({"uid": uid}, {"$pull": {"chat_history": {"chat_id": chat_id}}})
+        return jsonify({"status": "success"}), 200
+
     @app.route("/api/slug", methods=["POST"])
     def get_chat_history_slug():
         data = request.get_json()
