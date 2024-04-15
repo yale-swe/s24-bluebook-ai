@@ -40,6 +40,17 @@ export default function Chat() {
   const [chatVisible, setChatVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const [selectedSeason, setSelectedSeason] = useState('');
+  const [selectedAreas, setSelectedAreas] = useState('');
+
+  const handleSeasonChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedSeason(e.target.value);
+};
+
+const handleAreaChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedAreas(e.target.value);
+};
+
   const [expanded, setExpanded] = useState(false);
 
   const customStyles = {
@@ -129,42 +140,42 @@ export default function Chat() {
     clearTicketFromUrl();
   }, []);
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setInput("");
-
-    // add the user's message to the chat.
+  
     const newUserMessage = {
       id: `user-${Date.now()}`,
       content: input,
       role: "user",
     };
-
+  
     setMessages((messages) => [...messages, newUserMessage]);
     setIsTyping(true);
+    console.log(selectedSeason, selectedAreas, selectedSubjects);
 
     const response = await fetch("http://127.0.0.1:8000/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      // body: JSON.stringify({ message: [{ content: input, role: 'user' }] }),
       body: JSON.stringify({
         message: [...messages, newUserMessage],
+        season_codes: selectedSeason ? [selectedSeason] : [],
+        subject: selectedSubjects.map(subject => subject.value),
+        areas: selectedAreas ? [selectedAreas] : []
       }),
     });
-
+  
     setIsTyping(false);
-
     if (response.ok) {
       const data = await response.json();
-      // simulateTypingEffect(data.message[0].content, 'ai', `ai-${Date.now()}`);
       simulateTypingEffect(data.response, "ai", `ai-${Date.now()}`);
     } else {
       console.error("Failed to send message");
     }
   };
+  
 
   const simulateTypingEffect = (
     message: string,
@@ -311,13 +322,16 @@ export default function Chat() {
           </div>
           <form onSubmit={handleSubmit} className={styles.inputForm}>
             <div className={styles.floatingDropdowns}>
-              <select className={styles.dropdown} defaultValue="">
+              <select   className={styles.dropdown}
+                        value={selectedSeason}
+                        onChange={handleSeasonChange}
+                        defaultValue="">
                 <option value="" disabled selected>
                   Season
                 </option>
-                <option value="season1">Spring 2024</option>
-                <option value="season2">Fall 2023</option>
-                <option value="season3">Summer 2023</option>
+                <option value="202401">Spring 2024</option>
+                <option value="202303">Fall 2023</option>
+                <option value="202302">Summer 2023</option>
               </select>
               {/* <select className={styles.dropdown} defaultValue="">
                 <option value="" disabled selected>
@@ -329,15 +343,18 @@ export default function Chat() {
                   </option>
                 ))}
               </select> */}
-              <select className={styles.dropdown} defaultValue="">
+              <select className={styles.dropdown} 
+                      value={selectedAreas}
+                      onChange={handleAreaChange}
+                      defaultValue="">
                 <option value="" disabled selected>
                   Areas
                 </option>
-                <option value="area1">Hu</option>
-                <option value="area2">Sc</option>
-                <option value="area3">So</option>
-                <option value="area4">Qr</option>
-                <option value="area5">Wr</option>
+                <option value="Hu">Hu</option>
+                <option value="Sc">Sc</option>
+                <option value="So">So</option>
+                <option value="Qr">Qr</option>
+                <option value="Wr">Wr</option>
               </select>
               <Select
                 isMulti

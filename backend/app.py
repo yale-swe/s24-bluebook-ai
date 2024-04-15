@@ -17,7 +17,6 @@ DATABASE_RELEVANCY_CHECK_ENABLED = False
 
 load_dotenv()
 
-
 # Separate function to load configurations
 def load_config(app, test_config=None):
     app.secret_key = os.environ.get(
@@ -35,7 +34,12 @@ def load_config(app, test_config=None):
 # Separate function to initialize database
 def init_database(app):
     if "MONGO_URI" in app.config:
-        client = MongoClient(app.config["MONGO_URI"])
+        client = MongoClient(app.config["MONGO_URI"], serverSelectionTimeoutMS=5000)
+        try:
+            # The ismaster command is cheap and does not require auth.
+            client.admin.command('ismaster')
+        except ConnectionFailure:
+            print("Server not available")
         db = client["course_db"]
         app.config["collection"] = db["parsed_courses"]
         # else, set to None or Mock in case of testing
@@ -100,6 +104,7 @@ def create_app(test_config=None):
     @app.route("/api/chat", methods=["POST"])
     def chat():
         data = request.get_json()
+        # print(data)
         user_messages = data.get("message", None)
 
         filter_season_codes = data.get("season_codes", None) # assume it is an array of season code
@@ -115,8 +120,6 @@ def create_app(test_config=None):
                 del message["id"]
             if message["role"] == "ai":
                 message["role"] = "assistant"
-
-        print(user_messages)
 
         if SAFETY_CHECK_ENABLED:
             # for safety check, not to be included in final response
@@ -202,7 +205,7 @@ def create_app(test_config=None):
                 "limit": COURSE_QUERY_LIMIT,
             }
         }
-        
+                
         if filter_season_codes:
             aggregate_pipeline["$vectorSearch"]["filter"] = {
                 "season_code": {
@@ -213,7 +216,7 @@ def create_app(test_config=None):
         if filter_subject:
             aggregate_pipeline["$vectorSearch"]["filter"] = {
                 "subject": {
-                    "$eq": filter_subject
+                    "$in": filter_subject
                 }
             }
 
@@ -223,6 +226,8 @@ def create_app(test_config=None):
                     "$in": filter_areas
                 }
             }
+
+        print(aggregate_pipeline)
 
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
