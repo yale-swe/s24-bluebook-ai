@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_cas import CAS, login_required
 import os
 from dotenv import load_dotenv
-from lib import chat_completion_request, create_embedding
+from lib import chat_completion_request, create_embedding, tools
 import json
 from pymongo.mongo_client import MongoClient
 import requests
@@ -45,6 +45,7 @@ def load_config(app, test_config=None):
         # Load configuration from environment variables
         app.config["MONGO_URI"] = os.getenv("MONGO_URI")
 
+
 # Separate function to initialize database
 def init_database(app):
     if "MONGO_URI" in app.config:
@@ -54,6 +55,7 @@ def init_database(app):
         app.config["profiles"] = db["user_profile"]
 
         # else, set to None or Mock in case of testing
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -111,7 +113,7 @@ def create_app(test_config=None):
         else:
             print("response status is not 200")
             return jsonify({"isAuthenticated": False}), 401
-        
+
     @app.route("/api/save_chat", methods=["POST"])
     def save_chat():
         try:
@@ -121,7 +123,7 @@ def create_app(test_config=None):
             return jsonify({"status": "success", "id": str(result.inserted_id)}), 201
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
-        
+
     @app.route("/api/reload_chat", methods=["POST"])
     def reload_chat():
         try:
@@ -135,7 +137,7 @@ def create_app(test_config=None):
                 return jsonify({"status": "not found"}), 404
         except Exception as e:
             return jsonify({"status": "error", "message": str(e)}), 500
-        
+
     @app.route("/api/verify_course_code", methods=["POST"])
     def verify_course_code():
         try:
@@ -151,8 +153,12 @@ def create_app(test_config=None):
             course = course_collection.find_one({"course_code": course_code})
             if course:
                 # insert into database
-                result = user_collection.update_one({"uid": uid}, {"$addToSet": {"courses": course_code}})
-                return jsonify({"status": "success", "course": course['course_code']}), 200
+                result = user_collection.update_one(
+                    {"uid": uid}, {"$addToSet": {"courses": course_code}}
+                )
+                return jsonify(
+                    {"status": "success", "course": course["course_code"]}
+                ), 200
             else:
                 return jsonify({"status": "invalid course code"}), 404
         except Exception as e:
@@ -173,8 +179,12 @@ def create_app(test_config=None):
             course = course_collection.find_one({"course_code": course_code})
             if course:
                 # insert into database
-                result = user_collection.update_one({"uid": uid}, {"$pull": {"courses": course_code}})
-                return jsonify({"status": "success", "course": course['course_code']}), 200
+                result = user_collection.update_one(
+                    {"uid": uid}, {"$pull": {"courses": course_code}}
+                )
+                return jsonify(
+                    {"status": "success", "course": course["course_code"]}
+                ), 200
             else:
                 return jsonify({"status": "invalid course code"}), 404
         except Exception as e:
@@ -187,7 +197,7 @@ def create_app(test_config=None):
         uid = data.get("uid", None)
         if not uid:
             return jsonify({"error": "No uid provided"})
-        
+
         collection = app.config["profiles"]
 
         user_profile = {
@@ -198,7 +208,7 @@ def create_app(test_config=None):
         }
 
         result = collection.insert_one(user_profile)
-        user_profile['_id'] = str(result.inserted_id)
+        user_profile["_id"] = str(result.inserted_id)
 
         return jsonify(user_profile)
 
@@ -215,7 +225,7 @@ def create_app(test_config=None):
             return jsonify({"error": "No user profile found"}), 404
 
         # Convert ObjectId to string
-        user_profile['_id'] = str(user_profile['_id'])
+        user_profile["_id"] = str(user_profile["_id"])
 
         return jsonify(user_profile)
 
@@ -224,7 +234,7 @@ def create_app(test_config=None):
         user_profile = collection.find_one({"uid": uid})
         collection.update_one({"uid": uid}, {"$set": update})
         user_profile = collection.find_one({"uid": uid})
-        user_profile['_id'] = str(user_profile['_id'])
+        user_profile["_id"] = str(user_profile["_id"])
         return jsonify(user_profile)
 
     @app.route("/api/user/update/name", methods=["POST"])
@@ -324,13 +334,14 @@ def create_app(test_config=None):
         except:
             return jsonify({"slug": "Untitled"})
 
-
     @app.route("/api/chat", methods=["POST"])
     def chat():
         data = request.get_json()
         user_messages = data.get("message", None)
 
-        filter_season_codes = data.get("season_codes", None) # assume it is an array of season code
+        filter_season_codes = data.get(
+            "season_codes", None
+        )  # assume it is an array of season code
         filter_subjects = data.get("subject", None)
         filter_areas = data.get("areas", None)
 
@@ -344,7 +355,7 @@ def create_app(test_config=None):
             if message["role"] == "ai":
                 message["role"] = "assistant"
 
-        print(user_messages)
+        # print(user_messages)
 
         if SAFETY_CHECK_ENABLED:
             # for safety check, not to be included in final response
@@ -413,9 +424,13 @@ def create_app(test_config=None):
                 "content": "Generate a natural language string to query against the Yale courses vector database that will be helpful to you to generate a response.",
             }
         )
+
         response = chat_completion_request(messages=vector_search_prompt_generation)
         response = response.choices[0].message.content
+        print("")
+        print("Completion Request: Vector Search Prompt")
         print(response)
+        print("")
 
         query_vector = create_embedding(response)
 
@@ -430,25 +445,53 @@ def create_app(test_config=None):
                 "limit": COURSE_QUERY_LIMIT,
             }
         }
-        
-        if filter_season_codes or filter_subjects or filter_areas:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {}
-            filters = []
 
-            if filter_season_codes:
-                filters.append({"season_code": {"$in": filter_season_codes}})
-            
-            if filter_subjects:
-                filters.append({"subject": {"$in": filter_subjects}})
-            
-            if filter_areas:
-                filters.append({"areas": {"$in": filter_areas}})
-            
-            if filters:
-                aggregate_pipeline["$vectorSearch"]["filter"]["$and"] = filters
+        filtered_response = chat_completion_request(messages=user_messages, tools=tools)
+        filtered_data = json.loads(
+            filtered_response.choices[0].message.tool_calls[0].function.arguments
+        )
+        print("")
+        print("Completion Request: Filtered Response")
+        print(filtered_data)
+        print("")
 
+        natural_filter_subject = filtered_data.get("subject_code", None)
+        natural_filter_season_codes = filtered_data.get("season_code", None)
+        natural_filter_areas = filtered_data.get("area", None)
+
+        if filter_season_codes:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {"$in": filter_season_codes}
+            }
+        elif natural_filter_season_codes:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {"$in": [natural_filter_season_codes]}
+            }
+
+        if filter_subjects:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "subject": {"$in": filter_subjects}
+            }
+        elif natural_filter_subject:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {"$in": [natural_filter_subject]}
+            }
+
+        if filter_areas:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "areas": {"$in": filter_areas}
+            }
+        elif natural_filter_areas:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {"$in": [natural_filter_areas]}
+            }
+
+        # print(aggregate_pipeline)
+        print("Before aggregate")
         database_response = collection.aggregate([aggregate_pipeline])
+        print("After aggregate")
         database_response = list(database_response)
+        print(database_response)
 
         recommended_courses = [
             {
@@ -459,24 +502,37 @@ def create_app(test_config=None):
                 "areas": course["areas"],
                 "sentiment_label": course["sentiment_info"]["final_label"],
                 "sentiment_score": course["sentiment_info"]["final_proportion"],
-                 
             }
             for course in database_response
         ]
 
-        recommendation_prompt = (
-            "Here are some courses that might be relevant to the user request:\n\n"
-        )
-        for course in recommended_courses:
-            recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
-        recommendation_prompt += "Provide a response to the user. Incorporate specific course information if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list."
+        if recommended_courses:
+            recommendation_prompt = (
+                "Here are some courses that might be relevant to the user request:\n\n"
+            )
+            for course in recommended_courses:
+                recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
+            recommendation_prompt += "Provide a response to the user. Incorporate specific course information if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list."
+
+        else:
+            recommendation_prompt = "Please tell the user that you are unable to help with their request since no entry in the yale courses database matches the information provided."
 
         user_messages.append({"role": "system", "content": recommendation_prompt})
 
+        print(user_messages)
+
         response = chat_completion_request(messages=user_messages)
+
         response = response.choices[0].message.content
 
+        print(response)
+
         json_response = {"response": response, "courses": recommended_courses}
+
+        # print("")
+        # print("Completion Request: Recommendation")
+        # print(json_response)
+        # print("")
 
         return jsonify(json_response)
 
