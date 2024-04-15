@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_cas import CAS, login_required
 import os
 from dotenv import load_dotenv
-from lib import chat_completion_request, create_embedding
+from lib import chat_completion_request, create_embedding, tools
 import json
 from pymongo.mongo_client import MongoClient
 import requests
@@ -355,7 +355,7 @@ def create_app(test_config=None):
             if message["role"] == "ai":
                 message["role"] = "assistant"
 
-        print(user_messages)
+        # print(user_messages)
 
         if SAFETY_CHECK_ENABLED:
             # for safety check, not to be included in final response
@@ -420,13 +420,18 @@ def create_app(test_config=None):
         vector_search_prompt_generation = user_messages.copy()
         vector_search_prompt_generation.append(
             {
-                "role": "user",
-                "content": "Generate a natural language string based on user message to query against the Yale courses vector database that will be helpful to you to generate a response.",
+                "role": "system",
+                "content": "What would be a good search query (in conventional english) to query against the Yale courses database that addresses the user needs?",
             }
         )
+
+        print(vector_search_prompt_generation)
         response = chat_completion_request(messages=vector_search_prompt_generation)
         response = response.choices[0].message.content
+        print("")
+        print("Completion Request: Vector Search Prompt")
         print(response)
+        print("")
 
         query_vector = create_embedding(response)
 
@@ -442,24 +447,50 @@ def create_app(test_config=None):
             }
         }
 
-        if filter_season_codes or filter_subjects or filter_areas:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {}
-            filters = []
+        filtered_response = chat_completion_request(messages=user_messages, tools=tools)
+        filtered_data = json.loads(
+            filtered_response.choices[0].message.tool_calls[0].function.arguments
+        )
+        print("")
+        print("Completion Request: Filtered Response")
+        print(filtered_data)
+        print("")
 
-            if filter_season_codes:
-                filters.append({"season_code": {"$in": filter_season_codes}})
+        natural_filter_subject = filtered_data.get("subject_code", None)
+        natural_filter_season_codes = filtered_data.get("season_code", None)
+        natural_filter_areas = filtered_data.get("area", None)
 
-            if filter_subjects:
-                filters.append({"subject": {"$in": filter_subjects}})
+        if filter_season_codes:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {"$in": filter_season_codes}
+            }
+        elif natural_filter_season_codes:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {"$in": [natural_filter_season_codes]}
+            }
 
-            if filter_areas:
-                filters.append({"areas": {"$in": filter_areas}})
+        if filter_subjects:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "subject": {"$in": filter_subjects}
+            }
+        elif natural_filter_subject:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {"$in": [natural_filter_subject]}
+            }
 
-            if filters:
-                aggregate_pipeline["$vectorSearch"]["filter"]["$and"] = filters
+        if filter_areas:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "areas": {"$in": filter_areas}
+            }
+        elif natural_filter_areas:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {
+                "season_code": {"$in": [natural_filter_areas]}
+            }
 
+        # print(aggregate_pipeline)
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
+        print(database_response)
 
         recommended_courses = [
             {
@@ -474,24 +505,34 @@ def create_app(test_config=None):
             for course in database_response
         ]
 
-        recommendation_prompt = (
-            "Here are some courses that might be relevant to the user request:\n\n"
-        )
-        for course in recommended_courses:
-            recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
-        recommendation_prompt += "Provide a response to the user. Incorporate specific course information if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list."
+        if recommended_courses:
+            recommendation_prompt = (
+                "Here are some courses that might be relevant to the user request:\n\n"
+            )
+            for course in recommended_courses:
+                recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
+            recommendation_prompt += "Incorporate specific course information in your response to me if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list. Do not refer to any courses not in this list"
 
+        else:
+            recommendation_prompt = "Finish this message and include the whole message in your response, your response should contain the rest of this message verbatim: I'm sorry. I tried to search for courses that match your criteria but couldn't find any."
         user_messages.append({"role": "system", "content": recommendation_prompt})
 
+        print(user_messages)
+
         response = chat_completion_request(messages=user_messages)
+
         response = response.choices[0].message.content
 
-        print()
         print()
         print(user_messages)
         print(response)
 
         json_response = {"response": response, "courses": recommended_courses}
+
+        # print("")
+        # print("Completion Request: Recommendation")
+        # print(json_response)
+        # print("")
 
         return jsonify(json_response)
 
