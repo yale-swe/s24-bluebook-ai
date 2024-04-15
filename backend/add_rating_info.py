@@ -12,7 +12,7 @@ This file directly adds coursetable rating data to .json files in a directory of
 Args
 - target_data_path: Path to the desired folder containing .json files for courses that must be updated with rating info
 - sentiment_data_path: Path to folder containing .json files equipped with rating info
-- years_to_port: List containing integers representing what years of sentiment info to include in the given .json files for parsed courses
+- years_to_port: List containing integers representing what years of rating info to include in the given .json files for parsed courses
 
 Processing
 - Consider each .json file in 'data_path'
