@@ -22,7 +22,7 @@ def client():
         ]
     )
 
-    app = create_app({"TESTING": True, "collection": mock_collection})
+    app = create_app({"TESTING": True, "courses": mock_collection})
     with app.test_client() as client:
         yield client
 
