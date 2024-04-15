@@ -1,9 +1,35 @@
 "use client";
 
 import React, { useState } from "react";
+import Select, { components, GroupBase, MultiValueRemoveProps, ActionMeta, MultiValue, StylesConfig } from 'react-select';
+import { MultiValueGenericProps } from 'react-select';
 import { useEffect } from "react";
-import styles from "./page.module.css"; // change to ur own directory
+import styles from "./page.module.css";
+import courseSubjects from "./course_subjects.json";
 import { format } from "path";
+
+type OptionType = {
+  value: string;
+  label: string;
+};
+
+const MultiValueLabel = (props: MultiValueGenericProps<OptionType, true>) => {
+  return (
+    <components.MultiValueLabel {...props}>
+      {props.data.value}
+    </components.MultiValueLabel>
+  );
+};
+
+const MultiValueRemove = (props: MultiValueRemoveProps<OptionType, true, GroupBase<OptionType>>) => {
+  return (
+    <components.MultiValueRemove {...props}>
+      {props.children}
+      <span aria-hidden="true">&times;</span>
+    </components.MultiValueRemove>
+  );
+};
+
 
 export default function Chat() {
   const [isTyping, setIsTyping] = useState(false);
@@ -13,6 +39,74 @@ export default function Chat() {
   ]);
   const [chatVisible, setChatVisible] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const [expanded, setExpanded] = useState(false);
+
+  const customStyles = {
+    multiValue: (base: any, state: any) => ({
+      ...base,
+      display: 'flex',
+    }),
+    multiValueLabel: (base: any, state: any) => ({
+      ...base,
+      flex: '1 1 100%',
+    }),
+    valueContainer: (provided: any, state: any) => ({
+      ...provided,
+      flexWrap: 'wrap',
+      overflow: 'hidden',
+      width: '100%',
+    }),
+    container: (provided: any) => ({
+      ...provided,
+      width: 'fit',
+      maxWidth: '100%',
+    }),
+  };  
+
+  const CustomMultiValueContainer = (props: MultiValueGenericProps<OptionType, true>) => {
+    const { children, selectProps } = props;
+    const values = selectProps.value as OptionType[];
+    const total = values.length;
+    const maxVisibleValues = 2;
+    const currentIndex = values.findIndex(value => value.value === props.data.value);
+
+    if (expanded) {
+      return <components.MultiValueContainer {...props}>{children}</components.MultiValueContainer>;
+    }
+
+    if (currentIndex < maxVisibleValues) {
+      return <components.MultiValueContainer {...props}>{children}</components.MultiValueContainer>;
+    }
+
+    if (currentIndex === maxVisibleValues) {
+      const additionalCount = total - maxVisibleValues;
+      return (
+        <components.MultiValueContainer {...props}>
+          <div onClick={() => setExpanded(true)} style={{ cursor: 'pointer' }}>
+            +{additionalCount} 
+          </div>
+        </components.MultiValueContainer>
+      );
+    }
+
+    return null;
+  };
+  
+  const subjectOptions: OptionType[] = Object.entries(courseSubjects).map(([value, label]) => ({
+    value,
+    label: `${value} - ${label}`
+  }));
+  
+  const [selectedSubjects, setSelectedSubjects] = useState<MultiValue<OptionType>>([]);
+
+  const handleSubjectChange = (
+    selectedOptions: MultiValue<OptionType>,
+    actionMeta: ActionMeta<OptionType>
+  ) => {
+    setSelectedSubjects(selectedOptions || []);
+  };
+
 
   useEffect(() => {
     // Check for CAS ticket in URL parameters
@@ -216,6 +310,51 @@ export default function Chat() {
             )}
           </div>
           <form onSubmit={handleSubmit} className={styles.inputForm}>
+            <div className={styles.floatingDropdowns}>
+              <select className={styles.dropdown} defaultValue="">
+                <option value="" disabled selected>
+                  Season
+                </option>
+                <option value="season1">Spring 2024</option>
+                <option value="season2">Fall 2023</option>
+                <option value="season3">Summer 2023</option>
+              </select>
+              {/* <select className={styles.dropdown} defaultValue="">
+                <option value="" disabled selected>
+                  Subject
+                </option>
+                {subjects.map(subject => (
+                  <option key={subject.code} value={subject.code}>
+                    {subject.name}
+                  </option>
+                ))}
+              </select> */}
+              <select className={styles.dropdown} defaultValue="">
+                <option value="" disabled selected>
+                  Areas
+                </option>
+                <option value="area1">Hu</option>
+                <option value="area2">Sc</option>
+                <option value="area3">So</option>
+                <option value="area4">Qr</option>
+                <option value="area5">Wr</option>
+              </select>
+              <Select
+                isMulti
+                value={selectedSubjects}
+                onChange={handleSubjectChange}
+                options={subjectOptions}
+                styles={customStyles}
+                classNamePrefix="select"
+                placeholder="Subjects"
+                menuPlacement="top"
+                closeMenuOnSelect={false}
+                components={{ MultiValueContainer: CustomMultiValueContainer, MultiValueRemove , MultiValueLabel}}
+                onMenuOpen={() => setExpanded(true)}
+                onMenuClose={() => setExpanded(false)}
+              />
+            </div>
+          {/* <div className="col"> */}
             <input
               type="text"
               className={styles.inputField}
@@ -226,7 +365,9 @@ export default function Chat() {
             <button type="submit" className={styles.sendButton}>
               Send
             </button>
-          </form>
+          {/* </div> */}
+        </form>
+
         </div>
       )}
     </>
