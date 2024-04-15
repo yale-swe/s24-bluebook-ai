@@ -48,12 +48,7 @@ def load_config(app, test_config=None):
 # Separate function to initialize database
 def init_database(app):
     if "MONGO_URI" in app.config:
-        client = MongoClient(app.config["MONGO_URI"], serverSelectionTimeoutMS=5000)
-        try:
-            # The ismaster command is cheap and does not require auth.
-            client.admin.command('ismaster')
-        except ConnectionFailure:
-            print("Server not available")
+        client = MongoClient(app.config["MONGO_URI"])
         db = client["course_db"]
         app.config["courses"] = db["parsed_courses"]
         app.config["profiles"] = db["user_profile"]
@@ -333,7 +328,6 @@ def create_app(test_config=None):
     @app.route("/api/chat", methods=["POST"])
     def chat():
         data = request.get_json()
-        # print(data)
         user_messages = data.get("message", None)
 
         filter_season_codes = data.get("season_codes", None) # assume it is an array of season code
@@ -349,6 +343,8 @@ def create_app(test_config=None):
                 del message["id"]
             if message["role"] == "ai":
                 message["role"] = "assistant"
+
+        print(user_messages)
 
         if SAFETY_CHECK_ENABLED:
             # for safety check, not to be included in final response
@@ -435,20 +431,17 @@ def create_app(test_config=None):
             }
         }
         
+        if filter_season_codes or filter_subjects or filter_areas:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {}
+
         if filter_season_codes:
             aggregate_pipeline["$vectorSearch"]["filter"]["season_code"] = { "$in": filter_season_codes }
         
-        if filter_subject:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {
-                "subject": {
-                    "$eq": filter_subject
-                }
-            }
+        if filter_subjects:
+            aggregate_pipeline["$vectorSearch"]["filter"]["subject"] = { "$in": filter_subjects }
 
         if filter_areas:
             aggregate_pipeline["$vectorSearch"]["filter"]["areas"] = { "$in": filter_areas }
-
-        print(aggregate_pipeline)
 
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
