@@ -433,15 +433,19 @@ def create_app(test_config=None):
         
         if filter_season_codes or filter_subjects or filter_areas:
             aggregate_pipeline["$vectorSearch"]["filter"] = {}
+            filters = []
 
-        if filter_season_codes:
-            aggregate_pipeline["$vectorSearch"]["filter"]["season_code"] = { "$in": filter_season_codes }
-        
-        if filter_subjects:
-            aggregate_pipeline["$vectorSearch"]["filter"]["subject"] = { "$in": filter_subjects }
-
-        if filter_areas:
-            aggregate_pipeline["$vectorSearch"]["filter"]["areas"] = { "$in": filter_areas }
+            if filter_season_codes:
+                filters.append({"season_code": {"$in": filter_season_codes}})
+            
+            if filter_subjects:
+                filters.append({"subject": {"$in": filter_subjects}})
+            
+            if filter_areas:
+                filters.append({"areas": {"$in": filter_areas}})
+            
+            if filters:
+                aggregate_pipeline["$vectorSearch"]["filter"]["$and"] = filters
 
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
