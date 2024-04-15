@@ -44,6 +44,8 @@ OPENAI_API_KEY="sk-xxx"
 
 Don't push your API key to this repo!
 
+You can get an OpenAI API key [here](https://platform.openai.com/api-keys). The MongoDB URI is shared by the team. You will need to have your IP address allowlisted by MongoDB to query the database. Contact the team for access.
+
 To run sentiment classification, first create a conda environment for Python 3 using the `backend/sentiment_classif_requirements.txt` file:
 
 ```bash
@@ -58,8 +60,6 @@ conda activate <env_name>
 ```
 
 where `<env_name>` is your name of choice for the conda environment.
-
-You can get an OpenAI API key [here](https://platform.openai.com/api-keys). The MongoDB URI is shared by the team. You will need to have your IP address allowlisted by MongoDB to query the database. Contact the team for access.
 
 3. Start the Flask server:
 
