@@ -523,6 +523,8 @@ def create_app(test_config=None):
 
         response = response.choices[0].message.content
 
+        print()
+        print(user_messages)
         print(response)
 
         json_response = {"response": response, "courses": recommended_courses}
