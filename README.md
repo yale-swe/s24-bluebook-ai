@@ -150,7 +150,6 @@ Some stuff to keep in mind while writing new tests
 
 Here's an example of a test complete with mocks and fixtures:
 
-#### **`mock_client`**
 ```python
 @pytest.fixture
 def client():
@@ -202,7 +201,6 @@ def client():
     with app.test_client() as client:
         yield client
 ```
-#### **`mock_chat_completion_request`**
 ```python
 @pytest.fixture
 def mock_chat_completion_complete():
@@ -268,7 +266,6 @@ def mock_chat_completion_complete():
         mock.side_effect = responses
         yield mock
 ```
-#### **`test`**
 ```python
 def test_with_frontend_filters(client, mock_chat_completion_complete):
     request_data = {
