@@ -120,11 +120,14 @@ aws s3 sync out/ s3://bluebook-ai-frontend --acl public-read
 ```
 To enable continuous syncing of the CloudFront distribution with the frontend-associated S3 bucket we write the following invalidation rule.
 
-```aws cloudfront create-invalidation --distribution-id bluebook-ai-frontend --paths "/*"
+```
+aws cloudfront create-invalidation --distribution-id bluebook-ai-frontend --paths "/*"
 ```
 
 For running the Elastic Beanstalk web server, we use the aws EB CLI and run the follow commands in the backend/ folder
 
-```eb init
-eb deploy```
+```
+eb init
+eb deploy
+```
 
