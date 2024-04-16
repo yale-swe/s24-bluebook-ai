@@ -460,9 +460,12 @@ def create_app(test_config=None):
 
         # Get a second response which uses function calling (defined in lib.py) to filter the user query
         filtered_response = chat_completion_request(messages=user_messages, tools=tools)
-        filtered_data = json.loads(
-            filtered_response.choices[0].message.tool_calls[0].function.arguments
-        )
+        if filtered_response.choices[0].message.tool_calls:
+            filtered_data = json.loads(
+                filtered_response.choices[0].message.tool_calls[0].function.arguments
+            )
+        else:
+            filtered_data = None
 
         print("")
         print("Completion Request: Filtered Response")
@@ -470,22 +473,21 @@ def create_app(test_config=None):
         print("")
 
         filter_skills = None
-        
-        
+
         # Check if filters were provided from the front end. If not,
         # it checks if filters were provided from the chat completion request.
-        # This is due to the priority of frontend filters being higher than those from the request. 
-        if not filter_subjects:
+        # This is due to the priority of frontend filters being higher than those from the request.
+        if not filter_subjects and filtered_data:
             filter_subjects = filtered_data.get("subject", None)
             if filter_subjects:
                 filter_subjects = [filter_subjects]
 
-        if not filter_season_codes:
+        if not filter_season_codes and filtered_data:
             filter_season_codes = filtered_data.get("season_code", None)
             if filter_season_codes:
                 filter_season_codes = [filter_season_codes]
 
-        if not filter_areas:
+        if not filter_areas and filtered_data:
             filter_areas = filtered_data.get("areas", None)
             if filter_areas:
                 filter_areas = [filter_areas]
@@ -493,7 +495,7 @@ def create_app(test_config=None):
         elif filter_areas == "QR" or filter_areas == "WR":
             filter_skills = filtered_data.get("areas", None)
 
-        if not filter_skills:
+        if not filter_skills and filtered_data:
             filter_skills = filtered_data.get("skills", None)
             if filter_skills:
                 filter_skills = [filter_skills]
@@ -525,7 +527,7 @@ def create_app(test_config=None):
         print(aggregate_pipeline["$vectorSearch"]["filter"])
         print()
         # print(aggregate_pipeline)
-        
+
         # Get a response from the database
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
@@ -553,7 +555,7 @@ def create_app(test_config=None):
                 recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
             recommendation_prompt += "Incorporate specific course information in your response to me if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list. Do not refer to any courses not in this list"
 
-        # In the case that no courses are returned, prompt to provide a specific response to the user. 
+        # In the case that no courses are returned, prompt to provide a specific response to the user.
         # Fixes the "As an AI, I can't provide..." response
         else:
             recommendation_prompt = "Apologize to the user for not being able to fullfill their request, your response should begin with 'I'm sorry. I tried to search for courses that match your criteria but couldn't find any' verbatim"
