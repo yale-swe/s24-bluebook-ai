@@ -66,26 +66,11 @@ where `<env_name>` is your name of choice for the conda environment.
    ```bash
    python app.py
    ```
-
-## Usage
-
-1. Enter the `frontend` directory and run
-
-```bash
-npm run dev
-```
-
-2. Enter the `backend` directory and run
-
-```bash
-python app.py
-```
-
-3. Ask away!
+4. Ask away!
 
 ![demo](./demo.png)
 
-4. You can also use your favorite API client (e.g., Postman) to send a POST request to `http://localhost:8000/api/chat` with the following JSON payload:
+4.5. You can also use your favorite API client (e.g., Postman) to send a POST request to `http://localhost:8000/api/chat` with the following JSON payload:
 
    ```json
    {
@@ -130,3 +115,13 @@ eb init
 eb deploy
 ```
 The CloudFront Distribution should have a routing link to the backend server through a behavior pointing to the EB instance.
+
+## Running and Adding Tests
+
+This repository contains tests for the backend. To run these tests, pip install pytest (if you haven't already), cd into backend and run
+```
+pytest
+```
+This runs the tests located in ####**`backend/test_app.py`**
+
+The tests are also configured run automatically through GitHub Actions every time someone pushes to any branch or opens a pull request. You can find the workflow under #### **`.github/workflows/python-app.yml`**
