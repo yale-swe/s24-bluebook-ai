@@ -7,7 +7,7 @@ With CourseTable, students retrieve information using keyword search, filtering,
 In this project, we aim to enhance students’ course selection experience by augmenting CourseTable with a natural language interface that can provide customized course recommendations in response to student queries. By supplying more relevant and dynamic results and expanding students’ means of interaction with course data, this will enable students to more easily and effectively determine the best course schedule for themselves.
 
 ## Code Structure
-
+```
 .
 ├── ./.DS_Store
 ├── ./.github
@@ -59,7 +59,7 @@ In this project, we aim to enhance students’ course selection experience by au
 ├── ./load_courses.js
 ├── ./output.txt
 └── ./requirements.txt
-
+```
 ## Get Started
 
 ### Frontend
