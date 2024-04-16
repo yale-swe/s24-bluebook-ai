@@ -458,9 +458,12 @@ def create_app(test_config=None):
         }
 
         filtered_response = chat_completion_request(messages=user_messages, tools=tools)
-        filtered_data = json.loads(
-            filtered_response.choices[0].message.tool_calls[0].function.arguments
-        )
+        if filtered_response.choices[0].message.tool_calls:
+            filtered_data = json.loads(
+                filtered_response.choices[0].message.tool_calls[0].function.arguments
+            )
+        else:
+            filtered_data = None
 
         print("")
         print("Completion Request: Filtered Response")
@@ -469,17 +472,17 @@ def create_app(test_config=None):
 
         filter_skills = None
 
-        if not filter_subjects:
+        if not filter_subjects and filtered_data:
             filter_subjects = filtered_data.get("subject", None)
             if filter_subjects:
                 filter_subjects = [filter_subjects]
 
-        if not filter_season_codes:
+        if not filter_season_codes and filtered_data:
             filter_season_codes = filtered_data.get("season_code", None)
             if filter_season_codes:
                 filter_season_codes = [filter_season_codes]
 
-        if not filter_areas:
+        if not filter_areas and filtered_data:
             filter_areas = filtered_data.get("areas", None)
             if filter_areas:
                 filter_areas = [filter_areas]
@@ -487,7 +490,7 @@ def create_app(test_config=None):
         elif filter_areas == "QR" or filter_areas == "WR":
             filter_skills = filtered_data.get("areas", None)
 
-        if not filter_skills:
+        if not filter_skills and filtered_data:
             filter_skills = filtered_data.get("skills", None)
             if filter_skills:
                 filter_skills = [filter_skills]
