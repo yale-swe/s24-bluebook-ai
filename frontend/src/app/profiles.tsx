@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "./page.module.css"; 
+import styles from "./profile.module.css"; 
 
 const ProfilePopup = () => {
     const [popupVisible, setPopupVisible] = useState(false);
@@ -73,16 +73,18 @@ const ProfilePopup = () => {
                     
                     <div className={styles.profileHeader}>User Profile</div>
                     <div className={styles.profileDetails}>
-                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-                        <button onClick={handleSaveProfile}>Save</button>
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className={styles.inputField} placeholder="Username" />
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={styles.inputField} placeholder="Email" />
+                        <button onClick={handleSaveProfile} className={styles.sendButton}>Save</button>
                     </div>
                     <div className={styles.courseSearch}>
-                        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search courses" />
-                        <button onClick={handleAddCourse}>Add Course</button>
+                        <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} className={styles.inputField} placeholder="Search courses" />
+                        <button onClick={handleAddCourse} className={styles.sendButton}>Add Course</button>
                         {courses.map(course => <div key={course}>{course}</div>)}
                     </div>
-                    <button onClick={togglePopupVisibility} className={styles.closeButton}>Close</button>
+                    <button onClick={togglePopupVisibility} className={styles.closeButton}>
+                        &times;
+                    </button>
                 </div>
             )}
 
