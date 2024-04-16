@@ -109,3 +109,22 @@ python app.py
        "response": "To learn more about personal finance, you can start by taking courses or workshops that focus on financial management, budgeting, investing, and retirement planning. Some universities and educational platforms offer online courses on personal finance, such as ECON 436: Personal Finance and ECON 361: Corporate Finance. Additionally, you can explore resources like books, podcasts, and websites dedicated to personal finance advice and tips. It may also be helpful to consult with a financial advisor or planner for personalized guidance on managing your finances effectively."
    }
    ```
+## Deployment
+
+The website is hosted using CloudFront distribution through AWS which is routed to a web server running on Elastic Beanstalk. The code for the frontend and backend are contained in two separate S3 buckets. To update the frontend, we run the following script and disable
+
+```cd frontend
+export REACT_APP_API_URL=/api
+npm run build
+aws s3 sync out/ s3://bluebook-ai-frontend --acl public-read
+```
+To enable continuous syncing of the CloudFront distribution with the frontend-associated S3 bucket we write the following invalidation rule.
+
+```aws cloudfront create-invalidation --distribution-id bluebook-ai-frontend --paths "/*"
+```
+
+For running the Elastic Beanstalk web server, we use the aws EB CLI and run the follow commands in the backend/ folder
+
+```eb init
+eb deploy```
+
