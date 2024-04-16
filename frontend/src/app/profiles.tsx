@@ -89,7 +89,6 @@ const ProfilePopup = () => {
                     <div className={styles.profileHeader}>User Profile</div>
                     <div className={styles.profileDetails}>
                         <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className={styles.inputField} placeholder="Username" />
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={styles.inputField} placeholder="Email" />
                         <button onClick={handleSaveProfile} className={styles.sendButton}>Save</button>
 
                     </div>
