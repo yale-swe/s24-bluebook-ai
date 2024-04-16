@@ -62,10 +62,15 @@ tools = [
                     "enum": season_codes,
                     "description": "A semester represented as a season code (six numbers) formatted like 202401, where the first four digits are the year, and the last two corrsepond to Spring (01), Summer (02), and Fall (03). For example, 'Fall 2024' would be interpreted as 202403.",
                 }, 
-                "area": {
+                "areas": {
                     "type": "string",
-                    "enum": ["Hu", "So", "Sc", "Qr", "Wr"],
-                    "description": "The specified area for a course: Humanities (HU), Social Science (So), Science (Sc), Quantitative Reasoning (Qr), Writing (Wr). Don't make assumptions.",
+                    "enum": ["Hu", "So", "Sc"],
+                    "description": "The specified area for a course: Humanities (HU), Social Science (So), Science (Sc). Don't make broad assumptions.",
+                },  
+                "skills": {
+                    "type": "string",
+                    "enum": ["WR", "QR"],
+                    "description": "The specified skills for a course: Quantitative Reasoning (QR) or Writing (WR). Don't make broad assumptions).",
                 },       
             },
         },
