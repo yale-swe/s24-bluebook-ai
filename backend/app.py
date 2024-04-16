@@ -501,11 +501,11 @@ def create_app(test_config=None):
         print("Filters:")
         print(aggregate_pipeline["$vectorSearch"]["filter"])
         print()
-
         # print(aggregate_pipeline)
+        
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
-        print(database_response)
+        #print(database_response)
 
         recommended_courses = [
             {
@@ -530,17 +530,16 @@ def create_app(test_config=None):
 
         else:
             recommendation_prompt = "Finish this message and include the whole message in your response, your response should contain the rest of this message verbatim: I'm sorry. I tried to search for courses that match your criteria but couldn't find any."
+            recommendation_prompt += "Also suggest that the user should try widening their search or removing filters."
         user_messages.append({"role": "system", "content": recommendation_prompt})
-
-        print(user_messages)
 
         response = chat_completion_request(messages=user_messages)
 
         response = response.choices[0].message.content
 
-        print()
-        print(user_messages)
-        print(response)
+        # print()
+        # print(user_messages)
+        # print(response)
 
         json_response = {"response": response, "courses": recommended_courses}
 
