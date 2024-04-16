@@ -668,6 +668,7 @@ def test_update_user_name_successful(client):
 
 # test create chat
 
+
 @patch("uuid.uuid4", return_value=uuid4())
 def test_create_chat_no_uid_provided(mock_uuid, client):
     response = client.post("/api/chat/create_chat", json={})
@@ -693,5 +694,101 @@ def test_create_chat_without_message(mock_uuid, client):
         acknowledged=True
     )
     response = client.post("/api/chat/create_chat", json={"uid": "user123"})
+    assert response.status_code == 200
+    assert response.get_json() == {"status": "success"}
+
+
+# test append message
+
+
+def test_append_message_no_uid_provided(client):
+    response = client.post(
+        "/api/chat/append_message", json={"chat_id": "chat123", "message": "Hello!"}
+    )
+    assert response.status_code == 200
+    assert response.get_json() == {"error": "No uid provided"}
+
+
+def test_append_message_no_message_provided(client):
+    response = client.post(
+        "/api/chat/append_message", json={"uid": "user123", "chat_id": "chat123"}
+    )
+    assert response.status_code == 200
+    assert response.get_json() == {"error": "No message provided"}
+
+
+def test_append_message_no_chat_id_provided(client):
+    response = client.post(
+        "/api/chat/append_message", json={"uid": "user123", "message": "Hello!"}
+    )
+    assert response.status_code == 200
+    assert response.get_json() == {"error": "No chat_id provided"}
+
+
+def test_append_message_user_not_found(client):
+    client.application.config["profiles"].find_one.return_value = None
+    response = client.post(
+        "/api/chat/append_message",
+        json={"uid": "user123", "chat_id": "chat123", "message": "Hello!"},
+    )
+    assert response.status_code == 404
+    assert response.get_json() == {"error": "No user profile found"}
+
+
+def test_append_message_chat_not_found(client):
+    # Setup mock to return a valid user profile but no matching chat
+    client.application.config["profiles"].find_one.return_value = {
+        "uid": "user123",
+        "chat_history": [],
+    }
+    response = client.post(
+        "/api/chat/append_message",
+        json={"uid": "user123", "chat_id": "chat123", "message": "Hello!"},
+    )
+    assert response.status_code == 200
+    assert (
+        response.get_json() == {"status": "success"}
+    )  # Chat not found but status is success, consider updating logic or test expectation
+
+
+def test_append_message_successful(client):
+    # Mock user profile with a specific chat to update
+    client.application.config["profiles"].find_one.return_value = {
+        "uid": "user123",
+        "chat_history": [{"chat_id": "chat123", "messages": []}],
+    }
+    client.application.config["profiles"].update_one.return_value = MagicMock(
+        acknowledged=True
+    )
+    response = client.post(
+        "/api/chat/append_message",
+        json={"uid": "user123", "chat_id": "chat123", "message": "Hello!"},
+    )
+    assert response.status_code == 200
+    assert response.get_json() == {"status": "success"}
+
+
+# test delete chat
+
+
+def test_delete_chat_no_uid_provided(client):
+    response = client.post("/api/chat/delete_chat", json={"chat_id": "chat123"})
+    assert response.status_code == 200
+    assert response.get_json() == {"error": "No uid provided"}
+
+
+def test_delete_chat_no_chat_id_provided(client):
+    response = client.post("/api/chat/delete_chat", json={"uid": "user123"})
+    assert response.status_code == 200
+    assert response.get_json() == {"error": "No chat_id provided"}
+
+
+def test_delete_chat_successful(client):
+    client.application.config["profiles"].update_one.return_value = MagicMock(
+        acknowledged=True
+    )
+    response = client.post(
+        "/api/chat/delete_chat", json={"uid": "user123", "chat_id": "chat123"}
+    )
     assert response.status_code == 200
     assert response.get_json() == {"status": "success"}
