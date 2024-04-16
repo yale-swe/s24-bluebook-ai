@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./page.module.css"; 
+import { json } from "stream/consumers";
 
 const ProfilePopup = () => {
     const [popupVisible, setPopupVisible] = useState(false);
@@ -39,8 +40,21 @@ const ProfilePopup = () => {
             });
             if (response.ok) {
                 const data = await response.json();
-                setCourses(prevCourses => [...prevCourses, data['course']]);
+                setCourses(prevCourses => {
+                    // Check if the course already exists based on the course code
+                    const exists = prevCourses.some(course => course === data['course']);
+                    if (!exists) {
+                        return [...prevCourses, data['course']];
+                    } else {
+                        // alert the user that the course is already added
+                        alert('This course is already added.');
+                        return prevCourses;
+                    }
+                });
                 setSearch('');
+            } else {
+                // Handle cases where the course code is not found or invalid
+                alert('Invalid course code');
             }
         }
     };
