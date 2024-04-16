@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from app import create_app
 from flask_testing import TestCase
 from requests_mock import Mocker
+import json
 
 
 # Define the TestConfig as a dictionary directly
@@ -369,3 +370,53 @@ def test_api_error(client, mock_chat_completion_yes_no):
     }
     with pytest.raises(Exception):
         client.post("/api/chat", json=request_data)
+
+
+def test_save_chat_success(client):
+    client.application.config["courses"].insert_one.return_value = MagicMock(
+        inserted_id="123456"
+    )
+    response = client.post("/api/save_chat", json={"message": "Hello, world!"})
+    assert response.status_code == 201
+    assert json.loads(response.data) == {"status": "success", "id": "123456"}
+
+
+def test_save_chat_failure(client):
+    client.application.config["courses"].insert_one.side_effect = Exception(
+        "Failed to insert"
+    )
+    response = client.post("/api/save_chat", json={"message": "Hello, world!"})
+    assert response.status_code == 500
+    assert json.loads(response.data) == {
+        "status": "error",
+        "message": "Failed to insert",
+    }
+
+
+def test_reload_chat_found(client):
+    client.application.config["courses"].find_one.return_value = {
+        "_id": "123456",
+        "message": "Hello, test!",
+    }
+    response = client.post("/api/reload_chat", json={"chat_id": "123456"})
+    assert response.status_code == 200
+    assert json.loads(response.data) == {
+        "status": "success",
+        "chat": {"_id": "123456", "message": "Hello, test!"},
+    }
+
+
+def test_reload_chat_not_found(client):
+    client.application.config["courses"].find_one.return_value = None
+    response = client.post("/api/reload_chat", json={"chat_id": "nonexistent"})
+    assert response.status_code == 404
+    assert json.loads(response.data) == {"status": "not found"}
+
+
+def test_reload_chat_exception(client):
+    client.application.config["courses"].find_one.side_effect = Exception(
+        "Database error"
+    )
+    response = client.post("/api/reload_chat", json={"chat_id": "123456"})
+    assert response.status_code == 500
+    assert json.loads(response.data) == {"status": "error", "message": "Database error"}
