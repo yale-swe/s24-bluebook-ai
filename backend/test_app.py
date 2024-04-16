@@ -792,3 +792,33 @@ def test_delete_chat_successful(client):
     )
     assert response.status_code == 200
     assert response.get_json() == {"status": "success"}
+
+
+@pytest.fixture
+def mock_chat_completion():
+    with patch("app.chat_completion_request") as mock:
+        mock.return_value = "what the hell is going on"
+        yield mock
+
+
+# test slug
+# Test for a valid response from chat_completion_request
+def test_get_chat_history_slug_valid_response(mock_chat_completion, client):
+    # Setting up the mock to return a specific slug
+    mock_chat_completion.return_value = MagicMock(
+        choices=[MagicMock(message=MagicMock(content="Effective Slug"))]
+    )
+    message_data = {"message": [{"role": "user", "content": "Hello, world!"}]}
+    response = client.post("/api/slug", json=message_data)
+    assert response.status_code == 200
+    assert response.get_json() == {"slug": "Effective Slug"}
+
+
+# Test for handling failures or empty responses from chat_completion_request
+def test_get_chat_history_slug_failure_handling(mock_chat_completion, client):
+    # Simulate failure by not providing choices or content
+    mock_chat_completion.return_value = MagicMock(choices=[])
+    message_data = {"message": [{"role": "user", "content": "Hello, world!"}]}
+    response = client.post("/api/slug", json=message_data)
+    assert response.status_code == 200
+    assert response.get_json() == {"slug": "Untitled"}
