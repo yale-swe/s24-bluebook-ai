@@ -458,6 +458,8 @@ def create_app(test_config=None):
         }
 
         filtered_response = chat_completion_request(messages=user_messages, tools=tools)
+        print(filtered_response)
+
         filtered_data = json.loads(
             filtered_response.choices[0].message.tool_calls[0].function.arguments
         )

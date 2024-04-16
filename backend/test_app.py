@@ -352,6 +352,76 @@ def test_no_need_for_query(client, mock_chat_completion_yes_no):
     assert mock_chat_completion_yes_no.call_count == 3
 
 
+@pytest.fixture
+def mock_chat_completion_complete():
+    with patch("app.chat_completion_request") as mock:
+        # Prepare the function mock that includes tool calls with the arguments JSON string
+        function_mock = MagicMock()
+        function_mock.arguments = '{"season_code": "202303"}'
+
+        # Mock for tool_calls that uses the prepared function mock
+        tool_call_mock = MagicMock()
+        tool_call_mock.function = function_mock
+
+        # Mock for the message that includes the list of tool calls
+        message_mock_with_tool_calls = MagicMock()
+        message_mock_with_tool_calls.content = "yes"
+        message_mock_with_tool_calls.tool_calls = [tool_call_mock]
+
+        message_mock_mock_response = MagicMock()
+        message_mock_mock_response.content = "Mock response based on user message"
+        message_mock_mock_response.tool_calls = [tool_call_mock]
+
+        # Wrap these into the respective choice structures
+        responses = [
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
+            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
+            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
+            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
+            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
+            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
+            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
+        ]
+
+        mock.side_effect = responses
+        yield mock
+
+
+def test_with_frontend_filters(client, mock_chat_completion_complete):
+    request_data = {
+        "season_codes": ["bruh"],
+        "subject": ["bruh"],
+        "areas": ["WR", "Hu"],
+        "message": [
+            {"id": 123, "role": "user", "content": "msg"},
+            {"id": 123, "role": "ai", "content": "msg2"},
+            {"id": 123, "role": "user", "content": "Tell me about cs courses"},
+        ],
+    }
+    response = client.post("/api/chat", json=request_data)
+    assert response.status_code == 200
+    data = response.get_json()
+    assert "Mock response based on user message" in data["response"]
+    assert mock_chat_completion_complete.call_count == 5
+
+
+def test_no_user_message(client, mock_chat_completion_complete):
+    request_data = {
+        "season_codes": ["bruh"],
+        "subject": ["bruh"],
+        "areas": ["WR", "Hu"],
+    }
+    response = client.post("/api/chat", json=request_data)
+    assert response.status_code == 200
+    data = response.get_json()
+    assert "No message provided" in data["error"]
+    assert mock_chat_completion_complete.call_count == 0
+
+
 def test_safty_violation(client, mock_chat_completion_no):
     request_data = {
         "message": [
