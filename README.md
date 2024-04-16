@@ -147,6 +147,18 @@ Some stuff to keep in mind while writing new tests
 4. Mock External Dependencies: Use mock or MagicMock to simulate external API calls, database interactions, and any other external processes.
 5. Minimize Test Dependencies: Each test should be independent of others. Avoid shared state between tests.
 6. Use Fixtures for Common Setup Code: If multiple tests share setup code, consider using pytest fixtures to centralize this setup logic.
+7. Add any new dependencies to the GitHub workflow file. Like this:
+```yml
+...
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest flask_testing requests_mock uuid <any other dependencies used in tests>
+...
+```
+And finally, make sure to comment your tests clearly, especially for complex test logic.
+Update the project README or docs if your changes include new functionality or change existing behaviors that require documentation.
 
 Here's an example of a test complete with mocks and fixtures:
 
