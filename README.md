@@ -6,6 +6,60 @@ With CourseTable, students retrieve information using keyword search, filtering,
 
 In this project, we aim to enhance students’ course selection experience by augmenting CourseTable with a natural language interface that can provide customized course recommendations in response to student queries. By supplying more relevant and dynamic results and expanding students’ means of interaction with course data, this will enable students to more easily and effectively determine the best course schedule for themselves.
 
+## Code Structure
+
+.
+├── ./.DS_Store
+├── ./.github
+│   └── ./.github/workflows
+│       └── ./.github/workflows/python-app.yml
+├── ./.gitignore
+├── ./README.md
+├── ./backend
+│   ├── ./backend/.elasticbeanstalk
+│   │   └── ./backend/.elasticbeanstalk/config.yml
+│   ├── ./backend/.env
+│   ├── ./backend/add_rating_info.py
+│   ├── ./backend/app.py
+│   ├── ./backend/course_subjects.json
+│   ├── ./backend/lib.py
+│   ├── ./backend/port_sentiment_info_to_parsed_courses.py
+│   ├── ./backend/process_data.ipynb
+│   ├── ./backend/sentiment_classif_requirements.txt
+│   ├── ./backend/sentiment_classification.py
+│   ├── ./backend/sentiment_classification_for_summer_courses.py
+│   └── ./backend/test_app.py
+├── ./data
+├── ./database_scripts
+│   ├── ./database_scripts/.env
+│   └── ./database_scripts/load_season_courses.py
+├── ./demo.png
+├── ./deploy_frontend.sh
+├── ./frontend
+│   ├── ./frontend/.eslintrc.json
+│   ├── ./frontend/README.md
+│   ├── ./frontend/next-env.d.ts
+│   ├── ./frontend/next.config.mjs
+│   ├── ./frontend/package-lock.json
+│   ├── ./frontend/package.json
+│   ├── ./frontend/src
+│   │   └── ./frontend/src/app
+│   │       ├── ./frontend/src/app/bg.png
+│   │       ├── ./frontend/src/app/chaticon.png
+│   │       ├── ./frontend/src/app/course_subjects.json
+│   │       ├── ./frontend/src/app/favicon.ico
+│   │       ├── ./frontend/src/app/globals.css
+│   │       ├── ./frontend/src/app/layout.tsx
+│   │       ├── ./frontend/src/app/page.module.css
+│   │       ├── ./frontend/src/app/page.tsx
+│   │       ├── ./frontend/src/app/profile-icon.png
+│   │       ├── ./frontend/src/app/profile.module.css
+│   │       └── ./frontend/src/app/profiles.tsx
+│   └── ./frontend/tsconfig.json
+├── ./load_courses.js
+├── ./output.txt
+└── ./requirements.txt
+
 ## Get Started
 
 ### Frontend
