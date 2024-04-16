@@ -352,8 +352,8 @@ export default function Chat() {
                   { value: "Hu", label: "Hu" },
                   { value: "Sc", label: "Sc" },
                   { value: "So", label: "So" },
-                  { value: "Qr", label: "Qr" },
-                  { value: "Wr", label: "Wr" }
+                  { value: "QR", label: "QR" },
+                  { value: "WR", label: "WR" }
                 ]}
                 styles={customStyles}
                 classNamePrefix="select"
