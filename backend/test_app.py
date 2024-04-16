@@ -107,8 +107,8 @@ def test_init_database_with_config(app):
 
 @pytest.fixture
 def client():
-    mock_collection = MagicMock()
-    mock_collection.aggregate.return_value = iter(
+    mock_courses_collection = MagicMock()
+    mock_courses_collection.aggregate.return_value = iter(
         [
             {
                 "areas": ["Hu"],
@@ -124,10 +124,28 @@ def client():
         ]
     )
 
+    mock_profiles_collection = MagicMock()
+    mock_profiles_collection.aggregate.return_value = iter(
+        [
+            {
+                "_id": {"$oid": "661c6bf1de004d9ab0e15604"},
+                "uid": "bob",
+                "chat_history": [
+                    {"chat_id": "79f0c4a7-548b-4fce-9a90-aaa709936907", "messages": []},
+                    {"chat_id": "c5b133b1-2f19-4c3c-8efc-0214c1540a75", "messages": []},
+                ],
+                "courses": [],
+                "name": "hello",
+                "email": "bluebookai@harvard.com",
+            }
+        ]
+    )
+
     app = create_app(
         {
             "TESTING": True,
-            "courses": mock_collection,
+            "courses": mock_courses_collection,
+            "profiles": mock_profiles_collection,
             "MONGO_URL": "TEST_URL",
             "COURSE_QUERY_LIMIT": 5,
             "SAFETY_CHECK_ENABLED": True,
@@ -140,8 +158,8 @@ def client():
 
 @pytest.fixture
 def client_all_disabled():
-    mock_collection = MagicMock()
-    mock_collection.aggregate.return_value = iter(
+    mock_courses_collection = MagicMock()
+    mock_courses_collection.aggregate.return_value = iter(
         [
             {
                 "areas": ["Hu"],
@@ -157,10 +175,28 @@ def client_all_disabled():
         ]
     )
 
+    mock_profiles_collection = MagicMock()
+    mock_profiles_collection.aggregate.return_value = iter(
+        [
+            {
+                "_id": {"$oid": "661c6bf1de004d9ab0e15604"},
+                "uid": "bob",
+                "chat_history": [
+                    {"chat_id": "79f0c4a7-548b-4fce-9a90-aaa709936907", "messages": []},
+                    {"chat_id": "c5b133b1-2f19-4c3c-8efc-0214c1540a75", "messages": []},
+                ],
+                "courses": [],
+                "name": "hello",
+                "email": "bluebookai@harvard.com",
+            }
+        ]
+    )
+
     app = create_app(
         {
             "TESTING": True,
-            "courses": mock_collection,
+            "courses": mock_courses_collection,
+            "profiles": mock_profiles_collection,
         }
     )
     with app.test_client() as client:
@@ -372,6 +408,9 @@ def test_api_error(client, mock_chat_completion_yes_no):
         client.post("/api/chat", json=request_data)
 
 
+# test save
+
+
 def test_save_chat_success(client):
     client.application.config["courses"].insert_one.return_value = MagicMock(
         inserted_id="123456"
@@ -391,6 +430,9 @@ def test_save_chat_failure(client):
         "status": "error",
         "message": "Failed to insert",
     }
+
+
+# test reload
 
 
 def test_reload_chat_found(client):
@@ -420,3 +462,100 @@ def test_reload_chat_exception(client):
     response = client.post("/api/reload_chat", json={"chat_id": "123456"})
     assert response.status_code == 500
     assert json.loads(response.data) == {"status": "error", "message": "Database error"}
+
+
+# test verify course code
+
+
+# Test case when no UID is provided
+def test_verify_course_code_no_uid_provided(client):
+    response = client.post("/api/verify_course_code", json={})
+    assert response.status_code == 400
+    assert json.loads(response.data) == {"error": "No uid provided"}
+
+
+# Test case when the course code exists
+def test_verify_course_code_exists(client):
+    client.application.config["courses"].find_one.return_value = {
+        "course_code": "CPSC 150"
+    }
+    client.application.config["profiles"].update_one.return_value = MagicMock(
+        acknowledged=True
+    )
+    response = client.post(
+        "/api/verify_course_code", json={"uid": "user123", "search": "CPSC 150"}
+    )
+    assert response.status_code == 200
+    assert json.loads(response.data) == {"status": "success", "course": "CPSC 150"}
+
+
+# Test case when the course code does not exist
+def test_verify_course_code_not_exist(client):
+    client.application.config["courses"].find_one.return_value = None
+    response = client.post(
+        "/api/verify_course_code", json={"uid": "user123", "search": "CPSC 150"}
+    )
+    assert response.status_code == 404
+    assert json.loads(response.data) == {"status": "invalid course code"}
+
+
+# Test case for exception during database operation
+def test_verify_course_code_exception(client):
+    client.application.config["courses"].find_one.side_effect = Exception(
+        "Database error"
+    )
+    response = client.post(
+        "/api/verify_course_code", json={"uid": "user123", "search": "CPSC 150"}
+    )
+    assert response.status_code == 500
+    assert json.loads(response.data) == {"status": "error", "message": "Database error"}
+
+
+# test delete course code
+
+
+def test_delete_course_code_no_uid_provided(client):
+    response = client.post("/api/delete_course_code", json={})
+    assert response.status_code == 400
+    assert response.get_json() == {"error": "No uid provided"}
+
+
+def test_delete_course_code_exists(client):
+    # Mock find_one to return a course
+    client.application.config["courses"].find_one.return_value = {
+        "course_code": "CPSC 150"
+    }
+    # Mock update_one to simulate successful removal
+    client.application.config["profiles"].update_one.return_value = MagicMock(
+        acknowledged=True
+    )
+
+    response = client.post(
+        "/api/delete_course_code", json={"uid": "user123", "search": "CPSC 150"}
+    )
+    assert response.status_code == 200
+    assert response.get_json() == {"status": "success", "course": "CPSC 150"}
+
+
+def test_delete_course_code_not_exist(client):
+    # Mock find_one to return None, indicating no course found
+    client.application.config["courses"].find_one.return_value = None
+
+    response = client.post(
+        "/api/delete_course_code", json={"uid": "user123", "search": "CPSC 150"}
+    )
+    assert response.status_code == 404
+    assert response.get_json() == {"status": "invalid course code"}
+
+
+def test_delete_course_code_exception(client):
+    # Simulate an exception when attempting to find a course
+    client.application.config["courses"].find_one.side_effect = Exception(
+        "Database error"
+    )
+
+    response = client.post(
+        "/api/delete_course_code", json={"uid": "user123", "search": "CPSC 150"}
+    )
+    assert response.status_code == 500
+    assert response.get_json() == {"status": "error", "message": "Database error"}
