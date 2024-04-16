@@ -154,9 +154,9 @@ def create_app(test_config=None):
             course = course_collection.find_one({"course_code": course_code})
             if course:
                 # insert into database
-                result = user_collection.update_one(
-                    {"uid": uid}, {"$addToSet": {"courses": course_code}}
-                )
+                # result = user_collection.update_one(
+                #     {"uid": uid}, {"$addToSet": {"courses": course_code}}
+                # )
                 return jsonify(
                     {"status": "success", "course": course["course_code"]}
                 ), 200
@@ -343,7 +343,17 @@ def create_app(test_config=None):
             "season_codes", None
         )  # assume it is an array of season code
         filter_subjects = data.get("subject", None)
-        filter_areas = data.get("areas", None)
+        filter_areas_and_skills = data.get("areas", None)
+        if filter_areas_and_skills:
+            filter_skills = [
+                area for area in filter_areas_and_skills if area in ["Hu", "So", "Sc"]
+            ]
+            filter_areas = [
+                area for area in filter_areas_and_skills if area in ["QR", "WR"]
+            ]
+        else:
+            filter_skills = None
+            filter_areas = None
 
         if not user_messages:
             return jsonify({"error": "No message provided"})
@@ -449,7 +459,7 @@ def create_app(test_config=None):
 
         filtered_response = chat_completion_request(messages=user_messages, tools=tools)
         filtered_data = json.loads(filtered_response.choices[0].message.tool_calls[0].function.arguments)
-        
+
         print("")
         print("Completion Request: Filtered Response")
         print(filtered_data)
@@ -505,8 +515,7 @@ def create_app(test_config=None):
         
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
-        #print(database_response)
-
+  
         recommended_courses = [
             {
                 "season_code": course["season_code"],
@@ -529,8 +538,9 @@ def create_app(test_config=None):
             recommendation_prompt += "Incorporate specific course information in your response to me if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list. Do not refer to any courses not in this list"
 
         else:
-            recommendation_prompt = "Finish this message and include the whole message in your response, your response should contain the rest of this message verbatim: I'm sorry. I tried to search for courses that match your criteria but couldn't find any."
+            recommendation_prompt = "Apologize to the user for not being able to fullfill their request, your response should begin with 'I'm sorry. I tried to search for courses that match your criteria but couldn't find any' verbatim"
             recommendation_prompt += "Also suggest that the user should try widening their search or removing filters."
+    
         user_messages.append({"role": "system", "content": recommendation_prompt})
 
         response = chat_completion_request(messages=user_messages)
