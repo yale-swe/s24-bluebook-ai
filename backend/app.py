@@ -344,12 +344,16 @@ def create_app(test_config=None):
         )  # assume it is an array of season code
         filter_subjects = data.get("subject", None)
         filter_areas_and_skills = data.get("areas", None)
-        filter_skills = [
-            area for area in filter_areas_and_skills if area in ["Hu", "So", "Sc"]
-        ]
-        filter_areas = [
-            area for area in filter_areas_and_skills if area in ["QR", "WR"]
-        ]
+        if filter_areas_and_skills:
+            filter_skills = [
+                area for area in filter_areas_and_skills if area in ["Hu", "So", "Sc"]
+            ]
+            filter_areas = [
+                area for area in filter_areas_and_skills if area in ["QR", "WR"]
+            ]
+        else:
+            filter_skills = None
+            filter_areas = None
 
         if not user_messages:
             return jsonify({"error": "No message provided"})
