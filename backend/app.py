@@ -468,7 +468,7 @@ def create_app(test_config=None):
         print(filtered_data)
         print("")
 
-        natural_filter_subject = filtered_data.get("subject_code", None)
+        natural_filter_subject = filtered_data.get("subject", None)
         natural_filter_season_codes = filtered_data.get("season_code", None)
         natural_filter_areas = filtered_data.get("areas", None)
         natural_filter_skills = filtered_data.get("skills", None)
