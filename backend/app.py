@@ -144,9 +144,9 @@ def create_app(test_config=None):
         try:
             data = request.get_json()
 
-            # uid = data.get("uid")
-            # if not uid:
-            #     return jsonify({"error": "No uid provided"}), 400
+            uid = data.get("uid")
+            if not uid:
+                return jsonify({"error": "No uid provided"}), 400
 
             course_code = data["search"]
             course_collection = app.config["courses"]
@@ -458,54 +458,67 @@ def create_app(test_config=None):
         }
 
         filtered_response = chat_completion_request(messages=user_messages, tools=tools)
-        print(filtered_response)
-
         filtered_data = json.loads(
             filtered_response.choices[0].message.tool_calls[0].function.arguments
         )
+
         print("")
         print("Completion Request: Filtered Response")
         print(filtered_data)
         print("")
 
-        natural_filter_subject = filtered_data.get("subject", None)
-        natural_filter_season_codes = filtered_data.get("season_code", None)
-        natural_filter_areas = filtered_data.get("areas", None)
-        natural_filter_skills = filtered_data.get("skills", None)
+        filter_skills = None
+
+        if not filter_subjects:
+            filter_subjects = filtered_data.get("subject", None)
+            if filter_subjects:
+                filter_subjects = [filter_subjects]
+
+        if not filter_season_codes:
+            filter_season_codes = filtered_data.get("season_code", None)
+            if filter_season_codes:
+                filter_season_codes = [filter_season_codes]
+
+        if not filter_areas:
+            filter_areas = filtered_data.get("areas", None)
+            if filter_areas:
+                filter_areas = [filter_areas]
+        # Remove this elif if a skills dropdown filter is added to the chat interface
+        elif filter_areas == "QR" or filter_areas == "WR":
+            filter_skills = filtered_data.get("areas", None)
+
+        if not filter_skills:
+            filter_skills = filtered_data.get("skills", None)
+            if filter_skills:
+                filter_skills = [filter_skills]
 
         filters = []
 
-        # Apply filters for season codes
+        # Filter season codes
         if filter_season_codes:
             filters.append({"season_code": {"$in": filter_season_codes}})
-        elif natural_filter_season_codes:
-            filters.append({"season_code": {"$in": [natural_filter_season_codes]}})
 
-        # Apply filters for subjects
+        # Filter subject
         if filter_subjects:
             filters.append({"subject": {"$in": filter_subjects}})
-        elif natural_filter_subject:
-            filters.append({"subject": {"$in": [natural_filter_subject]}})
 
-        # Apply filters for areas
+        # Filter areas
         if filter_areas:
             filters.append({"areas": {"$in": filter_areas}})
-        elif natural_filter_areas:
-            filters.append({"areas": {"$in": [natural_filter_areas]}})
-
-        # Apply filters for skills
+        # Filter skills
         if filter_skills:
             filters.append({"skills": {"$in": filter_skills}})
-        elif natural_filter_skills:
-            filters.append({"skills": {"$in": [natural_filter_skills]}})
 
         # If there are any filters, add them to the vectorSearch pipeline
         if filters:
             aggregate_pipeline["$vectorSearch"]["filter"] = {"$and": filters}
 
+        print()
+        print("Filters:")
         print(aggregate_pipeline["$vectorSearch"]["filter"])
-
+        print()
         # print(aggregate_pipeline)
+
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
 
@@ -532,17 +545,17 @@ def create_app(test_config=None):
 
         else:
             recommendation_prompt = "Apologize to the user for not being able to fullfill their request, your response should begin with 'I'm sorry. I tried to search for courses that match your criteria but couldn't find any' verbatim"
-        user_messages.append({"role": "system", "content": recommendation_prompt})
+            recommendation_prompt += "Also suggest that the user should try widening their search or removing filters."
 
-        print(user_messages)
+        user_messages.append({"role": "system", "content": recommendation_prompt})
 
         response = chat_completion_request(messages=user_messages)
 
         response = response.choices[0].message.content
 
-        print()
-        print(user_messages)
-        print(response)
+        # print()
+        # print(user_messages)
+        # print(response)
 
         json_response = {"response": response, "courses": recommended_courses}
 
