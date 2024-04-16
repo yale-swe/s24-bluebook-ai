@@ -6,8 +6,7 @@ import styles from "./page.module.css";
 const ProfilePopup = () => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [chatHistoryVisible, setChatHistoryVisible] = useState(false);
-    const [username, setUsername] = useState("JohnDoe");
-    const [email, setEmail] = useState("johndoe@example.com");
+    const [username, setUsername] = useState("");
     const [courses, setCourses] = useState<string[]>([]);
     const [search, setSearch] = useState("");
     const [chatHistories, setChatHistories] = useState<{ id: number; summary: string }[]>([]);
@@ -24,7 +23,7 @@ const ProfilePopup = () => {
         const response = await fetch('/api/save_profile', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ username, email }),
+            body: JSON.stringify({ username }),
         });
         if (!response.ok) {
             console.error("Failed to save profile");
@@ -40,7 +39,7 @@ const ProfilePopup = () => {
             });
             if (response.ok) {
                 const data = await response.json();
-                setCourses(prevCourses => [...prevCourses, data]);
+                setCourses(prevCourses => [...prevCourses, data['course']]);
                 setSearch('');
             }
         }
@@ -74,7 +73,6 @@ const ProfilePopup = () => {
                     <div className={styles.profileHeader}>User Profile</div>
                     <div className={styles.profileDetails}>
                         <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
                         <button onClick={handleSaveProfile}>Save</button>
                     </div>
                     <div className={styles.courseSearch}>
