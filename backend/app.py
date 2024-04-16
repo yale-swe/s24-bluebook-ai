@@ -460,13 +460,15 @@ def create_app(test_config=None):
 
         # Get a second response which uses function calling (defined in lib.py) to filter the user query
         filtered_response = chat_completion_request(messages=user_messages, tools=tools)
-        filtered_data = json.loads(filtered_response.choices[0].message.tool_calls[0].function.arguments)
+        filtered_data = json.loads(
+            filtered_response.choices[0].message.tool_calls[0].function.arguments
+        )
 
         print("")
         print("Completion Request: Filtered Response")
         print(filtered_data)
         print("")
-        
+
         filter_skills = None
         
         
@@ -475,23 +477,27 @@ def create_app(test_config=None):
         # This is due to the priority of frontend filters being higher than those from the request. 
         if not filter_subjects:
             filter_subjects = filtered_data.get("subject", None)
-            if filter_subjects: filter_subjects = [filter_subjects]
-             
+            if filter_subjects:
+                filter_subjects = [filter_subjects]
+
         if not filter_season_codes:
             filter_season_codes = filtered_data.get("season_code", None)
-            if filter_season_codes: filter_season_codes = [filter_season_codes]
-            
+            if filter_season_codes:
+                filter_season_codes = [filter_season_codes]
+
         if not filter_areas:
             filter_areas = filtered_data.get("areas", None)
-            if filter_areas: filter_areas = [filter_areas]
+            if filter_areas:
+                filter_areas = [filter_areas]
         # Remove this elif if a skills dropdown filter is added to the chat interface
         elif filter_areas == "QR" or filter_areas == "WR":
             filter_skills = filtered_data.get("areas", None)
-            
+
         if not filter_skills:
             filter_skills = filtered_data.get("skills", None)
-            if filter_skills: filter_skills = [filter_skills]
-            
+            if filter_skills:
+                filter_skills = [filter_skills]
+
         filters = []
 
         # Append the above filters to a list which can be inserted into the aggregate pipeline
@@ -502,18 +508,18 @@ def create_app(test_config=None):
         # Filter subject
         if filter_subjects:
             filters.append({"subject": {"$in": filter_subjects}})
-            
+
         # Filter areas
         if filter_areas:
             filters.append({"areas": {"$in": filter_areas}})
         # Filter skills
         if filter_skills:
             filters.append({"skills": {"$in": filter_skills}})
-        
+
         # If there are any filters, add them to the vectorSearch pipeline
         if filters:
             aggregate_pipeline["$vectorSearch"]["filter"] = {"$and": filters}
-        
+
         print()
         print("Filters:")
         print(aggregate_pipeline["$vectorSearch"]["filter"])
@@ -525,6 +531,7 @@ def create_app(test_config=None):
         database_response = list(database_response)
 
         # Template for course data sent in the recommendation prompt
+
         recommended_courses = [
             {
                 "season_code": course["season_code"],
@@ -551,7 +558,7 @@ def create_app(test_config=None):
         else:
             recommendation_prompt = "Apologize to the user for not being able to fullfill their request, your response should begin with 'I'm sorry. I tried to search for courses that match your criteria but couldn't find any' verbatim"
             recommendation_prompt += "Also suggest that the user should try widening their search or removing filters."
-    
+
         user_messages.append({"role": "system", "content": recommendation_prompt})
 
         response = chat_completion_request(messages=user_messages)

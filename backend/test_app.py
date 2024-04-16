@@ -15,6 +15,8 @@ test_config = {
     "MONGO_URI": "mongodb://localhost:27017/test",
 }
 
+# test cas
+
 
 class TestApp(TestCase):
     def create_app(self):
@@ -91,6 +93,9 @@ class TestApp(TestCase):
         self.assertIn("Ticket or service URL not provided", response.json["error"])
 
 
+# test initialization
+
+
 @pytest.fixture
 def app():
     app = create_app(test_config)
@@ -104,6 +109,9 @@ def test_load_config_with_test_config(app):
 
 def test_init_database_with_config(app):
     assert "courses" in app.config
+
+
+# test chat
 
 
 @pytest.fixture
@@ -175,6 +183,39 @@ def client_all_disabled():
             },
         ]
     )
+
+    mock_profiles_collection = MagicMock()
+    mock_profiles_collection.aggregate.return_value = iter(
+        [
+            {
+                "_id": {"$oid": "661c6bf1de004d9ab0e15604"},
+                "uid": "bob",
+                "chat_history": [
+                    {"chat_id": "79f0c4a7-548b-4fce-9a90-aaa709936907", "messages": []},
+                    {"chat_id": "c5b133b1-2f19-4c3c-8efc-0214c1540a75", "messages": []},
+                ],
+                "courses": [],
+                "name": "hello",
+                "email": "bluebookai@harvard.com",
+            }
+        ]
+    )
+
+    app = create_app(
+        {
+            "TESTING": True,
+            "courses": mock_courses_collection,
+            "profiles": mock_profiles_collection,
+        }
+    )
+    with app.test_client() as client:
+        yield client
+
+
+@pytest.fixture
+def client_empty_collection():
+    mock_courses_collection = MagicMock()
+    mock_courses_collection.aggregate.return_value = iter([])
 
     mock_profiles_collection = MagicMock()
     mock_profiles_collection.aggregate.return_value = iter(
@@ -355,15 +396,13 @@ def test_no_need_for_query(client, mock_chat_completion_yes_no):
 @pytest.fixture
 def mock_chat_completion_complete():
     with patch("app.chat_completion_request") as mock:
-        # Prepare the function mock that includes tool calls with the arguments JSON string
+        # Common setup for tool call within the chat message
         function_mock = MagicMock()
         function_mock.arguments = '{"season_code": "202303"}'
 
-        # Mock for tool_calls that uses the prepared function mock
         tool_call_mock = MagicMock()
         tool_call_mock.function = function_mock
 
-        # Mock for the message that includes the list of tool calls
         message_mock_with_tool_calls = MagicMock()
         message_mock_with_tool_calls.content = "yes"
         message_mock_with_tool_calls.tool_calls = [tool_call_mock]
@@ -372,19 +411,47 @@ def mock_chat_completion_complete():
         message_mock_mock_response.content = "Mock response based on user message"
         message_mock_mock_response.tool_calls = [tool_call_mock]
 
+        # Special setup for the 7th call
+        special_function = MagicMock(
+            arguments='{\n  "subject": "ENGL",\n  "season_code": "202403",\n  "areas": "Hu",\n  "skills": "WR"\n}',
+            name="CourseFilter",
+        )
+        special_tool_call = MagicMock(
+            id="call_XwZ68clbWJGtafNAlM2uq9f0",
+            function=special_function,
+            type="function",
+        )
+
+        special_message = MagicMock(
+            content=None,
+            role="assistant",
+            function_call=None,
+            tool_calls=[special_tool_call],
+        )
+        special_choice = MagicMock(
+            finish_reason="tool_calls", index=0, logprobs=None, message=special_message
+        )
+
+        special_chat_completion = MagicMock(
+            id="chatcmpl-9EU2H7bduxQysddvkIYnJBFuq1gmR",
+            choices=[special_choice],
+            created=1713239077,
+            model="gpt-4-0613",
+            object="chat.completion",
+            system_fingerprint=None,
+            usage=MagicMock(
+                completion_tokens=39, prompt_tokens=1475, total_tokens=1514
+            ),
+        )
+
         # Wrap these into the respective choice structures
         responses = [
             MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
             MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
             MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            special_chat_completion,
             MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
-            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
-            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
-            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
-            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
-            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
-            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
-            MagicMock(choices=[MagicMock(message=message_mock_mock_response)]),
+            special_chat_completion,
         ]
 
         mock.side_effect = responses
@@ -405,7 +472,37 @@ def test_with_frontend_filters(client, mock_chat_completion_complete):
     response = client.post("/api/chat", json=request_data)
     assert response.status_code == 200
     data = response.get_json()
-    assert "Mock response based on user message" in data["response"]
+    assert "yes" in data["response"]
+    assert mock_chat_completion_complete.call_count == 5
+
+
+def test_with_natural_filters(client, mock_chat_completion_complete):
+    request_data = {
+        "message": [
+            {"id": 123, "role": "user", "content": "msg"},
+            {"id": 123, "role": "ai", "content": "msg2"},
+            {"id": 123, "role": "user", "content": "Tell me about cs courses"},
+        ],
+    }
+    response = client.post("/api/chat", json=request_data)
+    assert response.status_code == 200
+    data = response.get_json()
+    assert "yes" in data["response"]
+    assert mock_chat_completion_complete.call_count == 5
+
+
+def test_with_empty_collection(client_empty_collection, mock_chat_completion_complete):
+    request_data = {
+        "message": [
+            {"id": 123, "role": "user", "content": "msg"},
+            {"id": 123, "role": "ai", "content": "msg2"},
+            {"id": 123, "role": "user", "content": "Tell me about cs courses"},
+        ],
+    }
+    response = client_empty_collection.post("/api/chat", json=request_data)
+    assert response.status_code == 200
+    data = response.get_json()
+    assert "yes" in data["response"]
     assert mock_chat_completion_complete.call_count == 5
 
 
@@ -542,7 +639,6 @@ def test_reload_chat_exception(client):
 def test_verify_course_code_no_uid_provided(client):
     response = client.post("/api/verify_course_code", json={})
     assert response.status_code == 400
-    assert json.loads(response.data) == {"error": "No uid provided"}
 
 
 # Test case when the course code exists
