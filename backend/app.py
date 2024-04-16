@@ -447,6 +447,7 @@ def create_app(test_config=None):
 
         collection = app.config["courses"]
 
+        # To be sent to database
         aggregate_pipeline = {
             "$vectorSearch": {
                 "index": "parsed_courses_title_description_index",
@@ -457,6 +458,7 @@ def create_app(test_config=None):
             }
         }
 
+        # Get a second response which uses function calling (defined in lib.py) to filter the user query
         filtered_response = chat_completion_request(messages=user_messages, tools=tools)
         filtered_data = json.loads(filtered_response.choices[0].message.tool_calls[0].function.arguments)
 
@@ -466,7 +468,11 @@ def create_app(test_config=None):
         print("")
         
         filter_skills = None
-
+        
+        
+        # Check if filters were provided from the front end. If not,
+        # it checks if filters were provided from the chat completion request.
+        # This is due to the priority of frontend filters being higher than those from the request. 
         if not filter_subjects:
             filter_subjects = filtered_data.get("subject", None)
             if filter_subjects: filter_subjects = [filter_subjects]
@@ -488,6 +494,7 @@ def create_app(test_config=None):
             
         filters = []
 
+        # Append the above filters to a list which can be inserted into the aggregate pipeline
         # Filter season codes
         if filter_season_codes:
             filters.append({"season_code": {"$in": filter_season_codes}})
@@ -513,9 +520,11 @@ def create_app(test_config=None):
         print()
         # print(aggregate_pipeline)
         
+        # Get a response from the database
         database_response = collection.aggregate([aggregate_pipeline])
         database_response = list(database_response)
-  
+
+        # Template for course data sent in the recommendation prompt
         recommended_courses = [
             {
                 "season_code": course["season_code"],
@@ -537,6 +546,8 @@ def create_app(test_config=None):
                 recommendation_prompt += f'{course["course_code"]}: {course["title"]}\n{course["description"]}\n\n'
             recommendation_prompt += "Incorporate specific course information in your response to me if it is relevant to the user request. If you include any course titles, make sure to wrap it in **double asterisks**. Do not order them in a list. Do not refer to any courses not in this list"
 
+        # In the case that no courses are returned, prompt to provide a specific response to the user. 
+        # Fixes the "As an AI, I can't provide..." response
         else:
             recommendation_prompt = "Apologize to the user for not being able to fullfill their request, your response should begin with 'I'm sorry. I tried to search for courses that match your criteria but couldn't find any' verbatim"
             recommendation_prompt += "Also suggest that the user should try widening their search or removing filters."
