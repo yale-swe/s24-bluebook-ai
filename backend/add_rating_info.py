@@ -11,7 +11,7 @@ This file directly adds coursetable rating data to .json files in a directory of
 
 Args
 - target_data_path: Path to the desired folder containing .json files for courses that must be updated with rating info
-- sentiment_data_path: Path to folder containing .json files equipped with rating info
+- rating_data_path: Path to folder containing .json files equipped with rating info
 - years_to_port: List containing integers representing what years of rating info to include in the given .json files for parsed courses
 
 Processing
@@ -53,14 +53,14 @@ def main(args):
                     print(f"On: {season_code}-{crn} / index {count}")
 
                     # Inspect if there are any json entries for that course in the specified season
-                    grep_cmd = f"ls {args.sentiment_data_path} | grep {season_code}-{crn}"
-                    try: # if so, write the sentiment data to the file
+                    grep_cmd = f"ls {args.rating_data_path} | grep {season_code}-{crn}"
+                    try: # if so, write the rating data to the file
                         grep_output = subprocess.check_output(grep_cmd, shell=True).decode().strip().split("\n")
                         season_filename = grep_output[0]
-                        sentiment_file_path = os.path.join(args.sentiment_data_path, season_filename)
-                        with open(sentiment_file_path, 'r') as sentiment_file:
-                            sentiment_json = json.load(sentiment_file)
-                            course_object["ratings"] = sentiment_json["ratings"]
+                        rating_file_path = os.path.join(args.rating_data_path, season_filename)
+                        with open(rating_file_path, 'r') as rating_file:
+                            rating_json = json.load(rating_file)
+                            course_object["ratings"] = rating_json["ratings"]
                         print(f"Finished {season_code}-{crn}")
                         reviews_missing = False
                         break
@@ -74,7 +74,7 @@ def main(args):
 
 
 ############################################################
-############ RUN SENTIMENT CLASSIFICATION HERE #############
+############ RUN HERE #############
 ############################################################
 
 if __name__ == "__main__":
@@ -85,20 +85,19 @@ if __name__ == "__main__":
     parser.add_argument("--target_data_path", 
                         type=str, 
                         default="data/parsed_courses",
-                        help="Folder where the .json files that need sentiment info copied over are located.") 
+                        help="Folder where the .json files that need rating info copied over are located.") 
 
-    parser.add_argument("--sentiment_data_path", 
+    parser.add_argument("--rating_data_path", 
                         type=str, 
                         default="data/course_evals",
-                        help="Folder where the .json files with sentiment info are located.") 
+                        help="Folder where the .json files with rating info are located.") 
 
     parser.add_argument("--years_to_port", 
                         nargs="*",  # 0 or more values expected => creates a list
                         type=int,
                         default = [2023], # other options: YC401, YC403
-                        help="Specify what years of sentiment info to include in the parsed course data .json files.") 
+                        help="Specify what years of rating info to include in the parsed course data .json files.") 
 
     args = parser.parse_args()
 
     main(args)
-
