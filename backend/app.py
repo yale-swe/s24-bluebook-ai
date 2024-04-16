@@ -448,44 +448,59 @@ def create_app(test_config=None):
         }
 
         filtered_response = chat_completion_request(messages=user_messages, tools=tools)
-        filtered_data = json.loads(
-            filtered_response.choices[0].message.tool_calls[0].function.arguments
-        )
+        filtered_data = json.loads(filtered_response.choices[0].message.tool_calls[0].function.arguments)
+        
         print("")
         print("Completion Request: Filtered Response")
         print(filtered_data)
         print("")
+        
+        filter_skills = None
 
-        natural_filter_subject = filtered_data.get("subject_code", None)
-        natural_filter_season_codes = filtered_data.get("season_code", None)
-        natural_filter_areas = filtered_data.get("area", None)
+        if not filter_subjects:
+            filter_subjects = filtered_data.get("subject", None)
+            if filter_subjects: filter_subjects = [filter_subjects]
+             
+        if not filter_season_codes:
+            filter_season_codes = filtered_data.get("season_code", None)
+            if filter_season_codes: filter_season_codes = [filter_season_codes]
+            
+        if not filter_areas:
+            filter_areas = filtered_data.get("areas", None)
+            if filter_areas: filter_areas = [filter_areas]
+        # Remove this elif if a skills dropdown filter is added to the chat interface
+        elif filter_areas == "QR" or filter_areas == "WR":
+            filter_skills = filtered_data.get("areas", None)
+            
+        if not filter_skills:
+            filter_skills = filtered_data.get("skills", None)
+            if filter_skills: filter_skills = [filter_skills]
+            
+        filters = []
 
+        # Filter season codes
         if filter_season_codes:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {
-                "season_code": {"$in": filter_season_codes}
-            }
-        elif natural_filter_season_codes:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {
-                "season_code": {"$in": [natural_filter_season_codes]}
-            }
+            filters.append({"season_code": {"$in": filter_season_codes}})
 
+        # Filter subject
         if filter_subjects:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {
-                "subject": {"$in": filter_subjects}
-            }
-        elif natural_filter_subject:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {
-                "season_code": {"$in": [natural_filter_subject]}
-            }
-
+            filters.append({"subject": {"$in": filter_subjects}})
+            
+        # Filter areas
         if filter_areas:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {
-                "areas": {"$in": filter_areas}
-            }
-        elif natural_filter_areas:
-            aggregate_pipeline["$vectorSearch"]["filter"] = {
-                "season_code": {"$in": [natural_filter_areas]}
-            }
+            filters.append({"areas": {"$in": filter_areas}})
+        # Filter skills
+        if filter_skills:
+            filters.append({"skills": {"$in": filter_skills}})
+        
+        # If there are any filters, add them to the vectorSearch pipeline
+        if filters:
+            aggregate_pipeline["$vectorSearch"]["filter"] = {"$and": filters}
+        
+        print()
+        print("Filters:")
+        print(aggregate_pipeline["$vectorSearch"]["filter"])
+        print()
 
         # print(aggregate_pipeline)
         database_response = collection.aggregate([aggregate_pipeline])
