@@ -638,7 +638,7 @@ def test_reload_chat_exception(client):
 # Test case when no UID is provided
 def test_verify_course_code_no_uid_provided(client):
     response = client.post("/api/verify_course_code", json={})
-    assert response.status_code == 500
+    assert response.status_code == 400
 
 
 # Test case when the course code exists
