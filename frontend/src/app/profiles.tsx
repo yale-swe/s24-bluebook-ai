@@ -63,7 +63,7 @@ const ProfilePopup = () => {
     return (
         <>
             <button onClick={togglePopupVisibility} className={styles.floatingProfileButton}>
-                <img src="/path/to/profile-icon.png" alt="Profile Icon" />
+                
             </button>
 
             {popupVisible && (
