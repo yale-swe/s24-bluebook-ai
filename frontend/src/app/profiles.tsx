@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
+
 import styles from "./profile.module.css"; 
+import { json } from "stream/consumers";
+
 
 const ProfilePopup = () => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [chatHistoryVisible, setChatHistoryVisible] = useState(false);
-    const [username, setUsername] = useState("JohnDoe");
-    const [email, setEmail] = useState("johndoe@example.com");
+    const [username, setUsername] = useState("");
     const [courses, setCourses] = useState<string[]>([]);
     const [search, setSearch] = useState("");
     const [chatHistories, setChatHistories] = useState<{ id: number; summary: string }[]>([]);
@@ -24,7 +26,7 @@ const ProfilePopup = () => {
         const response = await fetch('/api/save_profile', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ username, email }),
+            body: JSON.stringify({ username }),
         });
         if (!response.ok) {
             console.error("Failed to save profile");
@@ -40,8 +42,21 @@ const ProfilePopup = () => {
             });
             if (response.ok) {
                 const data = await response.json();
-                setCourses(prevCourses => [...prevCourses, data]);
+                setCourses(prevCourses => {
+                    // Check if the course already exists based on the course code
+                    const exists = prevCourses.some(course => course === data['course']);
+                    if (!exists) {
+                        return [...prevCourses, data['course']];
+                    } else {
+                        // alert the user that the course is already added
+                        alert('This course is already added.');
+                        return prevCourses;
+                    }
+                });
                 setSearch('');
+            } else {
+                // Handle cases where the course code is not found or invalid
+                alert('Invalid course code');
             }
         }
     };
@@ -76,6 +91,7 @@ const ProfilePopup = () => {
                         <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} className={styles.inputField} placeholder="Username" />
                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className={styles.inputField} placeholder="Email" />
                         <button onClick={handleSaveProfile} className={styles.sendButton}>Save</button>
+
                     </div>
                     <div className={styles.courseSearch}>
                         <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} className={styles.inputField} placeholder="Search courses" />
