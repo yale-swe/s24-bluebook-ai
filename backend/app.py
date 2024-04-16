@@ -144,9 +144,9 @@ def create_app(test_config=None):
         try:
             data = request.get_json()
 
-            uid = data.get("uid")
-            if not uid:
-                return jsonify({"error": "No uid provided"}), 400
+            # uid = data.get("uid")
+            # if not uid:
+            #     return jsonify({"error": "No uid provided"}), 400
 
             course_code = data["search"]
             course_collection = app.config["courses"]
@@ -154,9 +154,9 @@ def create_app(test_config=None):
             course = course_collection.find_one({"course_code": course_code})
             if course:
                 # insert into database
-                result = user_collection.update_one(
-                    {"uid": uid}, {"$addToSet": {"courses": course_code}}
-                )
+                # result = user_collection.update_one(
+                #     {"uid": uid}, {"$addToSet": {"courses": course_code}}
+                # )
                 return jsonify(
                     {"status": "success", "course": course["course_code"]}
                 ), 200

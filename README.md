@@ -111,7 +111,7 @@ python app.py
    ```
 ## Deployment
 
-The website is hosted using CloudFront distribution through AWS which is routed to a web server running on Elastic Beanstalk. The code for the frontend and backend are contained in two separate S3 buckets. To update the frontend, we run the following script and disable
+The website is hosted using CloudFront distribution through AWS which is routed to a web server running on Elastic Beanstalk. The code for the frontend and backend are contained in two separate S3 buckets. To update the frontend, we run the following script
 
 ```cd frontend
 export REACT_APP_API_URL=/api
@@ -125,9 +125,8 @@ aws cloudfront create-invalidation --distribution-id bluebook-ai-frontend --path
 ```
 
 For running the Elastic Beanstalk web server, we use the aws EB CLI and run the follow commands in the backend/ folder
-
 ```
 eb init
 eb deploy
 ```
-
+The CloudFront Distribution should have a routing link to the backend server through a behavior pointing to the EB instance.
