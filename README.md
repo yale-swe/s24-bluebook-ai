@@ -6,6 +6,60 @@ With CourseTable, students retrieve information using keyword search, filtering,
 
 In this project, we aim to enhance students’ course selection experience by augmenting CourseTable with a natural language interface that can provide customized course recommendations in response to student queries. By supplying more relevant and dynamic results and expanding students’ means of interaction with course data, this will enable students to more easily and effectively determine the best course schedule for themselves.
 
+## Code Structure
+```
+.
+├── ./.DS_Store
+├── ./.github
+│   └── ./.github/workflows
+│       └── ./.github/workflows/python-app.yml
+├── ./.gitignore
+├── ./README.md
+├── ./backend
+│   ├── ./backend/.elasticbeanstalk
+│   │   └── ./backend/.elasticbeanstalk/config.yml
+│   ├── ./backend/.env
+│   ├── ./backend/add_rating_info.py
+│   ├── ./backend/app.py
+│   ├── ./backend/course_subjects.json
+│   ├── ./backend/lib.py
+│   ├── ./backend/port_sentiment_info_to_parsed_courses.py
+│   ├── ./backend/process_data.ipynb
+│   ├── ./backend/sentiment_classif_requirements.txt
+│   ├── ./backend/sentiment_classification.py
+│   ├── ./backend/sentiment_classification_for_summer_courses.py
+│   └── ./backend/test_app.py
+├── ./data
+├── ./database_scripts
+│   ├── ./database_scripts/.env
+│   └── ./database_scripts/load_season_courses.py
+├── ./demo.png
+├── ./deploy_frontend.sh
+├── ./frontend
+│   ├── ./frontend/.eslintrc.json
+│   ├── ./frontend/README.md
+│   ├── ./frontend/next-env.d.ts
+│   ├── ./frontend/next.config.mjs
+│   ├── ./frontend/package-lock.json
+│   ├── ./frontend/package.json
+│   ├── ./frontend/src
+│   │   └── ./frontend/src/app
+│   │       ├── ./frontend/src/app/bg.png
+│   │       ├── ./frontend/src/app/chaticon.png
+│   │       ├── ./frontend/src/app/course_subjects.json
+│   │       ├── ./frontend/src/app/favicon.ico
+│   │       ├── ./frontend/src/app/globals.css
+│   │       ├── ./frontend/src/app/layout.tsx
+│   │       ├── ./frontend/src/app/page.module.css
+│   │       ├── ./frontend/src/app/page.tsx
+│   │       ├── ./frontend/src/app/profile-icon.png
+│   │       ├── ./frontend/src/app/profile.module.css
+│   │       └── ./frontend/src/app/profiles.tsx
+│   └── ./frontend/tsconfig.json
+├── ./load_courses.js
+├── ./output.txt
+└── ./requirements.txt
+```
 ## Get Started
 
 ### Frontend
@@ -66,26 +120,11 @@ where `<env_name>` is your name of choice for the conda environment.
    ```bash
    python app.py
    ```
-
-## Usage
-
-1. Enter the `frontend` directory and run
-
-```bash
-npm run dev
-```
-
-2. Enter the `backend` directory and run
-
-```bash
-python app.py
-```
-
-3. Ask away!
+4. Ask away!
 
 ![demo](./demo.png)
 
-4. You can also use your favorite API client (e.g., Postman) to send a POST request to `http://localhost:8000/api/chat` with the following JSON payload:
+4.5. You can also use your favorite API client (e.g., Postman) to send a POST request to `http://localhost:8000/api/chat` with the following JSON payload:
 
    ```json
    {
@@ -130,3 +169,184 @@ eb init
 eb deploy
 ```
 The CloudFront Distribution should have a routing link to the backend server through a behavior pointing to the EB instance.
+
+## Running and Adding Tests
+
+This repository contains tests for the backend. To run these tests, `pip install pytest` (if you haven't already), cd into backend and run
+```
+pytest
+```
+This runs the tests located in **`backend/test_app.py`**
+
+The tests are also configured run automatically through GitHub Actions every time someone pushes to any branch or opens a pull request. You can find the workflow under  **`.github/workflows/python-app.yml`**
+
+To generate a coverage report, first `pip install coverage`, then cd into backend and run
+```
+coverage run -m pytest
+coverage html
+```
+then cd into htmlcov and run `open index.html`
+
+### Adding Tests
+
+Always check the import statements at the top of **`test_app.py`** and `pip install` anything that you didn't already.
+
+The GitHub Actions workflow runs a single `pytest` command in the backend folder, so make sure your pytests are in the root directory and are named appropriately (filename begins with "test_...")
+
+Some stuff to keep in mind while writing new tests
+
+1. Locate the Correct Test File: Find the test file that corresponds to the module you are modifying or create a new one if your code is in a new module.
+2. Test Function Naming: Begin your test function names with test_. This naming convention is necessary for pytest to recognize the function as a test.
+3. Arrange, Act, Assert (AAA) Pattern: Structure your tests with the setup (Arrange), the action (Act), and the verification (Assert). This makes tests easy to read and understand.
+4. Mock External Dependencies: Use mock or MagicMock to simulate external API calls, database interactions, and any other external processes.
+5. Minimize Test Dependencies: Each test should be independent of others. Avoid shared state between tests.
+6. Use Fixtures for Common Setup Code: If multiple tests share setup code, consider using pytest fixtures to centralize this setup logic.
+7. Add any new dependencies to the GitHub workflow file. Like this:
+```yml
+...
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest flask_testing requests_mock uuid <any other dependencies used in tests>
+...
+```
+And finally, make sure to comment your tests clearly, especially for complex test logic.
+Update the project README or docs if your changes include new functionality or change existing behaviors that require documentation.
+
+Here's an example of a test complete with mocks and fixtures:
+
+```python
+@pytest.fixture
+def client():
+    mock_courses_collection = MagicMock()
+    mock_courses_collection.aggregate.return_value = iter(
+        [
+            {
+                "areas": ["Hu"],
+                "course_code": "CPSC 150",
+                "description": "Introduction to the basic ideas of computer science (computability, algorithm, virtual machine, symbol processing system), and of several ongoing relationships between computer science and other fields, particularly philosophy of mind.",
+                "season_code": "202303",
+                "sentiment_info": {
+                    "final_label": "NEGATIVE",
+                    "final_proportion": 0.9444444444444444,
+                },
+                "title": "Computer Science and the Modern Intellectual Agenda",
+            },
+        ]
+    )
+
+    mock_profiles_collection = MagicMock()
+    mock_profiles_collection.aggregate.return_value = iter(
+        [
+            {
+                "_id": {"$oid": "661c6bf1de004d9ab0e15604"},
+                "uid": "bob",
+                "chat_history": [
+                    {"chat_id": "79f0c4a7-548b-4fce-9a90-aaa709936907", "messages": []},
+                    {"chat_id": "c5b133b1-2f19-4c3c-8efc-0214c1540a75", "messages": []},
+                ],
+                "courses": [],
+                "name": "hello",
+                "email": "bluebookai@harvard.com",
+            }
+        ]
+    )
+
+    app = create_app(
+        {
+            "TESTING": True,
+            "courses": mock_courses_collection,
+            "profiles": mock_profiles_collection,
+            "MONGO_URL": "TEST_URL",
+            "COURSE_QUERY_LIMIT": 5,
+            "SAFETY_CHECK_ENABLED": True,
+            "DATABASE_RELEVANCY_CHECK_ENABLED": True,
+        }
+    )
+    with app.test_client() as client:
+        yield client
+```
+```python
+@pytest.fixture
+def mock_chat_completion_complete():
+    with patch("app.chat_completion_request") as mock:
+        # Common setup for tool call within the chat message
+        function_mock = MagicMock()
+        function_mock.arguments = '{"season_code": "202303"}'
+
+        tool_call_mock = MagicMock()
+        tool_call_mock.function = function_mock
+
+        message_mock_with_tool_calls = MagicMock()
+        message_mock_with_tool_calls.content = "yes"
+        message_mock_with_tool_calls.tool_calls = [tool_call_mock]
+
+        message_mock_mock_response = MagicMock()
+        message_mock_mock_response.content = "Mock response based on user message"
+        message_mock_mock_response.tool_calls = [tool_call_mock]
+
+        # Special setup for the 7th call
+        special_function = MagicMock(
+            arguments='{\n  "subject": "ENGL",\n  "season_code": "202403",\n  "areas": "Hu",\n  "skills": "WR"\n}',
+            name="CourseFilter",
+        )
+        special_tool_call = MagicMock(
+            id="call_XwZ68clbWJGtafNAlM2uq9f0",
+            function=special_function,
+            type="function",
+        )
+
+        special_message = MagicMock(
+            content=None,
+            role="assistant",
+            function_call=None,
+            tool_calls=[special_tool_call],
+        )
+        special_choice = MagicMock(
+            finish_reason="tool_calls", index=0, logprobs=None, message=special_message
+        )
+
+        special_chat_completion = MagicMock(
+            id="chatcmpl-9EU2H7bduxQysddvkIYnJBFuq1gmR",
+            choices=[special_choice],
+            created=1713239077,
+            model="gpt-4-0613",
+            object="chat.completion",
+            system_fingerprint=None,
+            usage=MagicMock(
+                completion_tokens=39, prompt_tokens=1475, total_tokens=1514
+            ),
+        )
+
+        # Wrap these into the respective choice structures
+        responses = [
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            special_chat_completion,
+            MagicMock(choices=[MagicMock(message=message_mock_with_tool_calls)]),
+            special_chat_completion,
+        ]
+
+        mock.side_effect = responses
+        yield mock
+```
+```python
+def test_with_frontend_filters(client, mock_chat_completion_complete):
+    request_data = {
+        "season_codes": ["bruh"],
+        "subject": ["bruh"],
+        "areas": ["WR", "Hu"],
+        "message": [
+            {"id": 123, "role": "user", "content": "msg"},
+            {"id": 123, "role": "ai", "content": "msg2"},
+            {"id": 123, "role": "user", "content": "Tell me about cs courses"},
+        ],
+    }
+    response = client.post("/api/chat", json=request_data)
+    assert response.status_code == 200
+    data = response.get_json()
+    assert "yes" in data["response"]
+    assert mock_chat_completion_complete.call_count == 5
+```
