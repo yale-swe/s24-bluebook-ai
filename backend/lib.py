@@ -37,11 +37,11 @@ tools = [
                     "subject": {
                         "type": "string",
                         "enum": [str(key) for key in subjects.keys()],
-                        "description": "A code for the subject of instruction",
+                        "description": "A code for the subject of instruction. You can provide mulitple different subjects, but format them in the following way: {$or: [ {subject: 'subject1'}, {subject: 'subject2'}, ... ]}",
                     },
                     "rating": {
                         "type": "number",
-                        "description": "The rating (a number with one significant digit) for the class (0 - 4). If a number is not provided, interpret the given opinion to fit the range. Unless specified by the user, a good, or average, class should be 3.5",
+                        "description": "The rating (a number with one significant digit) for the class (0 - 4). If a number is not provided, interpret the given opinion (if one is given) to fit the range. Unless specified by the user, a good, or average, class should be 3.5",
                     },
                     "comparison_operator_rating": {
                         "type": "string",
