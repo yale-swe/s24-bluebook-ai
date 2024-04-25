@@ -18,7 +18,6 @@ DATABASE_RELEVANCY_CHECK_ENABLED = False
 
 load_dotenv()
 
-
 # Separate function to load configurations
 def load_config(app, test_config=None):
     app.secret_key = os.environ.get(
@@ -467,10 +466,10 @@ def create_app(test_config=None):
         else:
             filtered_data = None
 
-        print("")
-        print("Completion Request: Filtered Response")
-        print(filtered_data)
-        print("")
+        # print("")
+        # print("Completion Request: Filtered Response")
+        # print(filtered_data)
+        # print("")
 
         filter_skills = None
 
